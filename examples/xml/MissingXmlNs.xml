@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<Document>
+	<DocumentId DomainId="BSP-OEM" IsPrimary="true">ts-ddd-234</DocumentId>
+	<DocumentId DomainId="BSP-OEM">data-sheet-br-01-26</DocumentId>
+	<DocumentIdDomain DocumentDomainId="BSP-OEM">
+		<Party Role="Responsible">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification ClassificationSystem="VDI2770:2018">
+		<ClassId>02-01</ClassId>
+		<ClassName Language="de">Technische Spezifikation</ClassName>
+		<ClassName Language="en">technical specification</ClassName>
+	</DocumentClassification>
+	<DocumentClassification ClassificationSystem="IEC61355">
+		<ClassId>DA</ClassId>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId RefType="product type" ObjectType="Type">BR-01</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Baureihe</Description>
+		<Description Language="en">series</Description>
+	</ReferencedObject>
+	<ReferencedObject>
+		<ObjectId RefType="product type" ObjectType="Type">BR-01-26</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Modell</Description>
+		<Description Language="en">model</Description>
+	</ReferencedObject>
+	<ReferencedObject>
+		<ObjectId RefType="serial number" ObjectType="Individual">XUJ-345-111</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Seriennummer</Description>
+		<Description Language="en">serial number</Description>
+	</ReferencedObject>
+	<DocumentVersion>
+		<DocumentVersionId>3.0</DocumentVersionId>
+		<Language>de</Language>
+		<Language>en</Language>
+		<Party Role="Author">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Technisches Datenblatt</Title>
+			<Summary>Dieses Dokument enthält die technischen Spezifikationen
+                                       des Motors</Summary>
+			<KeyWords>
+				<KeyWord>Datenblatt</KeyWord>
+				<KeyWord>Motor</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<DocumentDescription Language="en">
+			<Title>Technical Data Sheet</Title>
+			<Summary>This document contains the technical specifications of the engine</Summary>
+			<KeyWords>
+				<KeyWord>data sheet</KeyWord>
+				<KeyWord>engine</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus StatusValue="Released" SetDate="2018-04-04">
+			<Party Role="Responsible">
+				<Organization OrganizationName="Beispiel GmbH"
+                    OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+			</Party>
+		</LifeCycleStatus>
+		<DigitalFile FileFormat="application/pdf">Technisches_Datenblatt.pdf</DigitalFile>
+		<DigitalFile FileFormat="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">Technisches_Datenblatt.xlsx
+		</DigitalFile>
+	</DocumentVersion>
+</Document>

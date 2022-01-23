@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770 ../vdi2770.xsd"
+	xmlns="http://www.vdi.de/schemas/vdi2770">
+	<DocumentId DomainId="INFAI" IsPrimary="true">INFAIH1.1</DocumentId>
+	<DocumentIdDomain DocumentDomainId="INFAI">
+		<Party Role="Responsible">
+			<Organization OrganizationId="INFAI"
+				OrganizationName="InfAI e.V."
+				OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification
+		ClassificationSystem="VDI2770:2018">
+		<ClassId>01-01</ClassId>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId ObjectType="Individual">I123</ObjectId>
+		<ObjectId ObjectType="Type">ABC1223</ObjectId>
+		<ObjectId ObjectType="Type">http://company-inc.com/4711</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Company"
+				OrganizationOfficialName="Company Inc." />
+		</Party>
+	</ReferencedObject>
+	<DocumentVersion>
+		<DocumentVersionId>2.0</DocumentVersionId>
+		<Language>de</Language>
+		<Party Role="Author">
+			<Organization OrganizationId="INFAI"
+				OrganizationName="InfAI e.V."
+				OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Hauptdokument</Title>
+			<Summary>Hauptdokument</Summary>
+			<KeyWords>
+				<KeyWord>Hauptdokument</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus StatusValue="Released"
+			SetDate="2018-04-04">
+			<Party Role="Responsible">
+				<Organization OrganizationId="INFAI"
+					OrganizationName="InfAI e.V."
+					OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+			</Party>
+		</LifeCycleStatus>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="INFAI">456-29201</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="INFAI">AB393</DocumentId>
+			<DocumentVersionId>2.0</DocumentVersionId>
+		</DocumentRelationship>
+		<DigitalFile FileFormat="application/pdf">VDI2770_Main.pdf</DigitalFile>
+	</DocumentVersion>
+</Document>

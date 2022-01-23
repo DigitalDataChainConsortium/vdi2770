@@ -1,0 +1,11 @@
+= VDI 2770 Core Module
+Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
+include::../../../../src/docs/asciidoc/config.adoc[]
+
+include::core.adoc[lines=1..-1]
+
+include::../../../../Readme.adoc[tag=license]
+
+include::../../../../Readme.adoc[tag=supporters]
+
+include::../../../../Readme.adoc[tag=doc-license]

@@ -1,0 +1,13 @@
+= VDI 2770 Docker Image
+Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
+include::../../../../../src/docs/asciidoc/config.adoc[]
+
+include::overview.adoc[]
+
+include::../../../../../Readme.adoc[tag=doc-license]
+
+include::../../../../../Readme.adoc[tag=license]
+
+include::../../../../../Readme.adoc[tag=supporters]
+
+include::../../../../../Readme.adoc[tag=doc-license]

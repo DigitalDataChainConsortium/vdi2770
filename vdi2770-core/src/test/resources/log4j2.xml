@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+	<Appenders>
+		<Console name="Console" target="SYSTEM_OUT">
+			<PatternLayout pattern="%-5level %msg%n" />
+		</Console>
+
+		<File name="LogFile" fileName="application.log"
+			immediateFlush="true" append="false">
+			<PatternLayout
+				pattern="%d{yyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
+		</File>
+
+		<File name="ReportFile" fileName="report.log"
+			immediateFlush="true" append="false">
+			<PatternLayout pattern="%-5level %msg%n" />
+		</File>
+
+	</Appenders>
+	<Loggers>
+		<Root level="WARN">
+			<appender-ref ref="LogFile" />
+			<appender-ref ref="Console" />
+		</Root>
+		<Logger name="de.vdi.vdi2770.metadata.report.Report"
+			level="INFO" additivity="false">
+			<appender-ref ref="ReportFile" level="INFO" />
+		</Logger>
+		<Logger name="de.vdi.vdi2770.metadata.xml.XmlValidator"
+			level="INFO" additivity="false">
+			<appender-ref ref="ReportFile" level="INFO" />
+			<appender-ref ref="LogFile" level="INFO" />
+		</Logger>
+		<Logger name="com.github.dozermapper" level="WARN">
+			<appender-ref ref="ReportFile" level="error" />
+			<appender-ref ref="LogFile" level="error" />
+		</Logger>
+	</Loggers>
+</Configuration>

@@ -1,0 +1,108 @@
+= VDI 2770 Reference Implementation
+Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
+ifndef::env-github[]
+include::src/docs/asciidoc/config.adoc[]
+endif::[]
+ifdef::env-github[]
+:toc:
+:tip-caption: :bulb:
+:note-caption: :information_source:
+:important-caption: :heavy_exclamation_mark:
+:caution-caption: :fire:
+:warning-caption: :warning:
+toc::[]
+endif::[]
+
+// tag::overview[]
+
+== Project Overview
+This project provides a reference implementation of the 
+link:https://www.beuth.de/de/technische-regel/vdi-2770-blatt-1/319538792[VDI 2770 specification] 
+focusing on the implementation of containers and metadata. 
+The validation web service can analyze document container, documentation container as 
+well as XML metadata files or PDF files. Validation reports are available as JSON
+results or PDF report files.
+
+In a nutshell, VDI 2770 defines technical requirements for digital documentation exchange.
+
+. Every document shall conform to PDF/A-{1,2,3}
+. Metadata shall be available for every document
+. Metadata shall be provided as an XML file
+. Documents and their metadata shall be bundled as ZIP containers (called 
+document container)
+. The handover documentation shall be zipped as documentation container.
+
+== Building the Source Code
+This project is implemented with Java programming language. JDK 17 is required. 
+
+link:https://maven.apache.org/[Maven] is used for dependency management. To build from scratch, call
+
+[source=bash]
+----
+$ mvn clean package
+----
+
+== Module Overview
+There are several modules in Spring Boot. Here is a quick overview:
+
+=== vdi2770-core
+This project provides functionalities to read and write VDI 2770 XML metadata files. 
+This includes basic validation.
+
+=== vdi2770-processor
+The processor can "process"a document or a documentation including creating and reading 
+containers. It provides extended validation functionalities.
+
+=== vdi2770-validator[-web]
+This module provides a web API to validate XML metadate files, document container files,
+documentation container files or PDF files.
+
+// end::overview[]
+
+== Documentation
+
+Each project contains a `documentation.adoc` file in the `src/docs/asciidoc` folder.
+These files use the link:https://asciidoctor.org/[asciidoctor] include directive. 
+Therefore, these files can not be rendered by github. 
+The following command demonstrates the conversion a `documentation.adoc` file to a HTML file. 
+
+.Conversion of the overall documentation
+[source=bash]
+----
+$src/docs/asciidoc$ asciidoctor documentation.adoc
+----
+
+* link:src/docs/asciidoc/documentation.adoc[overall documentation]
+* link:vdi2770-core/src/docs/asciidoc/documentation.adoc[core documentation]
+* link:vdi2770-processor/src/docs/asciidoc/documentation.adoc[processor documentation]
+* link:vdi2770-validator/vdi2770-validator-web/src/docs/asciidoc/documentation.adoc[web validator documentation]
+
+
+// tag::license[]
+
+== Project License
+VDI 2770 reference implementation is Open Source software released under the 
+link:https://opensource.org/licenses/MIT[The MIT License].
+
+// end::license[]
+
+// tag::supporters[]
+
+== Supporters
+This project was initiated by Johannes Schmidt to support the standadization working group at 
+link:https://www.vdi.de/[VDI]. His work was supported by 
+link:https://www.uni-leipzig.de/[Leipzig University],
+link:https://infai.org/en/[the Institute for Applied Informatics (InfAI)],
+link:https://www.bmbf.de[the Federal Ministry of Education and Research of Germany] (project CVtec with
+funding code 01IS14016) and link:https://www.sab.sachsen.de/index_en.jsp[Sächsische Aufbaubank]
+(project Mindset with funding code 100341518).
+
+// end::supporters[]
+
+// tag::doc-license[]
+
+== Document License
+
+This work is licensed under a link:http://creativecommons.org/licenses/by-sa/4.0/[Creative Commons Attribution-ShareAlike 4.0 International License].
+
+// end::doc-license[]

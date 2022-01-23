@@ -1,0 +1,51 @@
+=== Module Overview
+
+This module provides classes to read and write metadata according to VDI 2770:2020 
+technical guideline, which is available at link:https://www.vdi.de/richtlinien/details/vdi-2770-blatt-1-betrieb-verfahrenstechnischer-anlagen-mindestanforderungen-an-digitale-herstellerinformationen-fuer-die-prozessindustrie-grundlagen[VDI web site]. 
+
+The benefits of this module are:
+
+* Java class support for VDI 2770 meta data
+* Basic XML reader and writer
+* Implementation of meta model validation according to VDI 2770 constraints
+
+=== Technical Overview
+
+Java POJO classes of XML elements are generated using Jakarta XML Binding (JAXB). These 
+classes are mapped using link:https://dozermapper.github.io/[dozer mappings] to plain POJO files 
+without any JAXB annotations. Logging is provided using SLF4J and Log4J.
+
+This projects supports messages translations. English, German and Chinese language are supported. 
+Translations are handle by ``src/main/resources/i8n/metadata[_<language>].properties`` files.
+
+=== Introduction of useful Classes and Packages
+
+The base namespace of this module is ``de.vdi.vdi2770.metadata``. The package `
+``de.vdi.vdi2770.metadata.model`` provides plain POJO files for VDI 2770 metadata including 
+enumerations and e.g. predefined file names. The package ``de.vdi.vdi2770.metadata.xml`` provides 
+XML readers and XML writers.
+
+=== XML Validation
+
+The following codes demonstrates the validation of a XML metadata file.
+
+[source,Java]
+----
+import java.io.File;
+import java.util.List;
+
+import de.vdi.vdi2770.metadata.model.Document;
+import de.vdi.vdi2770.metadata.model.ValidationFault;
+import de.vdi.vdi2770.metadata.xml.XmlProcessingException;
+import de.vdi.vdi2770.metadata.xml.XmlReader;
+
+...
+
+try {
+    final XmlReader reader = new XmlReader();
+    final Document xmlDocument = reader.read(new File("mydemofile.xml"));
+    final List<ValidationFault> errors = xmlDocument.validate();
+} catch (final XmlProcessingException e) {
+    e.printStackTrace();
+}
+----

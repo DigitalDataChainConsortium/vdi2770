@@ -1,0 +1,58 @@
+=== Progress Report 
+
+The VDI 2770 reference implementation has been tested for 
+many different containers. In the following, recurring errors are discussed.
+
+==== Data in XML Files
+
+Table C7 in VDI 2770 specifies that the XML element `Summary` of 
+`DocumentDescription` is mandatory. 
+This does not mean that the element may be empty. 
+Empty content is not intended. 
+A summary of the document content is imported for the user.
+A validation of the following XML fragment must therefore fail. 
+
+[source,xml]
+----
+<DocumentDescription Language="en">
+    <Summary />
+</DocumentDescription>
+----
+
+
+==== Format of Dates
+
+VDI 2770 does not specify formats for dates. 
+Date information are encoded as `xs:date`.
+The XML schema defines exactly one attribute of the type `xs:date`. 
+The W3C Recommendation link:https://www.w3.org/TR/xmlschema-2/#date["XML Schema Part 2: Datatypes Second Edition"] 
+defines requirements for dates in detail in section 3.2.9.
+
+* A day, a month and a year must be specified.
+* A time zone is optional.
+* Text representation is in an English format.
+
+Examples for dates
+[source,xml]
+<demo>
+    <entry>
+        <date>2021-01-04</date>
+        <comment>Without time zone information</comment>
+    </entry>
+    <entry>
+        <date>2021-01-04Z</date>
+        <comment>UTC time zone</comment>
+    </entry>
+    <entry>
+        <date>2021-01-04+02:00</date>
+        <comment>Two hours offset to UTC</comment>
+    </entry>
+</demo>`
+
+In case of any other date format, validation willl fail.
+
+==== ZIP Files
+
+Sometimes, ZIP files are not created validly. 
+This may be related to the ZIP header entries. 
+There are known issues using zip functions of link:https://ant.apache.org/[ant].

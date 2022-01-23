@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770 ../../vdi2770.xsd"
+	xmlns="http://www.vdi.de/schemas/vdi2770">
+	<DocumentId DomainId="INFAI">456-29201</DocumentId>
+	<DocumentIdDomain DocumentDomainId="UL">
+		<Party Role="Responsible">
+			<Organization OrganizationId="UL"
+				OrganizationName="Uni Leipzig"
+				OrganizationOfficialName="Universität Leipzig" />
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification
+		ClassificationSystem="VDI2770:2018">
+		<ClassId>03-01</ClassId>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId ObjectType="Individual">I123</ObjectId>
+		<ObjectId ObjectType="Type">ABC1223</ObjectId>
+		<ObjectId ObjectType="Type">http://company-inc.com/4711</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Company"
+				OrganizationOfficialName="Company Inc." />
+		</Party>
+	</ReferencedObject>
+	<DocumentVersion>
+		<DocumentVersionId>2.0</DocumentVersionId>
+		<Language>de</Language>
+		<Language>en</Language>
+		<Party Role="Author">
+			<Organization OrganizationId="UL"
+				OrganizationName="Uni Leipzig"
+				OrganizationOfficialName="Universität Leipzig" />
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Testtitel</Title>
+			<Summary>Das ist ein kleiner Test</Summary>
+			<KeyWords>
+				<KeyWord>Test1</KeyWord>
+				<KeyWord>Test2</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<DocumentDescription Language="en">
+			<Title>Test title</Title>
+			<Summary>This is a test</Summary>
+			<KeyWords>
+				<KeyWord>Test1</KeyWord>
+				<KeyWord>Test2</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus StatusValue="Released"
+			SetDate="2018-04-04">
+			<Party Role="Responsible">
+				<Organization OrganizationId="UL"
+					OrganizationName="Uni Leipzig"
+					OrganizationOfficialName="Universität Leipzig" />
+			</Party>
+		</LifeCycleStatus>
+		<DigitalFile FileFormat="application/pdf">demo.pdf</DigitalFile>
+		<DigitalFile
+			FileFormat="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet">demo.xlsx</DigitalFile>
+	</DocumentVersion>
+</Document>

@@ -1,0 +1,132 @@
+= VDI 2770 Web Validator Docker Container
+Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
+include::../../src/docs/asciidoc/config.adoc[]
+
+// tag::docker[]
+
+== Build and run the Docker file
+
+To build the VDI 2770 image, run the ``docker build`` command.
+
+[source,bash]
+---- 
+user@server:~/vdi2770$ docker build -t vdi2770/validator-web .
+----
+
+To start the application, call ``docker run ``. After startup, the console output 
+contains the REST API token that is necessary to access the REST API. 
+To set the API token, use `api-key` in the HTTP header.
+In the following startup command, the web application is exposed on port 3000 (from internal 
+port 8080).
+
+[source,bash]
+---- 
+user@server:validator-web$ docker run --rm -p 3000:8080 vdi2770/validator-web:latest
+REST token: vdi2770
+----
+
+
+
+== Docker parameter
+
+The following command shows supported parameter and volumes of the image.
+
+[source,bash]
+---- 
+user@server:validator-web$ docker run -e TOKEN=changeme -e FILELIMIT=10MB -e DOMAINS=http://localhost:9000 -v /my/local/path/html:/app/static -v /path/to/logfolder:/app/log --rm -p 3000:8080 vdi2770/validator-web-ul 
+----
+
+=== Variables
+
+The docker image provides three parameters.
+
+``TOKEN``:: Set the REST API key. The default value is ``vdi2770``.
+``FILELIMIT``:: Define maximum file size for uploads. The default value is ``5MB``.
+``DOMAINS``:: Enabled CORS domains. The default value is ``http://localhost:3000``. Multiple
+domains are allowed: ``https://exmaple.com,https://other.domain.de``.
+
+=== Volumes
+
+There are two special folders that could be mounted as volumes.
+
+``/app/log``:: This folder contains the application log file as well as a CSV statistics file.
+``/app/static``:: In this folder, static HTML content may be provided. For example, one may 
+provide a HTML form to submit the validation. Otherwise, one can set the ``DOMAINS`` parameter
+to allow cross origins web calls.
+
+== Dokku deployment
+
+The following shows how to deploy this VDI 2770 reference implementation at a 
+link:https://dokku.com/[dokku] infrastructure.
+The app is created using `apps:create`.
+If a Dockerfile is available, link:https://dokku.com/[dokku] uses docker build commands instead
+of dokku buildpacks.
+To specify docker environment variables, `docker-options:add` is used.
+
+[source, bash]
+----
+user@server:validator-web$ ssh dokku@server.name.org apps:create vdi2770
+
+user@server:validator-web$ ssh dokku@server.name.org docker-options:add vdi2770 deploy "-e TOKEN=demoapikey"
+user@server:validator-web$ ssh dokku@server.name.org docker-options:add vdi2770 deploy "-e FILELIMIT=10MB"
+---- 
+
+To increase the upload size, the third party dokku plugin 
+link:https://github.com/Zeilenwerk/dokku-nginx-max-upload-size[dokku-nginx-max-upload-size] can be used.
+
+[source, bash]
+----
+user@server:validator-web$ ssh dokku@server.name.org config:set MAX_UPLOAD_SIZE=10MB
+----
+
+Now, we can copy the packaged validator web application to the current folder and name it
+`vdi2770-validator-web.jar`. 
+This file name is configurable (see Dockerfile).
+To push the application, we may initialize a GIT repository and push it or we deploy the 
+application as a tar ball. 
+
+[source, bash]
+----
+user@server:validator-web$ tar -c . $* | ssh dokku@server.name.org git:from-archive vdi2770 --
+----
+
+Afterwards, the domain of the application shall be configured including SSL support
+(using e.g. link:https://github.com/dokku/dokku-letsencrypt[dokku dokku-letsencrypt plugin]).
+
+To configure volumes, `docker-options:add` shall be used.
+
+[source, bash]
+----
+user@server:validator-web$ ssh dokku@server.name.org docker-options:add vdi2770 deploy "-v /data/dokku/volumes/vdi2770/static:/app/static"
+user@server:validator-web$ ssh dokku@server.name.org docker-options:add vdi2770 deploy "-v /data/dokku/volumes/vdi2770/logs:/app/log"
+----
+
+// end::docker[]
+
+
+== Project License
+VDI 2770 reference implementation is Open Source software released under the 
+link:https://opensource.org/licenses/MIT[The MIT License].
+
+// end::license[]
+
+// tag::supporters[]
+
+== Supporters
+This project was initiated by Johannes Schmidt to support the standadization working group at 
+link:https://www.vdi.de/[VDI]. His work was supported by 
+link:https://www.uni-leipzig.de/[Leipzig University],
+link:https://infai.org/en/[the Institute for Applied Informatics (InfAI)],
+link:https://www.bmbf.de[the Federal Ministry of Education and Research of Germany] (project CVtec with
+funding code 01IS14016) and link:https://www.sab.sachsen.de/index_en.jsp[Sächsische Aufbaubank]
+(project Mindset with funding code 100341518).
+
+// end::supporters[]
+
+// tag::doc-license[]
+
+== Document License
+
+This work is licensed under a link:http://creativecommons.org/licenses/by-sa/4.0/[Creative Commons Attribution-ShareAlike 4.0 International License].
+
+// end::doc-license[]

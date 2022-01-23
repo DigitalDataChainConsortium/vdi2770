@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770 ../../vdi2770.xsd"
+	xmlns="http://www.vdi.de/schemas/vdi2770">
+	<DocumentId DomainId="INFAI">AB393</DocumentId>
+	<DocumentIdDomain DocumentDomainId="INFAI">
+		<Party Role="Responsible">
+			<Organization OrganizationId="INFAI"
+				OrganizationName="InfAI e.V."
+				OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification
+		ClassificationSystem="VDI2770:2018">
+		<ClassId>02-01</ClassId>
+	</DocumentClassification>
+	<DocumentClassification
+		ClassificationSystem="VDI2770:2018">
+		<ClassId>01-01</ClassId>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId ObjectType="Type">P1.1</ObjectId>
+		<ObjectId ObjectType="Individual">ABC1223</ObjectId>
+		<ObjectId ObjectType="Type">http://company-inc.com/4711</ObjectId>
+		<ObjectId ObjectType="Type">4711</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Company"
+				OrganizationOfficialName="Company Inc." />
+		</Party>
+	</ReferencedObject>
+	<DocumentVersion>
+		<DocumentVersionId>2.0</DocumentVersionId>
+		<Language>de</Language>
+		<Language>en</Language>
+		<Party Role="Author">
+			<Organization OrganizationId="INFAI"
+				OrganizationName="InfAI e.V."
+				OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Zweidokument</Title>
+			<Summary>Noch ein Dokument</Summary>
+			<KeyWords>
+				<KeyWord>2</KeyWord>
+				<KeyWord>zwei</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<DocumentDescription Language="en">
+			<Title>Foo</Title>
+			<Summary>Test</Summary>
+			<KeyWords>
+				<KeyWord>Bar</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus StatusValue="Released"
+			SetDate="2018-04-04">
+			<Party Role="Responsible">
+				<Organization OrganizationId="INFAI"
+					OrganizationName="InfAI e.V."
+					OrganizationOfficialName="Institut für Angewandte Informatik (InfAI) e. V." />
+			</Party>
+		</LifeCycleStatus>
+		<DigitalFile FileFormat="application/pdf">demo.pdf</DigitalFile>
+		<DigitalFile
+			FileFormat="application/vnd.openxmlformats-officedocument.wordprocessingml.document">demo.docx</DigitalFile>
+	</DocumentVersion>
+</Document>
