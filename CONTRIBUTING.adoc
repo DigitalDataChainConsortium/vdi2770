@@ -1,0 +1,22 @@
+= Contributing to VDI 2770 Project
+
+This project is released under the MIT license. 
+
+== Code of Conduct
+This project adheres to the Contributor Covenant link:CODE_OF_CONDUCT.adoc[code of conduct].
+By participating, you are expected to uphold this code. Please report unacceptable behavior to spring-code-of-conduct@pivotal.io.
+
+== Using GitHub Issues
+We use GitHub issues to track bugs and feature requests.
+
+Please provide as much as problem details, like stack traces or a minimal sample, as possible in you bug reports to support fast fixes.
+
+== Submitting a Pull Request
+
+. Fork the repository
+. Create a feature branch or bug fix branch (see git flow for more information). Please inlcude the issue number in the name: e.g. `bugfix/issue#12` or `feature/issue#1` 
+. Add tests for your feature or bug fix.
+. Build the code locally using `mvn clean package`. Fix tests, if needed.
+. Add documentation for your feature or bug fix.
+. Push your changes.
+. Submit a pull request.

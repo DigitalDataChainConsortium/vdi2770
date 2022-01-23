@@ -1,0 +1,325 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns="http://www.vdi.de/schemas/vdi2770"
+	targetNamespace="http://www.vdi.de/schemas/vdi2770"
+	elementFormDefault="qualified" attributeFormDefault="unqualified"
+	version="2019-08-23">
+	<xs:annotation>
+		<xs:appinfo>
+			This XML schema declares the information model of
+			the metadata file for
+			VDI 2770
+		</xs:appinfo>
+	</xs:annotation>
+
+	<xs:element name="Document">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DocumentId" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="DomainId" type="xs:string"
+									use="required" />
+								<xs:attribute name="IsPrimary" type="xs:boolean" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="DocumentIdDomain" maxOccurs="unbounded" />
+				<xs:element ref="DocumentClassification"
+					maxOccurs="unbounded" />
+				<xs:element ref="ReferencedObject" maxOccurs="unbounded" />
+				<xs:element ref="DocumentVersion" maxOccurs="unbounded" />
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DocumentIdDomain">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Party">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Organization">
+								<xs:complexType>
+									<xs:attribute name="OrganizationId"
+										type="xs:string" />
+									<xs:attribute name="OrganizationName"
+										type="xs:string" use="required" />
+									<xs:attribute name="OrganizationOfficialName"
+										type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Role" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Responsible" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="DocumentDomainId" type="xs:string"
+				use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DocumentClassification">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ClassId" type="xs:string" />
+				<xs:element name="ClassName" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="Language" type="xs:string"
+									use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="ClassificationSystem"
+				type="xs:string" use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="ReferencedObject">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="ObjectId" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="ObjectType" use="required">
+									<xs:simpleType>
+										<xs:restriction base="xs:string">
+											<xs:enumeration value="Type" />
+											<xs:enumeration value="Individual" />
+										</xs:restriction>
+									</xs:simpleType>
+								</xs:attribute>
+								<xs:attribute name="RefType" type="xs:string" />
+								<xs:attribute name="IsGloballyBiUnique"
+									type="xs:boolean" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="ReferenceDesignation" type="xs:string"
+					minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="EquipmentId" type="xs:string"
+					minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="ProjectId" type="xs:string"
+					minOccurs="0" maxOccurs="unbounded" />
+				<xs:element name="Party" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Organization">
+								<xs:complexType>
+									<xs:attribute name="OrganizationId"
+										type="xs:string" />
+									<xs:attribute name="OrganizationName"
+										type="xs:string" use="required" />
+									<xs:attribute name="OrganizationOfficialName"
+										type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Role" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Supplier" />
+									<xs:enumeration value="Manufacturer" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Description" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="Language" type="xs:string"
+									use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DocumentVersion">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="DocumentVersionId" />
+				<xs:element ref="Language" maxOccurs="unbounded" />
+				<xs:element name="Party" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Organization">
+								<xs:complexType>
+									<xs:attribute name="OrganizationId"
+										type="xs:string" />
+									<xs:attribute name="OrganizationName"
+										type="xs:string" use="required" />
+									<xs:attribute name="OrganizationOfficialName"
+										type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Role" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Author" />
+									<xs:enumeration value="Responsible" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="DocumentDescription"
+					maxOccurs="unbounded" />
+				<xs:element ref="LifeCycleStatus" />
+				<xs:element ref="DocumentRelationship" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element ref="DigitalFile" maxOccurs="unbounded" />
+			</xs:sequence>
+			<xs:attribute name="NumberOfPages"
+				type="xs:positiveInteger" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DocumentVersionId" type="xs:string" />
+
+	<xs:element name="Language" type="xs:string" />
+
+	<xs:element name="DocumentDescription">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Title" type="xs:string" />
+				<xs:element name="SubTitle" type="xs:string"
+					minOccurs="0" />
+				<xs:element name="Summary" type="xs:string" />
+				<xs:element name="KeyWords">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="KeyWord" type="xs:string"
+								maxOccurs="unbounded" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Language" type="xs:string"
+				use="required" />
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="LifeCycleStatus">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="Party" maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Organization">
+								<xs:complexType>
+									<xs:attribute name="OrganizationId"
+										type="xs:string" />
+									<xs:attribute name="OrganizationName"
+										type="xs:string" use="required" />
+									<xs:attribute name="OrganizationOfficialName"
+										type="xs:string" use="required" />
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="Role" use="required">
+							<xs:simpleType>
+								<xs:restriction base="xs:string">
+									<xs:enumeration value="Responsible" />
+								</xs:restriction>
+							</xs:simpleType>
+						</xs:attribute>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="Comments" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="Language" type="xs:string"
+									use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="SetDate" type="xs:date" />
+			<xs:attribute name="StatusValue" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="InReview" />
+						<xs:enumeration value="Released" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DocumentRelationship">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="DocumentId">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="DomainId" type="xs:string"
+									use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+				<xs:element ref="DocumentVersionId" minOccurs="0"
+					maxOccurs="unbounded" />
+				<xs:element name="Description" minOccurs="0"
+					maxOccurs="unbounded">
+					<xs:complexType>
+						<xs:simpleContent>
+							<xs:extension base="xs:string">
+								<xs:attribute name="Language" type="xs:string"
+									use="required" />
+							</xs:extension>
+						</xs:simpleContent>
+					</xs:complexType>
+				</xs:element>
+			</xs:sequence>
+			<xs:attribute name="Type" use="required">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:enumeration value="RefersTo" />
+						<xs:enumeration value="BasedOn" />
+						<xs:enumeration value="Affecting" />
+						<xs:enumeration value="TranslationOf" />
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:attribute>
+		</xs:complexType>
+	</xs:element>
+
+	<xs:element name="DigitalFile">
+		<xs:complexType>
+			<xs:simpleContent>
+				<xs:extension base="xs:string">
+					<xs:attribute name="FileFormat" type="xs:string"
+						use="required" />
+				</xs:extension>
+			</xs:simpleContent>
+		</xs:complexType>
+	</xs:element>
+
+</xs:schema>

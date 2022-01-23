@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<p:Document xmlns:p="http://www.vdi.de/schemas/vdi2770"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770">
+	<p:DocumentId DomainId="" IsPrimary="true"></p:DocumentId>
+	<p:DocumentIdDomain DocumentDomainId="">
+		<p:Party Role="Responsible">
+			<p:Organization OrganizationId="" OrganizationName=""
+				OrganizationOfficialName="" />
+		</p:Party>
+	</p:DocumentIdDomain>
+	<p:DocumentClassification
+		ClassificationSystem="">
+		<p:ClassId></p:ClassId>
+		<p:ClassName Language=""></p:ClassName>
+	</p:DocumentClassification>
+	<p:ReferencedObject>
+		<p:ObjectId IsGloballyBiUnique="true" ObjectType="Type"
+			RefType=""></p:ObjectId>
+		<p:ReferenceDesignation></p:ReferenceDesignation>
+		<p:EquipmentId></p:EquipmentId>
+		<p:ProjectId></p:ProjectId>
+		<p:Party Role="Supplier">
+			<p:Organization OrganizationId="" OrganizationName=""
+				OrganizationOfficialName="" />
+		</p:Party>
+		<p:Description Language=""></p:Description>
+	</p:ReferencedObject>
+	<p:DocumentVersion NumberOfPages="1">
+		<p:DocumentVersionId></p:DocumentVersionId>
+		<p:Language></p:Language>
+		<p:Party Role="Author">
+			<p:Organization OrganizationId="" OrganizationName=""
+				OrganizationOfficialName="" />
+		</p:Party>
+		<p:DocumentDescription Language="">
+			<p:Title></p:Title>
+			<p:Summary></p:Summary>
+			<p:KeyWords>
+				<p:KeyWord></p:KeyWord>
+			</p:KeyWords>
+		</p:DocumentDescription>
+		<p:LifeCycleStatus SetDate="2001-01-01"
+			StatusValue="InReview">
+			<p:Party Role="Responsible">
+				<p:Organization OrganizationId="" OrganizationName=""
+					OrganizationOfficialName="" />
+			</p:Party>
+		</p:LifeCycleStatus>
+		<p:DocumentRelationship Type="RefersTo">
+			<p:DocumentId DomainId=""></p:DocumentId>
+		</p:DocumentRelationship>
+		<p:DigitalFile FileFormat=""></p:DigitalFile>
+	</p:DocumentVersion>
+</p:Document>

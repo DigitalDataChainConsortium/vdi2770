@@ -1,0 +1,41 @@
+= Changelog
+
+== v0.9.5
+2022-01-23
+
+* preparing github actions
+* updated documentation, because github does not support adoc includes
+* fixed test data pdf files (clean PDF A3 files)
+* files cleanup
+* init git flow
+* added constributing information and code of conduct
+
+== v0.9.4
+2022-01-07
+
+* fixed application properties processing
+
+== v0.9.3
+2022-01-07
+
+* updated log4j (see CVE-2017-5645)
+* support Java 17
+* fixed Apache FOP warnings
+* documentation review
+* cleanups
+* API extension: get version information
+
+== v0.9.2
+2021-12-23
+
+* updated log4j (see CVE-2017-5645)
+* updated MIT license information
+* support Java 11
+
+== v0.9.1
+2021-12-16
+
+* preparing first official release
+* added license information
+* updated docker container
+* extended tests

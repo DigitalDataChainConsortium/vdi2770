@@ -1,0 +1,18 @@
+=== Third Party Licenses
+
+The following table lists third party libraries and fonts that are directly
+used in this project.
+To list transitive dependencies and their licenses, call `mvn site` and have a 
+loot at the dependencies HTML page.
+
+.Third party components
+[options="header"]
+|===
+|*Component*|*Type*|*License*
+|link:https://github.com/FasterXML/jackson[Jackson] | Library |http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://github.com/google/guava[Google Guava] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://commons.apache.org/proper/commons-lang/[Apache Commons Lang] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://logging.apache.org/log4j/[Apache Log4j] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://spring.io/projects/spring-boot[Spring Boot] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://spring.io/projects/spring-security[Spring Security] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|===

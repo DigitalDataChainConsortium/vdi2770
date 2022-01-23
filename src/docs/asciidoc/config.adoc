@@ -1,0 +1,7 @@
+:toc: left
+:toclevels: 2
+:icons: font
+:sectnums:
+:source-highlighter: rouge
+:revnumber: v0.9.4 (draft)
+:revdate: 2022-01-07

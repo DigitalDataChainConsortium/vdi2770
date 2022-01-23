@@ -1,0 +1,56 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>vdi2770-docker-web</artifactId>
+	<name>vdi2770-docker-web</name>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>de.vdi.vdi2770</groupId>
+		<artifactId>vdi2770</artifactId>
+		<version>0.9.5</version>
+		<relativePath>../../pom.xml</relativePath>
+	</parent>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+				<dependencies>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj-pdf</artifactId>
+						<version>1.6.2</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>generate-asciidoc-readme</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>process-asciidoc</goal>
+						</goals>
+						<configuration>
+							<failOnError>false</failOnError>
+							<sourceDocumentName>Readme.adoc</sourceDocumentName>
+							<sourceDirectory>${project.build.directory}/asciidoc</sourceDirectory>
+							<backend>pdf</backend>
+							<baseDir>${project.basedir}</baseDir>
+							<outputDirectory>${project.basedir}</outputDirectory>
+							<attributes>
+								<toc />
+								<compact>true</compact>
+								<revnumber>${project.version}</revnumber>
+								<revdate>${maven.build.timestamp}</revdate>
+							</attributes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

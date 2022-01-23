@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770 vdi2770.xsd"
+    xmlns="http://www.vdi.de/schemas/vdi2770">
+	<DocumentId DomainId="BSP-OEM">XCP328490</DocumentId>
+	<DocumentIdDomain DocumentDomainId="BSP-OEM">
+		<Party Role="Responsible">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification ClassificationSystem="VDI2770:2018">
+		<ClassId>01-01</ClassId>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId RefType="product type" ObjectType="Type">BR-01</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Baureihe</Description>
+	</ReferencedObject>
+	<ReferencedObject>
+		<ObjectId RefType="product type" ObjectType="Type">BR-01-26</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Modell</Description>
+	</ReferencedObject>
+	<ReferencedObject>
+		<ObjectId RefType="serial number" ObjectType="Individual">XUJ-345-111</ObjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA"/>
+		</Party>
+		<Description Language="de">Seriennummer</Description>
+	</ReferencedObject>
+	<DocumentVersion>
+		<DocumentVersionId>1.0</DocumentVersionId>
+		<Language>de</Language>
+		<Party Role="Author">
+			<Organization OrganizationName="Beispiel GmbH"
+                OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Hauptdokument</Title>
+			<Summary>Das Hauptdoument ist eine Auflistung aller Dokumente einer Ebene.
+                Gibt es zu dieser Ebene auch eine untergeordnete Ebene, so enthält die Auflistung auch die Hauptdokumente
+                der zugehörigen ersten untergeordneten Ebene.
+			</Summary>
+			<KeyWords>
+				<KeyWord>Hauptdokument</KeyWord>
+				<KeyWord>Dokumentenliste</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus StatusValue="Released" SetDate="2018-04-04">
+			<Party Role="Responsible">
+				<Organization OrganizationName="Beispiel GmbH"
+                    OrganizationOfficialName="Beispiel GmbH &amp; Co. KGaA" OrganizationId="BSP"/>
+			</Party>
+		</LifeCycleStatus>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ts-dds-2234</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ac345-339-112/07</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ac345-339-112/02</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ac345-339-112</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ac345-339-112/00</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ac345-339-112/00e</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">2016-04_FSA_24345</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">PTB-2016-3301-fsd-17</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ba-dds-2234</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">as-44/02</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">iwp-dds-234/02/a</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">iwp-dds-234/02/p</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">ra-dds-234</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">e-dds-234/02</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">hub-dds-234</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">20180226-B-3229</DocumentId>
+		</DocumentRelationship>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="BSP-OEM">g-dds-234</DocumentId>
+		</DocumentRelationship>
+		<DigitalFile FileFormat="application/pdf">VDI2770_Main.pdf</DigitalFile>
+	</DocumentVersion>
+</Document>

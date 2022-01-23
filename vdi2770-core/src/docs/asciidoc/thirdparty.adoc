@@ -1,0 +1,20 @@
+=== Third Party Licenses
+
+The following table lists third party libraries and fonts that are directly
+used in this project.
+To list transitive dependencies and their licenses, call `mvn site` and have a 
+loot at the dependencies HTML page.
+
+.Third party components
+[options="header"]
+|===
+|*Component*|*Type*|*License*
+|https://github.com/DozerMapper/dozer[dozermapper] | Library |http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://github.com/google/guava[Google Guava] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://commons.apache.org/proper/commons-cli/[Apache CLI] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|http://commons.apache.org/collections/[Apache Commons Collections] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://commons.apache.org/proper/commons-io/[Apache Commons IO] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://commons.apache.org/proper/commons-lang/[Apache Commons Lang] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://logging.apache.org/log4j/[Apache Log4j] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|https://github.com/javaee/jaxb-v2[JAXB] | Library | https://oss.oracle.com/licenses/CDDL+GPL-1.1[CDDL 1.1], https://oss.oracle.com/licenses/CDDL+GPL-1.1[GPL2 w/ CPE]
+|===

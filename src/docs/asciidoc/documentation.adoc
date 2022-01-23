@@ -1,0 +1,19 @@
+= VDI 2770 Reference Implementation
+Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
+include::config.adoc[]
+
+include::../../../Readme.adoc[tag=overview]
+
+include::../../../vdi2770-core/src/docs/asciidoc/core.adoc[]
+
+include::../../../vdi2770-processor/src/docs/asciidoc/processor.adoc[]
+
+include::../../../vdi2770-validator/vdi2770-validator-web/src/docs/asciidoc/web.adoc[]
+
+include::../../../docker/validator-web/src/docs/asciidoc/docker.adoc[]
+
+include::../../../Readme.adoc[tag=license]
+
+include::../../../Readme.adoc[tag=supporters]
+
+include::../../../Readme.adoc[tag=doc-license]

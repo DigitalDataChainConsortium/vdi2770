@@ -1,0 +1,10 @@
+= API documentation
+
+== Validation Report
+
+.request
+include::{snippets}/report/http-request.adoc[opts=optional]
+
+.response
+include::{snippets}/report/http-response.adoc[opts=optional]
+

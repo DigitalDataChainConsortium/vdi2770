@@ -1,0 +1,26 @@
+=== Third Party Licenses
+
+The following table lists third party libraries and fonts that are directly
+used in this project.
+To list transitive dependencies and their licenses, call `mvn site` and have a 
+loot at the dependencies HTML page.
+
+.Third party components
+[options="header"]
+|===
+|*Component*|*Type*|*License*
+|link:https://github.com/FasterXML/jackson[Jackson] | Library |http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://github.com/google/guava[Google Guava] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://commons.apache.org/proper/commons-cli/[Apache CLI] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://commons.apache.org/proper/commons-io/[Apache Commons IO] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://commons.apache.org/proper/commons-lang/[Apache Commons Lang] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://commons.apache.org/proper/commons-text[Apache Commons Text] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://logging.apache.org/log4j/[Apache Log4j] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://www.joda.org/joda-time/[Joda Time] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://github.com/srikanth-lingala/zip4j[ZIP4J] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://pdfbox.apache.org/[Apache PDFBox®] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://tika.apache.org/[Apache Tika] | Library | http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://xmlgraphics.apache.org/fop/[Apache FOP] | Library |  http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://fonts.google.com/specimen/Roboto[Roboto] | Font |  http://www.apache.org/licenses/LICENSE-2.0.txt[Apache License, Version 2.0]
+|link:https://www.babelstone.co.uk/Fonts/Han.html[BabelStone Han] | Font | http://ftp.gnu.org/non-gnu/chinese-fonts-truetype/LICENSE[ARPHIC PUBLIC LICENSE]
+|===

@@ -1,0 +1,82 @@
+=== Module Overview
+
+This module provides container processing and validation features for VDI 2770 container files 
+and its content.
+
+=== Technical Overview
+
+Java POJO classes of XML elements are generated using Jakarta XML Binding (JAXB). These 
+classes are mapped using link:https://dozermapper.github.io/[dozer mappings] to plain POJO files 
+without any JAXB annotations. Logging is provided using SLF4J and Log4J.
+
+This projects supports messages translations. English, German and Chinese language are supported. 
+Translations are handle by ``src/main/resources/i8n/metadata[_<language>].properties`` files.
+
+
+=== Introduction of useful Classes and Packages
+
+The base namespace of this module is ``de.vdi.vdi2770.metadata``. The package `
+``de.vdi.vdi2770.metadata.model`` provides plain POJO files for VDI 2770 metadata including 
+enumerations and e.g. predefined file names. The package ``de.vdi.vdi2770.metadata.xml`` provides 
+XML readers and XML writers.
+
+// ==== Container Validation
+
+// [source,Java]
+// ----
+// ----
+
+// === Container Processing
+
+// [source,Java]
+// ----
+// ----
+
+=== Application Configuration
+
+The application is configured using the file `app.properties`.
+
+[source,properties]
+----
+vdi2770.report.pdf.logo.file = demo.png
+vdi2770.report.pdf.logo.height = 0.6cm
+vdi2770.report.pdf.title.logo.height = 1.8cm
+vdi2770.report.pdf.author = Demo
+vdi2770.report.pdf.heading.color = #000000
+vdi2770.report.pdf.title.color = #000000
+vdi2770.report.pdf.table.border.color = #000000
+vdi2770.report.pdf.font.color = #000000
+vdi2770.report.pdf.link.color = #000000
+
+vdi2770.zip.maxcompression = -1
+vdi2770.zip.maxfilesize = -1
+----
+
+In the following, important application settings are explained.
+
+The following parameters are used for PDF report generation.
+
+``vdi2770.report.pdf.logo.file``:: Specify a path to a logo file.
+
+``vdi2770.report.pdf.logo.height``:: The logo height in the page header.
+
+``vdi2770.report.pdf.title.logo.height``:: The logo height at the title page.
+
+``vdi2770.report.pdf.author``:: The name of the author.
+
+``vdi2770.report.pdf.heading.color``:: Font color of headings.
+
+``vdi2770.report.pdf.title.color``:: Font color of the report title.
+
+``vdi2770.report.pdf.table.border.color``:: Font color for table borders.
+
+``vdi2770.report.pdf.font.color``:: Font color of text.
+
+``vdi2770.report.pdf.link.color``:: Font color for links.
+
+The following parameters are used to detect ZIP bombs.
+
+``vdi2770.zip.maxcompression``:: Maximum factor of a zip entry between uncompressed and compressed 
+size.
+
+``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.

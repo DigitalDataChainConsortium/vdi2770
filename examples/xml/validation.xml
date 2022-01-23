@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Document xmlns="http://www.vdi.de/schemas/vdi2770"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.vdi.de/schemas/vdi2770 vdi2770.xsd">
+	<DocumentId DomainId="DemoDomain" IsPrimary="true">4711Demo</DocumentId>
+	<DocumentId DomainId="MyDomain" IsPrimary="false">AB-8889-XY/40</DocumentId>
+	<DocumentIdDomain DocumentDomainId="DemoDomain">
+		<Party Role="Responsible">
+			<Organization OrganizationId="ULE"
+				OrganizationName="Uni Leipzig"
+				OrganizationOfficialName="Universität Leipzig" />
+		</Party>
+	</DocumentIdDomain>
+	<DocumentIdDomain DocumentDomainId="MyDomain">
+		<Party Role="Responsible">
+			<Organization OrganizationId="CUS"
+				OrganizationName="Customer" OrganizationOfficialName="Customer GmbH" />
+		</Party>
+	</DocumentIdDomain>
+	<DocumentClassification
+		ClassificationSystem="VDI2770:2018">
+		<ClassId>03-01</ClassId>
+		<ClassName Language="de">Montage, Inbetriebnahme, Demontage</ClassName>
+		<ClassName Language="en">assembly, disassembly</ClassName>
+	</DocumentClassification>
+	<DocumentClassification
+		ClassificationSystem="IEC61355">
+		<ClassId>DD</ClassId>
+		<ClassName Language="de">Technische Berichte</ClassName>
+		<ClassName Language="en">Technical reports</ClassName>
+	</DocumentClassification>
+	<ReferencedObject>
+		<ObjectId ObjectType="Individual" RefType="serial number">29389-2139292</ObjectId>
+		<ObjectId ObjectType="Type" RefType="product type">4023/A</ObjectId>
+		<ReferenceDesignation>#ABC 001</ReferenceDesignation>
+		<ReferenceDesignation>#ABC 001 .99</ReferenceDesignation>
+		<EquipmentId>900.330.30/100</EquipmentId>
+		<ProjectId>P001</ProjectId>
+		<Party Role="Manufacturer">
+			<Organization OrganizationId="ULE"
+				OrganizationName="Uni Leipzig"
+				OrganizationOfficialName="Universität Leipzig" />
+		</Party>
+		<Party Role="Supplier">
+			<Organization OrganizationId="ACME"
+				OrganizationName="ACME" OrganizationOfficialName="ACME INC" />
+		</Party>
+		<Description Language="en">Product A</Description>
+		<Description Language="de">Produkt A</Description>
+	</ReferencedObject>
+	<DocumentVersion NumberOfPages="100">
+		<DocumentVersionId>1.0</DocumentVersionId>
+		<Language>de</Language>
+		<Language>en</Language>
+		<Party Role="Author">
+			<Organization OrganizationId="ULE"
+				OrganizationName="Uni Leipzig"
+				OrganizationOfficialName="Universität Leipzig" />
+		</Party>
+		<DocumentDescription Language="de">
+			<Title>Demo Bericht</Title>
+			<SubTitle>Ein kleines Beispiel für einen Untertitel</SubTitle>
+			<Summary>Dies ist eine Zusammenfassung in deutsch für den beispielhaften Demo Bericht</Summary>
+			<KeyWords>
+				<KeyWord>Test</KeyWord>
+				<KeyWord>Demo</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<DocumentDescription Language="en">
+			<Title>Demo Report</Title>
+			<SubTitle>A short example for sub titles</SubTitle>
+			<Summary>This is a summary in english for the Demo Report document</Summary>
+			<KeyWords>
+				<KeyWord>Test</KeyWord>
+				<KeyWord>Demo</KeyWord>
+			</KeyWords>
+		</DocumentDescription>
+		<LifeCycleStatus SetDate="2019-05-07"
+			StatusValue="Released">
+			<Party Role="Responsible">
+				<Organization OrganizationId="ULE"
+					OrganizationName="Uni Leipzig"
+					OrganizationOfficialName="Universität Leipzig" />
+			</Party>
+			<Comments Language="de">Die Version ist frei erfunden, aber freigegeben.</Comments>
+			<Comments Language="en">This milestone is just for testing purposes</Comments>
+		</LifeCycleStatus>
+		<DocumentRelationship Type="RefersTo">
+			<DocumentId DomainId="DemoDomain">449890</DocumentId>
+			<Description Language="de">Dies ist eine Dokumentenbeziehung, die ausschließlich auf eine Dokument ID verweist.</Description>
+			<Description Language="en">This is a document relationship, that only refers to a document id.</Description>
+		</DocumentRelationship>
+		<DocumentRelationship Type="Affecting">
+			<DocumentId DomainId="MyDomain">9994/22029</DocumentId>
+			<DocumentVersionId>1.0</DocumentVersionId>
+			<DocumentVersionId>2.0</DocumentVersionId>
+			<Description Language="de">Diese Beziehung gilt für genau zwei Dokumentversion eines Dokumentes.</Description>
+		</DocumentRelationship>
+		<DigitalFile FileFormat="application/pdf">test.pdf</DigitalFile>
+		<DigitalFile FileFormat="application/vnd.ms-excel">test.xls</DigitalFile>
+	</DocumentVersion>
+</Document>

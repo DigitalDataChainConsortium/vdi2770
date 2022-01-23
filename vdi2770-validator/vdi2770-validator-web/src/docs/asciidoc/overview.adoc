@@ -1,0 +1,442 @@
+=== Application Overview
+
+VDI 2770 validator application can validate document container, 
+documentation container, XML metadata files and PDF files.
+
+This service uses https://spring.io/projects/spring-boot[Spring-Boot]. Three REST endpoints are provided:
+
+* ``/rest/report``: Return report messages as JSON data structure.
+* ``/rest/reportpdf``: Return report messages as PDF file.
+* ``/rest/stats``: Get statistics as JSON.
+
+The API supports internationalization. Currently, English, German and Chinese are supported. 
+The default language is English. To set your preferred language, 
+set the HTTP header ``Accept-Language``. A security token is given the HTTP header ``Api-Key``.
+
+``Api-Key``:: Set the REST API key. The name of the header and its value is configurable.
+
+``Accept-Language``:: Set the desired language of validation messages. English, Germany and Chinese 
+are supported. In case of other languages, English will return.
+
+=== Settings
+
+``/rest/report`` and ``/rest/reportpdf`` support file parameters as well as a 
+data structure that is defined as follows:
+
+[source,json]
+----
+{
+  "renderInfo": "boolean",
+  "renderWarning": "boolean",
+  "allowStatistics": "boolean",
+  "enableStrictMode": "boolean"
+}
+----
+
+``renderInfo``:: If ``renderInfo`` is disabled, no report information 
+returns (default is ``false``) but warnings and errors. 
+
+``renderWarning``:: If ``renderWarning`` is disabled, 
+no report warnings return (default is ``false``). 
+
+``allowStatistics``:: To allow statistics collections, set ``allowStatistics`` to 
+``true`` (default is `false`). Anonymized results are persisted in a CSV file.
+
+``enableStrictMode``:: If set to ``true``, container files
+shall contain VDI2770_Main.xml or VDI2770_Metadata.xml file. If ``false``, the validator tries
+to check other XML files that which are not named according to the specification.
+
+=== JSON report
+
+The ``/rest/report`` endpoint returns a recursive JSON ``report`` data structure that is 
+defined as follows:
+
+[source,json]
+----
+{
+  "containerType": "string",
+  "fileHash": "string",
+  "fileName": "string",
+  "id": "string",
+  "locale": "string",
+  "messages": [
+        {
+            "indent": "integer",
+            "level": "string",
+            "text": "string"
+        }
+    ]
+    "subReports": [
+    ]
+}    
+----
+
+``containerType``:: If ``containerType`` is ``DOCUMENTATION_CONTAINER``, the validated file is a 
+documentation container. If it is ``DOCUMENT_CONTAINER``, the given file was a document container. 
+The ``containerType`` type is optional and may be `null` (in case of a PDF file or a XML metadata file).
+
+``fileHash``:: The ``fileHash`` contains a SHA25 hash for the file or a UUID in case the hash 
+generation failed.
+
+``fileName``:: The ``fileName`` property holds the name of the validated file, which may be a 
+nested container file.
+
+``id``:: The property ``id`` contains a unique identification string for the report.
+
+``locale``:: The language of the report is given  by the property ``locale``.
+
+``messages``:: The array ``messages`` holds the report messages, that directly refer to the report. 
+The log levels ``INFO``, ``WARN`` and ``ERROR`` are supported. The ``text`` property holds the 
+localized message (see also ``locale`` property of the ``report``).
+
+Container files are recursive structures. Therefore, the ``report`` data structure is recursive, 
+too. The array ``subReports`` contains ``report`` objects for nested container and files.
+
+=== Example: XML metadata file
+
+In the following, the validation of an XML metadata file is shown. The property ``subReports`` is 
+empty, because an XML metadata file does not have any nested file elements.
+
+[source,shell]
+----
+user@server:~/vdi2770$ curl -s -S -X POST -H 'API-KEY: vdi2770' -H 'Accept-Language: en' -F 'file=@VDI2770_Main.xml' http://localhost:8080/rest/report | python -mjson.tool
+{
+    "containerType": null,
+    "fileHash": "285ae7d6b07bdd630d65f4b6ce081369209123b64b26efafa535b73640186ba4",
+    "fileName": "VDI2770_Main.xml",
+    "id": "cLxbVOvD",
+    "locale": "en",
+    "messages": [
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_020 XML file is valid."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "D_003 At least one document class should be conform to IEC61355."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_009 DocumentId: INFAIH1.1;INFAI;true."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_010 Object Individual: XXZ1;null;false."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_010 Object Type: http://company-inc.com/4712;null;false."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_011 Document ClassId: VDI2770:2018 / 01-01 [de: Identifikation]."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_012 Document Relations: 456-29201;INFAI;false."
+        },
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_012 Document Relations: AB393;INFAI;false / 2.0."
+        }
+    ],
+    "subReports": []
+}
+----
+
+To disable warnings and information, use the settings parameter.
+
+[source,shell]
+----
+user@server:~/vdi2770$ curl -S -s -X POST -H 'api-key:vdi2770' -H 'Accept-Language: en' -F 'file=@VDI2770_Main.xml' -F 'settings={"renderInfo":false,"renderWarning":false,"a
+llowStatistics":true}' http://localhost:8080/rest/report | python -mjson.tool
+{
+    "containerType": null,
+    "fileHash": "285ae7d6b07bdd630d65f4b6ce081369209123b64b26efafa535b73640186ba4",
+    "fileName": "VDI2770_Main.xml",
+    "id": "Vwqqxjuu",
+    "locale": "en",
+    "messages": [],
+    "subReports": []
+}
+----
+
+==== Example: Container file 
+
+In the following, the validation of a simple documentation container is shown (shortend). 
+The property ``subReports`` is set, because the documentation container
+contains two document container files. Information messages are skipped.
+
+[source,shell]
+----
+user@server:~/vdi2770$ curl -S -s -X POST -H 'api-key:vdi2770' -H 'Accept-Language: en' -F 'file=@demo_vdi.zip' -F 'settings={"renderInfo":false,"renderWarning":true,"allowStatistics":true}' http://localhost:8080/rest/report | python -mjson.tool
+{
+    "containerType": "DOCUMENTATION_CONTAINER",
+    "fileHash": "4e830dda2f622143f745a57cc2ccbeb5648d1f0ddce38dd5ba06dc173cf87b6b",
+    "fileName": "demo_vdi.zip",
+    "id": "LjlPVV1O",
+    "locale": "en",
+    "messages": [
+        {
+            "indent": 0,
+            "level": "ERROR",
+            "text": "REP_017 Cannot read PDF/A level of VDI2770_Main.pdf."
+        }
+    ],
+    "subReports": [
+        {
+            "containerType": "DOCUMENT_CONTAINER",
+            "fileHash": "ec9084e456a9a5c11822384ea9472156926fa5f1c0331858c7dd35fbc2b0b940",
+            "fileName": "456-29201.zip",
+            "id": "1OT34EvT",
+            "locale": "en",
+            "messages": [],
+            "subReports": []
+        },
+        {
+            "containerType": "DOCUMENT_CONTAINER",
+            "fileHash": "9eff13d0d5174a562394fa3adc3948e8438a84bdd251fefbd76b83ea199c13dc",
+            "fileName": "AB393.zip",
+            "id": "X0KuXXV1",
+            "locale": "en",
+            "messages": [],
+            "subReports": []
+        }
+    ]
+}
+----
+
+==== Example PDF file
+
+A simple PDF validation is implemented. The PDF/A value is checked for conformity. In the
+following example, the given PDF file has the PDF/A level 3A.
+
+[source,shell]
+----
+user@server:~/vdi2770$ curl -S -s -X POST -H 'api-key:vdi2770' -H 'Accept-Language: en' -F 'file=@document.pdf' http://localhost:8080/rest/report | python -mjson.tool
+{
+    "containerType": null,
+    "fileHash": "f5643af30b632523bac04b0a08b25b1c959600b8b7b23b0139b73a5df444f657",
+    "fileName": "document.pdf",
+    "id": "P3i3sA9t",
+    "locale": "en",
+    "messages": [
+        {
+            "indent": 0,
+            "level": "INFO",
+            "text": "REP_015 PDF/A level of report.pdf: 3A."
+        }
+    ],
+    "subReports": []
+}
+----
+
+TIP: https://verapdf.org/software/[VeraPDF] is a very useful software to validate
+PDF files (preflight) and get a report on conformance problems. The VDI 2770 web validator
+does not include this library, because of license incompatibilities.
+
+=== PDF report
+
+The ``/rest/reportpdf`` endpoint returns a PDF document containing validation information.
+
+In the following, an example for the REST endpoint ``/rest/reportpdf`` is shown. 
+The file demo_vdi.zip is a documentation container. The resulting PDF file is stored 
+as ``report.pdf`` file.
+
+==== Example: Container file 
+
+In the following, a sime documentation container is validated. The resulting report
+will be saved as ``report.pdf`` file.
+
+NOTE: The PDF report conforms to PDF/A-3a.
+
+[source,shell]
+----
+user@server:~/vdi2770 curl -X POST -H 'api-key: vdi2770' -H 'Accept-Language: zh' -F 'file=@demo_vdi.zip' -F 'settings={"renderInfo":false,"renderWarning":true,"allowStatistics":true}' http://localhost:8080/rest/reportpdf --output report.pdf
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+100 13.3M  100 13.2M  100  129k  5446k  53284  0:00:02  0:00:02 --:--:-- 5496k
+----
+
+
+=== Statistics
+
+Validation statistics may help to improve container validation. Furthermore, such a feedback is 
+valuable for the VDI 2770 working group. Statistics are saved as CSV file. The file hash, a 
+timestamp and the IDs of errors and warnings are logged. In the following, an example CSV 
+file is shown.
+
+[source,shell]
+----
+user@server:~/vdi2770$ less stats/statistics.csv
+File;Timestamp;Errors;Warnings
+4152f3ee8c0a1dcb1f833460af5f772d6494885b456df1def576b09642ea22ab;2021-05-23T11:23:40;REP_035, REP_004, REP_039, REP_017, REP_023;
+4152f3ee8c0a1dcb1f833460af5f772d6494885b456df1def576b09642ea22ab;2021-05-23T11:23:50;;REP_027, REP_028
+----
+
+The ``rest/stats`` endpoint returns the statistic values. The resulting JSON structure is defined 
+as follows:
+
+[source,json]
+----
+[
+  {
+    errorIds: ["string"],
+    hash: "string",
+    timestamp: "ISO timestamp as string",
+    warningIds: ["string"]
+  }
+]
+----
+
+``hash``:: The file hash (or unique UUID) of the validated file. 
+
+``errorIds``:: This array contains the error ID of the report. 
+
+``warningIds``:: This array contains the warning ID of the report. 
+
+``timestamp``:: Timestamp of validation.
+
+NOTE: There is no different security token of ``rest/stats`` endoint. The application
+only implements a single security token filter.
+
+Calling ``rest/stats`` without any parameter returns the complete statistics file as JSON. 
+
+[source,shell]
+----
+curl -S -s -X GET -H 'api-key:vdi2770' http://localhost:8080/rest/stats | python -mjson.tool
+[
+    {
+        "errorIds": [],
+        "hash": "285ae7d6b07bdd630d65f4b6ce081369209123b64b26efafa535b73640186ba4",
+        "timestamp": "2021-12-01 13:42:14",
+        "warningIds": []
+    },
+    {
+        "errorIds": [
+            "REP_017"
+        ],
+        "hash": "4e830dda2f622143f745a57cc2ccbeb5648d1f0ddce38dd5ba06dc173cf87b6b",
+        "timestamp": "2021-12-02 15:36:34",
+        "warningIds": []
+    },
+    {
+        "errorIds": [],
+        "hash": "f5643af30b632523bac04b0a08b25b1c959600b8b7b23b0139b73a5df444f657",
+        "timestamp": "2021-12-05 15:41:25",
+        "warningIds": []
+    }
+]
+----
+
+Using the parameter ``timestamp``, one can filter statistic entries. The value of this parameter
+is a date encoded according to ISO 8601. In the following example, 
+statistics will return that are logged at 2021-12-05 or later.
+
+[source,shell]
+----
+user@server:~/vdi2770$ curl -S -s -X GET -H 'api-key:vdi2770' http://localhost:8080/rest/stats?timestamp=2021-05-24| python -mjson.tool
+[
+    {
+        "errorIds": [],
+        "hash": "f5643af30b632523bac04b0a08b25b1c959600b8b7b23b0139b73a5df444f657",
+        "timestamp": "2021-12-05 15:41:25",
+        "warningIds": []
+    }
+]
+----
+
+=== Application Configuration
+
+The application is configured using the file `app.properties`.
+
+[source,properties]
+----
+spring.main.banner-mode=off
+
+# file uploads
+spring.servlet.multipart.max-file-size=2MB
+spring.servlet.multipart.max-request-size=2MB
+
+# HTTP header settings
+vdi2770.http.auth.tokenValue=demotoken
+vdi2770.http.auth.tokenName=Api-Key
+vdi2770.http.cors.domains=http://localhost:9000
+
+# Logging settings
+logging.level.root=WARN
+logging.level.com.github.dozermapper=WARN
+logging.level.de.vdi.vdi2770=WARN
+logging.level.org.apache.fop=ERROR
+logging.level.org.apache=WARN
+logging.level.de.vdi.vdi2770.web.security.PreAuthentitactedTokenFilter=WARN
+
+logging.pattern.console= %d{yyyy-MM-dd HH:mm:ss} - %msg%n
+logging.pattern.file= %d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%
+
+vdi2770.statistic.logfile=/app/log/statistics.csv
+logging.file.name=/app/log/validator.log
+
+# PDF report settings
+vdi2770.report.pdf.logo.file = ul.png
+vdi2770.report.pdf.logo.height = 1.7cm
+vdi2770.report.pdf.title.logo.height = 5cm
+vdi2770.report.pdf.author = Leipzig University
+vdi2770.report.pdf.heading.color = #b02f2c
+vdi2770.report.pdf.title.color = #b02f2c
+vdi2770.report.pdf.table.border.color = #b02f2c
+vdi2770.report.pdf.font.color = #262a31
+vdi2770.report.pdf.link.color = darkblue
+
+# ZIP bomb detection
+vdi2770.zip.maxcompression = 100
+vdi2770.zip.maxfilesize = 209715200
+----
+
+In the following, important application settings are explained.
+
+``spring.servlet.multipart.max-file-size``:: Set maximum file upload size.
+``spring.servlet.multipart.max-request-size`` :: Set maximum HTTP request size.
+
+``vdi2770.http.auth.tokenName``:: Specify the name of the security header. Default value 
+is ``Api-Key``.
+
+``vdi2770.http.auth.tokenValue``:: Security token to access the application. Default value 
+is ``vdi2770``.
+
+``vdi2770.http.cors.domains``:: Configure domains for CORS. Default is an empty List.
+
+The following parameters are used for PDF report generation.
+
+``vdi2770.report.pdf.logo.file``:: Specify a path to a logo file.
+
+``vdi2770.report.pdf.logo.height``:: The logo height in the page header.
+
+``vdi2770.report.pdf.title.logo.height``:: The logo height at the title page.
+
+``vdi2770.report.pdf.author``:: The name of the author.
+
+``vdi2770.report.pdf.heading.color``:: Font color of headings.
+
+``vdi2770.report.pdf.title.color``:: Font color of the report title.
+
+``vdi2770.report.pdf.table.border.color``:: Font color for table borders.
+
+``vdi2770.report.pdf.font.color``:: Font color of text.
+
+``vdi2770.report.pdf.link.color``:: Font color for links.
+
+The following parameters are used to detect ZIP bombs.
+
+``vdi2770.zip.maxcompression``:: Maximum factor of a zip entry between uncompressed and compressed 
+size.
+
+``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.

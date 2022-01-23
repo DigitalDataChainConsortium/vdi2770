@@ -1,0 +1,316 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>de.vdi.vdi2770</groupId>
+	<version>0.9.5</version>
+	<artifactId>vdi2770</artifactId>
+	<name>vdi2770</name>
+	<packaging>pom</packaging>
+
+	<description>VDI 2770 project is a reference implementation of  VDI 2770 guideline.</description>
+
+	<issueManagement>
+		<url>https://github.com/schmidt-uni-leipzig/vdi2770impl/issues</url>
+		<system>GitHub Issues</system>
+	</issueManagement>
+
+	<scm>
+		<url>https://github.com/schmidt-uni-leipzig/vdi2770impl</url>
+		<connection>scm:git:git://https://github.com/schmidt-uni-leipzig/vdi2770impl.git</connection>
+		<developerConnection>scm:git:git@https://github.com/schmidt-uni-leipzig/vdi2770impl.git</developerConnection>
+	</scm>
+
+	<distributionManagement>
+		<repository>
+			<id>github</id>
+			<name>GitHub Packages</name>
+			<url>https://maven.pkg.github.com/schmidt-uni-leipzig/vdi2770impl</url>
+		</repository>
+	</distributionManagement>
+
+	<developers>
+		<developer>
+			<name>Johannes Schmidt</name>
+			<id>jschmidt</id>
+		</developer>
+	</developers>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<maven.compiler.source>17</maven.compiler.source>
+		<maven.compiler.target>17</maven.compiler.target>
+	</properties>
+
+	<licenses>
+		<license>
+			<name>MIT License</name>
+			<url>http://www.opensource.org/licenses/mit-license.php</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<modules>
+		<module>vdi2770-bom</module>
+		<module>vdi2770-core</module>
+		<module>vdi2770-processor</module>
+		<module>vdi2770-validator</module>
+		<module>docker/validator-web</module>
+	</modules>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-resources-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.asciidoctor</groupId>
+				<artifactId>asciidoctor-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+		<pluginManagement>
+			<plugins>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.1.0</version>
+					<configuration>
+						<encoding>UTF-8</encoding>
+					</configuration>
+					<executions>
+						<execution>
+							<id>copy-asciidoc-resources</id>
+							<phase>generate-resources</phase>
+							<goals>
+								<goal>copy-resources</goal>
+							</goals>
+							<configuration>
+								<resources>
+									<resource>
+										<directory>${project.basedir}</directory>
+										<includes>
+											<include>Readme.adoc</include>
+										</includes>
+									</resource>
+									<resource>
+										<directory>src/docs/asciidoc</directory>
+										<includes>
+											<include>*.adoc</include>
+										</includes>
+									</resource>
+								</resources>
+								<outputDirectory>${project.build.directory}/asciidoc</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.8.1</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.ec4j.maven</groupId>
+					<artifactId>editorconfig-maven-plugin</artifactId>
+					<version>0.1.1</version>
+					<executions>
+						<execution>
+							<id>check</id>
+							<phase>verify</phase>
+							<goals>
+								<goal>check</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<failOnFormatViolation>false</failOnFormatViolation>
+						<includes>
+							<include>**/*/*.java</include>
+							<include>**/*/*.xml</include>
+							<include>**/*/*.md</include>
+							<include>**/*/*.adoc</include>
+						</includes>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-site-plugin</artifactId>
+					<version>3.10.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-project-info-reports-plugin</artifactId>
+					<version>3.1.2</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.2.0</version>
+					<executions>
+						<execution>
+							<id>copy-dependencies</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>copy-dependencies</goal>
+							</goals>
+							<configuration>
+								<outputDirectory>${project.build.directory}/libs</outputDirectory>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>3.0.0-M5</version>
+				</plugin>
+				<plugin>
+					<groupId>org.codehaus.mojo</groupId>
+					<artifactId>license-maven-plugin</artifactId>
+					<version>2.0.0</version>
+					<executions>
+						<!--<execution> <id>first</id> <goals> <goal>update-file-header</goal> 
+							</goals> <phase>process-sources</phase> </execution> -->
+						<execution>
+							<id>download-licenses</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>download-licenses</goal>
+							</goals>
+						</execution>
+						<execution>
+							<id>add-third-party</id>
+							<phase>process-resources</phase>
+							<goals>
+								<goal>aggregate-add-third-party</goal>
+							</goals>
+						</execution>
+					</executions>
+					<configuration>
+						<includeTransitiveDependencies>true</includeTransitiveDependencies>
+						<sortArtifactByName>true</sortArtifactByName>
+						<useMissingFile>true</useMissingFile>
+						<missingFile>src/license/THIRD-PARTY.properties</missingFile>
+						<failOnMissing>false</failOnMissing>
+						<encoding>utf-8</encoding>
+						<verbose>true</verbose>
+						<outputDirectory>${project.build.directory}/classes/META-INF/licenses</outputDirectory>
+						<thirdPartyFilename>THIRD-PARTY-included-modules.txt</thirdPartyFilename>
+						<licensesOutputFile>${project.build.directory}/classes/META-INF/licenses/licenses-generated.xml</licensesOutputFile>
+						<licensesOutputDirectory>${project.build.directory}/classes/META-INF/licenses/text</licensesOutputDirectory>
+						<excludedScopes>test|system</excludedScopes>
+						<licenseMerges>
+							<licenseMerge>Apache 2.0|The Apache Software License, Version 2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache License, Version 2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache Software License, Version 2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache-2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache 2</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache License 2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|Apache Public License 2.0</licenseMerge>
+							<licenseMerge>Apache 2.0|apache_v2</licenseMerge>
+							<licenseMerge>CDDL 1.0|COMMON DEVELOPMENT AND DISTRIBUTION
+								LICENSE (CDDL) Version 1.0</licenseMerge>
+							<licenseMerge>CDDL 1.0|Common Development and Distribution
+								License (CDDL) v1.0</licenseMerge>
+							<licenseMerge>CDDL 1.0|cddl_v1</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.0 and GPL v2|Dual license
+								consisting of the CDDL v1.0 and GPL v2</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.0 and GPL v2|CDDL+GPLv2</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.0 and GPL v2|CDDL+GPL</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.0 and GPL v2|CDDL+GPL License</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.1 and GPL v2|Dual license
+								consisting of the CDDL v1.1 and GPL v2</licenseMerge>
+							<licenseMerge>Dual license: CDDL 1.1 and GPL v2|CDDL1_1+GPLv2</licenseMerge>
+							<licenseMerge>Dual License: CDDL 1.0 and GPL V2 with Classpath
+								Exception|CDDL + GPLv2 with classpath exception</licenseMerge>
+						</licenseMerges>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.jvnet.jaxb2.maven2</groupId>
+					<artifactId>maven-jaxb2-plugin</artifactId>
+					<version>0.14.0</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.glassfish.jaxb</groupId>
+							<artifactId>jaxb-runtime</artifactId>
+							<version>2.3.5</version>
+						</dependency>
+					</dependencies>
+					<configuration>
+						<extension>true</extension>
+						<plugins>
+							<plugin>
+								<groupId>org.jvnet.jaxb2_commons</groupId>
+								<artifactId>jaxb2-basics</artifactId>
+								<version>0.12.0</version>
+							</plugin>
+						</plugins>
+						<locale>en</locale>
+						<encoding>UTF-8</encoding>
+					</configuration>
+				</plugin>
+				<plugin>
+					<groupId>org.asciidoctor</groupId>
+					<artifactId>asciidoctor-maven-plugin</artifactId>
+					<version>2.2.1</version>
+					<dependencies>
+						<dependency>
+							<groupId>org.asciidoctor</groupId>
+							<artifactId>asciidoctorj-pdf</artifactId>
+							<version>1.6.2</version>
+						</dependency>
+					</dependencies>
+					<executions>
+						<execution>
+							<id>generate-asciidoc-documentation</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>process-asciidoc</goal>
+							</goals>
+							<configuration>
+								<sourceDocumentName>documentation.adoc</sourceDocumentName>
+								<sourceDirectory>${project.build.directory}/asciidoc</sourceDirectory>
+								<backend>pdf</backend>
+								<baseDir>src/docs/asciidoc</baseDir>
+								<outputDirectory>${project.build.directory}/doc</outputDirectory>
+								<attributes>
+									<toc />
+									<compact>true</compact>
+									<revnumber>${project.version}</revnumber>
+									<revdate>${maven.build.timestamp}</revdate>
+								</attributes>
+							</configuration>
+						</execution>
+						<execution>
+							<id>generate-asciidoc-readme</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>process-asciidoc</goal>
+							</goals>
+							<configuration>
+								<sourceDocumentName>Readme.adoc</sourceDocumentName>
+								<sourceDirectory>${project.build.directory}/asciidoc</sourceDirectory>
+								<backend>pdf</backend>
+								<baseDir>${project.basedir}</baseDir>
+								<outputDirectory>${project.build.directory}/doc</outputDirectory>
+								<attributes>
+									<toc />
+									<compact>true</compact>
+									<revnumber>${project.version}</revnumber>
+									<revdate>${maven.build.timestamp}</revdate>
+								</attributes>
+							</configuration>
+						</execution>
+					</executions>
+				</plugin>
+			</plugins>
+		</pluginManagement>
+	</build>
+</project>

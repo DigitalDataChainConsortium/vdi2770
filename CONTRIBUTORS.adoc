@@ -1,0 +1,3 @@
+= Contributors in alphabetical order
+
+* Johannes Schmidt, Leipzig University
