@@ -12,21 +12,21 @@
 	<description>VDI 2770 project is a reference implementation of  VDI 2770 guideline.</description>
 
 	<issueManagement>
-		<url>https://github.com/schmidt-uni-leipzig/vdi2770impl/issues</url>
+		<url>https://github.com/DigitalDataChainConsortium/vdi2770/issues</url>
 		<system>GitHub Issues</system>
 	</issueManagement>
 
 	<scm>
-		<url>https://github.com/schmidt-uni-leipzig/vdi2770impl</url>
-		<connection>scm:git:git://https://github.com/schmidt-uni-leipzig/vdi2770impl.git</connection>
-		<developerConnection>scm:git:git@https://github.com/schmidt-uni-leipzig/vdi2770impl.git</developerConnection>
+		<url>https://github.com/DigitalDataChainConsortium/vdi2770</url>
+		<connection>scm:git:git://https://github.com/DigitalDataChainConsortium/vdi2770.git</connection>
+		<developerConnection>scm:git:git@https://github.com/DigitalDataChainConsortium/vdi2770</developerConnection>
 	</scm>
 
 	<distributionManagement>
 		<repository>
 			<id>github</id>
 			<name>GitHub Packages</name>
-			<url>https://maven.pkg.github.com/schmidt-uni-leipzig/vdi2770impl</url>
+			<url>https://maven.pkg.github.com/DigitalDataChainConsortium/vdi2770</url>
 		</repository>
 	</distributionManagement>
 
