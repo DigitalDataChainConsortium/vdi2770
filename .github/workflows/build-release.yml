@@ -1,11 +1,12 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Publish package to GitHub Packages
+name: Build and package a release to GitHub Packages
 
 on:
+
   release:
     types: [created]
+    
+    workflow_dispatch:
+      branches: [main]
 
 jobs:
   publish:
@@ -24,3 +25,37 @@ jobs:
         run: mvn --batch-mode deploy
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Get project version
+        run: |
+          echo "RELEASE_VERSION=$(mvn help:evaluate -Dexpression=project.version -q -DforceStdout)" >> $GITHUB_ENV
+   
+      - name: Copy Validator
+        env:
+          VERSION: ${{ env.RELEASE_VERSION }}
+        run: |
+          cp ./vdi2770-validator/vdi2770-validator-web/target/vdi2770-validator-web-$VERSION.jar ./docker/validator-web/vdi2770-validator-web.jar
+         
+      - name: Show extracted Maven project version
+        run: echo ${{ env.RELEASE_VERSION }}
+   
+      - name: Log in to the Container registry
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+       
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v3
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+       
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v2
+        with:
+          context: ./docker/validator-web
+          push: true
+          tags: ${{ env.RELEASE_VERSION }}
+          labels: ${{ steps.meta.outputs.labels }}}}}}}}}}}}}
