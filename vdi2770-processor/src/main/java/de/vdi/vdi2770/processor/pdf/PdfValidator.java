@@ -197,6 +197,7 @@ public class PdfValidator {
 
 		try {
 			final DomXmpParser xmpParser = new DomXmpParser();
+			xmpParser.setStrictParsing(false);
 			return getPdfAVersion(xmpParser, metadata, pdfFileName);
 
 		} catch (final XmpParsingException e) {

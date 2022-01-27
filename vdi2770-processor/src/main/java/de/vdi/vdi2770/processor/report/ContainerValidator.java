@@ -876,8 +876,8 @@ public class ContainerValidator {
 					MessageLevel.ERROR, MessageFormat
 							.format(this.bundle.getString("REP_MESSAGE_017"), pdfFile.getName()),
 					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error reading PDF/A level", e);
+			if (log.isWarnEnabled()) {
+				log.warn("Error reading PDF/A level", e);
 			}
 			return messages;
 		}
