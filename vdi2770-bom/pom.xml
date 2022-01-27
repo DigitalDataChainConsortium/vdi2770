@@ -20,8 +20,8 @@
 		<log4j.version>2.17.1</log4j.version>
 		<jackson.version>2.13.1</jackson.version>
 		<pdfbox.version>2.0.25</pdfbox.version>
-		<xmlgraphics.version>2.6</xmlgraphics.version>
-		<spring.boot.version>2.6.2</spring.boot.version>
+		<xmlgraphics.version>2.7</xmlgraphics.version>
+		<spring.boot.version>2.6.3</spring.boot.version>
 	</properties>
 
 	<dependencyManagement>
