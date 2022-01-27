@@ -882,22 +882,6 @@ public class ContainerValidator {
 			return messages;
 		}
 
-		try {
-			PdfValidator pdfValidator = new PdfValidator(this.locale);
-			for (final Message message : pdfValidator.validate(pdfFile)) {
-				message.setIndent(indentLevel);
-				messages.add(message);
-			}
-		} catch (final PdfValidationException e) {
-			messages.add(new Message(
-					MessageLevel.ERROR, MessageFormat
-							.format(this.bundle.getString("REP_MESSAGE_019"), pdfFile.getName()),
-					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error validating PDF/A level", e);
-			}
-		}
-
 		return messages;
 	}
 
