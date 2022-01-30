@@ -24,14 +24,18 @@ package de.vdi.vdi2770.processor.pdf;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
+
+import org.apache.commons.io.IOUtils;
+import org.apache.pdfbox.cos.COSInputStream;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -44,7 +48,6 @@ import org.apache.xmpbox.xml.XmpParsingException;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
-import de.vdi.vdi2770.processor.common.Message;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -201,9 +204,60 @@ public class PdfValidator {
 			return getPdfAVersion(xmpParser, metadata, pdfFileName);
 
 		} catch (final XmpParsingException e) {
+
+			log.warn("Can not extract XMP metadata using Apache PDFBox");
+
+			// try to read PDF/A conformance manually
+			String level = tryGetPdfAConformance(metadata);
+			if (!Strings.isNullOrEmpty(level)) {
+				return level;
+			}
+
+			log.warn("Can not extract XMP metadata manually from XML: " + tryXmpToString(metadata));
+
 			throw new PdfValidationException(
 					MessageFormat.format(this.bundle.getString("PV_EXCEPTION_003"), pdfFileName),
 					e);
+		}
+	}
+
+	/**
+	 * Manually extract XMP XML and read PDF/A conformance level using a SAX parser
+	 * implementation.
+	 * 
+	 * @param metadata Apache PDFBox PDF metadata
+	 * @return Empty {@link String}, if PDF/A conformance level could not be read.
+	 *         Otherwise, PDF/A id concated with leven will return.
+	 */
+	private static String tryGetPdfAConformance(final PDMetadata metadata) {
+
+		try (COSInputStream xmpStream = metadata.createInputStream()) {
+
+			// using SAX to parse the XML
+			SAXParserFactory factory = SAXParserFactory.newInstance();
+			SAXParser parser = factory.newSAXParser();
+
+			// custom SAX handler to read PDF/A XMP metadata data
+			XMPSaxHandler handler = new XMPSaxHandler();
+			parser.parse(xmpStream, handler);
+
+			return handler.getPdfALevel();
+		} catch (final Exception e) {
+			if(log.isWarnEnabled()) {
+				log.warn("Error extracting metadata", e);
+			}
+			return "";
+		}
+	}
+
+	private static String tryXmpToString(final PDMetadata metadata) {
+
+		try (COSInputStream rd = metadata.createInputStream()) {
+			String xmlText = IOUtils.toString(rd, StandardCharsets.UTF_8);
+			return xmlText;
+		} catch (final Exception e) {
+			log.warn("Can not convert XMP metadata to String", e);
+			return "";
 		}
 	}
 
