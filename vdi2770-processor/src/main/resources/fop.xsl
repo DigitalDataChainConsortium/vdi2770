@@ -3,7 +3,7 @@
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	xmlns:fo="http://www.w3.org/1999/XSL/Format"
 	xmlns:date="http://exslt.org/dates-and-times"
-    extension-element-prefixes="date"
+	extension-element-prefixes="date"
 	exclude-result-prefixes="fo">
 	
 	<xsl:output method="xml" version="1.0"
@@ -136,46 +136,46 @@
 							 xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 				<pdf:catalog xmlns:pdf="http://xmlgraphics.apache.org/fop/extensions/pdf">
 				  <pdf:dictionary type="normal" key="ViewerPreferences">
-				    <pdf:boolean key="DisplayDocTitle">true</pdf:boolean>
+					<pdf:boolean key="DisplayDocTitle">true</pdf:boolean>
 				  </pdf:dictionary>
 				  <pdf:string key="Lang"><xsl:value-of select="$LANG" /></pdf:string>
 				</pdf:catalog>
-			    <x:xmpmeta xmlns:x="adobe:ns:meta/" id="hc_meta">
-			        <rdf:RDF>
-			            <rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
-			                <xmp:CreatorTool>hx</xmp:CreatorTool>
-			                <dc:language>
-			                    <rdf:Bag>
-			                        <rdf:li><xsl:value-of select="$LANG" /></rdf:li>
-			                    </rdf:Bag>
-			                </dc:language>
-			                <dc:title>
-			                    <rdf:Alt>
-			                        <rdf:li xml:lang="{$LANG}"><xsl:value-of select="$TITLE" /></rdf:li>
-			                    </rdf:Alt>
-			                </dc:title>
-			                <dc:creator>
-			                    <rdf:Seq>
-			                        <rdf:li><xsl:value-of select="$AUTHOR" /></rdf:li>
-			                    </rdf:Seq>
-			                </dc:creator>
-			                <dc:description>
-			                    <rdf:Alt>
-			                        <rdf:li xml:lang="{$LANG}">VDI 2770 Validation</rdf:li>
-			                    </rdf:Alt>
-			                </dc:description>
-			                <dc:date>
-			                    <rdf:Seq>
-			                        <rdf:li><xsl:value-of select="date:format-date(date:date(), 'yyyy-MM-dd')" /></rdf:li>
-			                    </rdf:Seq>
-			                </dc:date>
-			            </rdf:Description>
-			            <rdf:Description rdf:about=""
-					         xmlns:xmp="http://ns.adobe.com/xap/1.0/">
-					       <xmp:CreatorTool>VDI 2770 Validator by Leipzig University</xmp:CreatorTool>
-					    </rdf:Description>
-			        </rdf:RDF>
-			    </x:xmpmeta>
+				<x:xmpmeta xmlns:x="adobe:ns:meta/" id="xmp_meta">
+					<rdf:RDF>
+						<rdf:Description xmlns:xmp="http://ns.adobe.com/xap/1.0/" rdf:about="">
+							<xmp:CreatorTool>VDI 2770 Processor</xmp:CreatorTool>
+							<dc:language>
+								<rdf:Bag>
+									<rdf:li><xsl:value-of select="$LANG" /></rdf:li>
+								</rdf:Bag>
+							</dc:language>
+							<dc:title>
+								<rdf:Alt>
+									<rdf:li xml:lang="{$LANG}"><xsl:value-of select="$TITLE" /></rdf:li>
+								</rdf:Alt>
+							</dc:title>
+							<dc:creator>
+								<rdf:Seq>
+									<rdf:li><xsl:value-of select="$AUTHOR" /></rdf:li>
+								</rdf:Seq>
+							</dc:creator>
+							<dc:description>
+								<rdf:Alt>
+									<rdf:li xml:lang="{$LANG}">VDI 2770 Validation</rdf:li>
+								</rdf:Alt>
+							</dc:description>
+							<dc:date>
+								<rdf:Seq>
+									<rdf:li><xsl:value-of select="date:format-date(date:date(), 'yyyy-MM-dd')" /></rdf:li>
+								</rdf:Seq>
+							</dc:date>
+						</rdf:Description>
+						<rdf:Description rdf:about=""
+							 xmlns:xmp="http://ns.adobe.com/xap/1.0/">
+						   <xmp:CreatorTool>VDI 2770 Processor by Leipzig University</xmp:CreatorTool>
+						</rdf:Description>
+					</rdf:RDF>
+				</x:xmpmeta>
 			</fo:declarations>
 			<fo:bookmark-tree>
 				<xsl:for-each select="Reports/Report">
@@ -193,56 +193,64 @@
 				</fo:flow>
 			</fo:page-sequence>
 			<fo:page-sequence master-reference="document">
-				<fo:static-content flow-name="footer-even">
-					<fo:block text-align-last="justify" border-top="1pt solid"
-						border-color="{$BORDERCOLOR}">
-						<fo:block margin-top="12pt">
-							<xsl:value-of select="$PAGE" />&#160;<fo:page-number />
+				<fo:static-content flow-name="footer-even" role="artifact">
+					<fo:block text-align-last="justify" role="artifact"> 
+						<fo:block border-top="1pt solid"
+							border-color="{$BORDERCOLOR}" role="artifact">
+						</fo:block>
+						<fo:block margin-top="12pt" role="artifact">
+							<fo:inline>
+								<xsl:value-of select="$PAGE" />&#160;<fo:page-number />
+							</fo:inline>
 							<fo:leader leader-length.maximum="100%"
 								leader-pattern="space" />
-							<xsl:value-of select="$AUTHOR" />
+							<fo:inline><xsl:value-of select="$AUTHOR" /></fo:inline>
 						</fo:block>
 					</fo:block>
 				</fo:static-content>
-				<fo:static-content flow-name="footer-odd">
-					<fo:block text-align-last="justify" border-top="1pt solid"
-						border-color="{$BORDERCOLOR}">
-						<fo:block margin-top="12pt">
-							<xsl:value-of select="$AUTHOR" />
+				<fo:static-content flow-name="footer-odd" role="artifact">
+					<fo:block text-align-last="justify" role="artifact"> 
+						<fo:block border-top="1pt solid"
+							border-color="{$BORDERCOLOR}" role="artifact">
+						</fo:block>
+						<fo:block margin-top="12pt" role="artifact">
+							<fo:inline><xsl:value-of select="$AUTHOR" /></fo:inline>
 							<fo:leader leader-length.maximum="100%"
 								leader-pattern="space" />
-							<xsl:value-of select="$PAGE" />&#160;<fo:page-number />
+							<fo:inline>
+								<xsl:value-of select="$PAGE" />&#160;<fo:page-number />
+							</fo:inline>
 						</fo:block>
 					</fo:block>
 				</fo:static-content>
-				<fo:static-content flow-name="header-odd">
+				<fo:static-content flow-name="header-odd" role="artifact">
+					<fo:block margin-top="20mm" padding-bottom="6pt" role="artifact">
+						<xsl:value-of select="$TITLE" />
+						<fo:leader leader-length.maximum="100%"
+							leader-pattern="space" />
+						<xsl:if test="contains($LOGO,'file:')">
+							<fo:external-graphic src="{$LOGO}"
+								fox:alt-text="{$ALT_LOGO}"
+								content-height="{$LOGOHEIGHT}" />
+						</xsl:if>
+					</fo:block>
 					<fo:block text-align-last="justify" border-bottom="1pt solid"
-						border-color="{$BORDERCOLOR}">
-						<fo:block margin-top="20mm" padding-bottom="6pt">
-							<xsl:value-of select="$TITLE" />
-							<fo:leader leader-length.maximum="100%"
-								leader-pattern="space" />
-							<xsl:if test="contains($LOGO,'file:')">
-								<fo:external-graphic src="{$LOGO}"
-									fox:alt-text="{$ALT_LOGO}"
-									content-height="{$LOGOHEIGHT}" />
-							</xsl:if>
-						</fo:block>
+						border-color="{$BORDERCOLOR}" role="artifact">
 					</fo:block>
 				</fo:static-content>
-				<fo:static-content flow-name="header-even">
-					<fo:block text-align-last="justify" border-bottom="1pt solid"
-						border-color="{$BORDERCOLOR}">
-						<fo:block margin-top="20mm" padding-bottom="6pt">
-							<xsl:if test="contains($LOGO,'file:')">
-								<fo:external-graphic src="{$LOGO}"
-									fox:alt-text="{$ALT_LOGO}"
-									content-height="{$LOGOHEIGHT}" />
-							</xsl:if>
+				<fo:static-content flow-name="header-even" role="artifact">
+					<fo:block margin-top="20mm" padding-bottom="6pt" role="artifact">
+						<xsl:if test="contains($LOGO,'file:')">
+							<fo:external-graphic src="{$LOGO}"
+								fox:alt-text="{$ALT_LOGO}"
+								content-height="{$LOGOHEIGHT}" />
 							<fo:leader leader-length.maximum="100%"
 								leader-pattern="space" />
-							<xsl:value-of select="$TITLE" />
-						</fo:block>
+						</xsl:if>
+						<xsl:value-of select="$TITLE" />
+					</fo:block>
+					<fo:block text-align-last="justify" border-bottom="1pt solid"
+						border-color="{$BORDERCOLOR}" role="artifact">
 					</fo:block>
 				</fo:static-content>
 				<fo:flow flow-name="xsl-region-body">
@@ -262,7 +270,7 @@
 				</xsl:if>
 			</fo:block>
 			<fo:block font-size="24pt" text-align="right"
-				margin-bottom="12pt" font-weight="bold" color="{$TITLECOLOR}">
+				margin-bottom="12pt" font-weight="bold" color="{$TITLECOLOR}" role="H1">
 				<xsl:value-of select="$TITLE" />
 			</fo:block>
 			<fo:block font-size="14pt" text-align="right"
@@ -300,7 +308,7 @@
 	</xsl:template>
 	<xsl:template match="Errors">
 		<xsl:if test="count(error) > 0">
-			<xsl:call-template name="heading2">
+			<xsl:call-template name="heading3">
 				<xsl:with-param name="text">
 					<xsl:value-of select="$SECERRORS" />
 				</xsl:with-param>
@@ -351,7 +359,7 @@
 	</xsl:template>
 	<xsl:template match="Warnings">
 		<xsl:if test="count(warning) > 0">
-			<xsl:call-template name="heading2">
+			<xsl:call-template name="heading3">
 				<xsl:with-param name="text">
 					<xsl:value-of select="$SECWARNINGS" />
 				</xsl:with-param>
@@ -365,7 +373,7 @@
 	</xsl:template>
 	<xsl:template match="Infos">
 		<xsl:if test="count(info) > 0">
-			<xsl:call-template name="heading2">
+			<xsl:call-template name="heading3">
 				<xsl:with-param name="text">
 					<xsl:value-of select="$SECINFOS" />
 				</xsl:with-param>
@@ -377,16 +385,16 @@
 			</fo:list-block>
 		</xsl:if>
 	</xsl:template>
-	<xsl:template match="Reports">
-		<xsl:call-template name="heading1">
+	<xsl:template match="Reports" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
+		<xsl:call-template name="heading2">
 			<xsl:with-param name="text">
 				<xsl:value-of select="$SECOVERVIEW" />
 			</xsl:with-param>
 		</xsl:call-template>
 		<fo:table inline-progression-dimension="auto"
-			table-layout="auto" width="100%" border-collapse="separate"
+			table-layout="fixed" width="100%" border-collapse="separate"
 			border-style="solid">
-			<fo:table-column column-width="70%"
+			<fo:table-column column-width="70%" fox:header="true"
 				border-style="solid" border-width="thin" />
 			<fo:table-column column-width="15%"
 				border-style="solid" border-width="thin" />
@@ -425,7 +433,7 @@
 			<xsl:for-each select="Report">
 				<xsl:variable name="blockId" select="id" />
 				<fo:block id="{$blockId}">
-					<xsl:call-template name="heading1">
+					<xsl:call-template name="heading2">
 						<xsl:with-param name="text">
 							<xsl:value-of select="$SECREPORT" /> &#160;<xsl:value-of select="fileName" />
 						</xsl:with-param>
@@ -485,7 +493,7 @@
 	<xsl:template match="Report" xmlns:fox="http://xmlgraphics.apache.org/fop/extensions">
 		<fo:table-row>
 			<fo:table-cell border-style="solid" border-width="thin"
-				padding-after="3pt" padding-before="3pt" padding-left="3pt">
+				padding-after="3pt" padding-before="3pt" padding-left="3pt" role="TD">
 				<fo:block>
 					<xsl:variable name="blockId" select="id" />
 					<fo:basic-link internal-destination="{$blockId}"

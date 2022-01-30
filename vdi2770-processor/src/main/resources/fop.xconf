@@ -2,6 +2,7 @@
 	<accessibility>true</accessibility>
 	<base>.</base>
 	<font-base>.</font-base>
+	<complex-scripts disabled="true" />
 	<renderers>
 		<renderer mime="application/pdf">
 			<pdf-a-mode>PDF/A-3a</pdf-a-mode>
