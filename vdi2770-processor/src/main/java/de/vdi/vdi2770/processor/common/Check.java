@@ -32,6 +32,7 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 
 import de.vdi.vdi2770.processor.ProcessorException;
+import de.vdi.vdi2770.processor.pdf.PdfValidator;
 import de.vdi.vdi2770.processor.zip.ZipUtils;
 
 /**
@@ -209,6 +210,15 @@ public class Check {
 		if (!SystemUtils.IS_OS_WINDOWS) {
 			throw new ProcessorException(this.bundle.getString(messageCode));
 		}
+	}
+
+	public void isPdfFile(final File file, final String messageCode) throws ProcessorException {
+
+		if (!PdfValidator.isPdfFile(file)) {
+			throw new ProcessorException(MessageFormat.format(this.bundle.getString(messageCode),
+					file.getAbsolutePath()));
+		}
+
 	}
 
 }

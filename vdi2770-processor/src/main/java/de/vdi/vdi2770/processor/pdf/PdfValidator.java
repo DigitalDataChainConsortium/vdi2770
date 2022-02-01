@@ -35,11 +35,13 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.pdfbox.cos.COSInputStream;
 import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
+import org.apache.tika.Tika;
 import org.apache.xmpbox.XMPMetadata;
 import org.apache.xmpbox.schema.PDFAIdentificationSchema;
 import org.apache.xmpbox.xml.DomXmpParser;
@@ -47,7 +49,10 @@ import org.apache.xmpbox.xml.XmpParsingException;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
+import com.google.common.net.MediaType;
 
+import de.vdi.vdi2770.processor.ProcessorException;
+import de.vdi.vdi2770.processor.common.Check;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -67,6 +72,7 @@ public class PdfValidator {
 
 	// prefix is PV
 	private final ResourceBundle bundle;
+	private final Locale locale;
 
 	// PDF type constants
 
@@ -125,6 +131,7 @@ public class PdfValidator {
 
 		Preconditions.checkArgument(locale != null);
 
+		this.locale = locale;
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
 
 		// improve performance of pdfbox with java8 or higher
@@ -243,7 +250,7 @@ public class PdfValidator {
 
 			return handler.getPdfALevel();
 		} catch (final Exception e) {
-			if(log.isWarnEnabled()) {
+			if (log.isWarnEnabled()) {
 				log.warn("Error extracting metadata", e);
 			}
 			return "";
@@ -301,5 +308,37 @@ public class PdfValidator {
 					MessageFormat.format(this.bundle.getString("PV_EXCEPTION_006"), pdfFileName),
 					e);
 		}
+	}
+
+	public static boolean isPdfFile(final File pdfFile) {
+
+		try {
+			final Tika tika = new Tika();
+			final String fileMimeType = tika.detect(pdfFile);
+			return StringUtils.equals(fileMimeType, MediaType.PDF.toString());
+		} catch (final IOException e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Can not detect mime type of file " + pdfFile.getAbsolutePath(), e);
+			}
+			return false;
+		}
+	}
+
+	public boolean isEncrypted(final File pdfFile) {
+
+		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
+		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
+		Preconditions.checkArgument(isPdfFile(pdfFile), "pdfFile is not a PDF file");
+
+		try (PDDocument d = PDDocument.load(pdfFile)) {
+			return d.isEncrypted();
+		} catch (final IOException e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Can not read encryption settings for file  " + pdfFile.getAbsolutePath(),
+						e);
+			}
+			return false;
+		}
+
 	}
 }

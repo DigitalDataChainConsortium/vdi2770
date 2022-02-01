@@ -801,8 +801,6 @@ public class ContainerValidator {
 			final String contentType = storedFile.getFileFormat();
 			if (contentType != null) {
 
-//				final String contentType = Files.probeContentType(localFile.toPath());
-
 				final Tika tika = new Tika();
 				final String fileMimeType = tika.detect(localFile);
 
@@ -827,8 +825,8 @@ public class ContainerValidator {
 					MessageLevel.ERROR, MessageFormat
 							.format(this.bundle.getString("REP_MESSAGE_017"), localFile.getName()),
 					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error reading PDF/A level", e);
+			if (log.isWarnEnabled()) {
+				log.warn("Error reading file mime type", e);
 			}
 		}
 	}
@@ -857,12 +855,10 @@ public class ContainerValidator {
 
 		final List<Message> messages = new ArrayList<>();
 
-		String pdfVersion = null;
+		final PdfValidator pdfValidator = new PdfValidator(this.locale);
 		try {
 
-			PdfValidator pdfValidator = new PdfValidator(this.locale);
-			pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
-
+			String pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
@@ -870,7 +866,7 @@ public class ContainerValidator {
 				messages.add(new Message(MessageLevel.ERROR,
 						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
-
+			
 		} catch (final PdfValidationException e) {
 			messages.add(new Message(
 					MessageLevel.ERROR, MessageFormat
@@ -879,7 +875,14 @@ public class ContainerValidator {
 			if (log.isWarnEnabled()) {
 				log.warn("Error reading PDF/A level", e);
 			}
-			return messages;
+		}
+		
+		boolean isEncrypted = pdfValidator.isEncrypted(pdfFile);
+		if(isEncrypted) {
+			messages.add(new Message(
+					MessageLevel.ERROR, MessageFormat
+							.format(this.bundle.getString("REP_MESSAGE_040"), pdfFile.getName()),
+					indentLevel));
 		}
 
 		return messages;
