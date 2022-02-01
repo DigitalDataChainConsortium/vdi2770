@@ -380,8 +380,7 @@ public class Report {
 	 * @param level A message level filter. Resulting messages have this level or
 	 *              above.
 	 * @return {@link List} of {@link Message}, that apply to the given
-	 *         {@link MessageLevel} or above. If deep is set to true,
-	 *         {@link Message}s of sub-reports are included in the result, too.
+	 *         {@link MessageLevel} or above.
 	 */
 	public List<Message> filter(final MessageLevel level) {
 		return filter(level, false, false);
@@ -436,7 +435,7 @@ public class Report {
 
 		// Include ERROR
 		if (level == MessageLevel.ERROR) {
-			result.addAll(this.messages.stream().filter(f -> f.getLevel() == MessageLevel.ERROR)
+			result.addAll(this.messages.stream().filter(f -> f.getLevel() == level)
 					.collect(Collectors.toList()));
 		}
 
@@ -444,6 +443,23 @@ public class Report {
 		if (deep && this.subReports.size() > 0) {
 			for (final Report sub : this.subReports) {
 				result.addAll(sub.filter(level, exact, deep));
+			}
+		}
+
+		return result;
+	}
+	
+	public List<Message> filterExact(final MessageLevel level, boolean deep) {
+
+		final List<Message> result = new ArrayList<>();
+
+		result.addAll(this.messages.stream().filter(f -> f.getLevel() == level)
+				.collect(Collectors.toList()));
+
+		// check sub-reports?
+		if (deep && this.subReports.size() > 0) {
+			for (final Report sub : this.subReports) {
+				result.addAll(sub.filterExact(level, deep));
 			}
 		}
 
