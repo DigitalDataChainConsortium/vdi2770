@@ -68,6 +68,8 @@ public class PdfValidator {
 	// prefix is PV
 	private final ResourceBundle bundle;
 
+	private final boolean isStrictMode;
+
 	// PDF type constants
 
 	/**
@@ -120,12 +122,24 @@ public class PdfValidator {
 	 *               <code>null</code>.
 	 */
 	public PdfValidator(final Locale locale) {
+		this(locale, false);
+	}
+	
+	/**
+	 * ctor
+	 * 
+	 * @param locale Desired {@link Locale} for validation messages; must not be
+	 *               <code>null</code>.
+	 * @param isStrictMode Enable or disable strict validation.
+	 */
+	public PdfValidator(final Locale locale, final boolean isStrictMode) {
 
 		super();
 
 		Preconditions.checkArgument(locale != null);
 
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
+		this.isStrictMode = isStrictMode;
 
 		// improve performance of pdfbox with java8 or higher
 		System.setProperty("sun.java2d.cmm", "sun.java2d.cmm.kcms.KcmsServiceProvider");
@@ -193,6 +207,9 @@ public class PdfValidator {
 
 		final PDMetadata metadata = pdfDocument.getDocumentCatalog().getMetadata();
 		if (metadata == null) {
+			if(log.isWarnEnabled()) {
+				log.warn("XMP meta data is null");
+			}
 			// can not read metadata
 			throw new PdfValidationException(
 					MessageFormat.format(this.bundle.getString("PV_EXCEPTION_002"), pdfFileName));
@@ -200,7 +217,7 @@ public class PdfValidator {
 
 		try {
 			final DomXmpParser xmpParser = new DomXmpParser();
-			xmpParser.setStrictParsing(false);
+			xmpParser.setStrictParsing(this.isStrictMode);
 			return getPdfAVersion(xmpParser, metadata, pdfFileName);
 
 		} catch (final XmpParsingException e) {
