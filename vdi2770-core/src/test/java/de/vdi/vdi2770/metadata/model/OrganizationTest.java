@@ -54,7 +54,7 @@ public class OrganizationTest {
 		orga.setOrganizationOfficialName("DEMO");
 		orga.setOrganizationId("asijdasd");
 
-		final List<ValidationFault> faults = orga.validate(this.locale);
+		final List<ValidationFault> faults = orga.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -71,7 +71,7 @@ public class OrganizationTest {
 		orga.setOrganizationName("");
 		orga.setOrganizationOfficialName("DEMO");
 
-		final List<ValidationFault> faults = orga.validate(this.locale);
+		final List<ValidationFault> faults = orga.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -96,7 +96,7 @@ public class OrganizationTest {
 		orga.setOrganizationName("DEMO");
 		orga.setOrganizationOfficialName("");
 
-		final List<ValidationFault> faults = orga.validate(this.locale);
+		final List<ValidationFault> faults = orga.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

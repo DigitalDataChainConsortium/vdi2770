@@ -49,9 +49,8 @@ public class ContainerProcessorTest {
 	@Test
 	public void isDocumentationContainerTest() throws ProcessorException, MetadataException {
 
-		ContainerProcessor processor = new ContainerProcessor(Locale.getDefault());
+		ContainerProcessor processor = new ContainerProcessor(Locale.getDefault(), true);
 
 		processor.createContainer(new File(EXAMPLES_FOLDER));
 	}
-
 }

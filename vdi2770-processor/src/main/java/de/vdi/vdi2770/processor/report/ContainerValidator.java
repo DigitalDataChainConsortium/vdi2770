@@ -101,20 +101,13 @@ public class ContainerValidator {
 	 *               <code>null</code>.
 	 */
 	public ContainerValidator(final Locale locale) {
-		super();
-
-		Preconditions.checkArgument(locale != null);
-
-		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
-		this.locale = (Locale) locale.clone();
-		this.isStrictMode = false;
+		this(locale, false);
 	}
 
 	/**
 	 * ctor
 	 * 
 	 * @param isStrictMode Enable or disable strict validation.
-	 * 
 	 * @param locale       Desired {@link Locale} for validation messages; must not
 	 *                     be <code>null</code>.
 	 */
@@ -319,7 +312,7 @@ public class ContainerValidator {
 			if (currentDocument.getDocumentVersion().stream().map(v -> v.getDocumentRelationship())
 					.flatMap(Collection::stream).count() == 0) {
 
-				// Document has not relationsships
+				// Document has no relationships
 				return;
 			}
 
@@ -702,10 +695,9 @@ public class ContainerValidator {
 			Document document = reader.read(xmlFile);
 			if (document.isMainDocument()) {
 				MainDocument main = new MainDocument(document);
-				faults = main.validate(this.locale);
+				faults = main.validate(this.locale, this.isStrictMode);
 			} else {
-				document.validate(null, this.locale);
-				faults = document.validate(null, this.locale);
+				faults = document.validate(null, this.locale, this.isStrictMode);
 			}
 
 			// add validation messages to report

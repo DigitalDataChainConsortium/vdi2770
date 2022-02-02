@@ -89,7 +89,7 @@ public class Application {
 					return;
 				}
 
-				final ContainerValidator report = new ContainerValidator(Locale.getDefault());
+				final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
 				final Report result = report.validate(containerFile, MessageLevel.INFO);
 
 				printReport(result, 0);
@@ -102,7 +102,7 @@ public class Application {
 					return;
 				}
 
-				ContainerProcessor processor = new ContainerProcessor(Locale.getDefault());
+				ContainerProcessor processor = new ContainerProcessor(Locale.getDefault(), true);
 				File zipFile = processor.createContainer(folder);
 
 				System.out.println(

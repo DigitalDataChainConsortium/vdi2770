@@ -51,7 +51,7 @@ public class DocumentClassificationTest {
 
 		final DocumentClassification system = new DocumentClassification("classId", "system");
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -77,7 +77,7 @@ public class DocumentClassificationTest {
 		final TranslatableString name_en = new TranslatableString("English Name", "en");
 		system.addClassName(name_en);
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -92,7 +92,7 @@ public class DocumentClassificationTest {
 
 		final DocumentClassification system = new DocumentClassification("", "system");
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -115,7 +115,7 @@ public class DocumentClassificationTest {
 
 		final DocumentClassification system = new DocumentClassification("classId", "");
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -138,7 +138,7 @@ public class DocumentClassificationTest {
 
 		final DocumentClassification system = new DocumentClassification("", "");
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -154,7 +154,7 @@ public class DocumentClassificationTest {
 		final DocumentClassification system = new DocumentClassification("classId",
 				Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME);
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -181,7 +181,7 @@ public class DocumentClassificationTest {
 		final TranslatableString name = new TranslatableString("Identifikation", "de");
 		system.addClassName(name);
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -200,7 +200,7 @@ public class DocumentClassificationTest {
 		final TranslatableString name = new TranslatableString("Demo", "de");
 		system.addClassName(name);
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -229,7 +229,7 @@ public class DocumentClassificationTest {
 		system.addClassName(name1);
 		system.addClassName(name2);
 
-		final List<ValidationFault> faults = system.validate(this.locale);
+		final List<ValidationFault> faults = system.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -243,4 +243,25 @@ public class DocumentClassificationTest {
 		assertTrue(fault.getType() == FaultType.HAS_DUPLICATE_VALUE);
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 	}
+	
+	@Test
+	public void invalidStrictVdi2770ClassName() {
+
+		final DocumentClassification system = new DocumentClassification("01-01",
+				Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME);
+
+		final TranslatableString name = new TranslatableString("identification", "en");
+		system.addClassName(name);
+
+		// strict mode enabled
+		List<ValidationFault> faults = system.validate(this.locale, true);
+		faults.stream().forEach(f -> log.debug(f.toString()));
+		assertTrue(faults.size() == 1);
+		
+		// strict mode disabled
+		faults = system.validate(this.locale, false);
+		faults.stream().forEach(f -> log.debug(f.toString()));
+		assertTrue(faults.size() == 0);
+	}
+
 }

@@ -49,7 +49,7 @@ public class ReportTest {
 	@Test
 	public void validDocumentReportTest() throws ProcessorException, MetadataException {
 
-		final ContainerValidator report = new ContainerValidator(Locale.getDefault());
+		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
 		final Report result = report.validate("../examples/container/documentcontainer.zip");
 
 		printReport(result, 0);
@@ -64,7 +64,7 @@ public class ReportTest {
 	@Test
 	public void validDocumentationReportTest() throws ProcessorException, MetadataException {
 
-		final ContainerValidator report = new ContainerValidator(Locale.getDefault());
+		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
 		final Report result = report.validate("../examples/container/documentationcontainer.zip");
 
 		printReport(result, 0);
@@ -87,7 +87,7 @@ public class ReportTest {
 	@Test
 	public void invalidObjectIdsReportTest() throws ProcessorException, MetadataException {
 
-		final ContainerValidator report = new ContainerValidator(Locale.getDefault());
+		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
 		final Report result = report.validate("../examples/container/objectreferences.zip");
 
 		printReport(result, 0);

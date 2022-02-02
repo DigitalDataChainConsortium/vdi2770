@@ -76,7 +76,7 @@ public class BaseControllerTest {
 		props.setAllowStatistics(true);
 		props.setRenderInfo(true);
 		props.setRenderWarning(true);
-		props.setEnableStrictMode(false);
+		props.setEnableStrictMode(true);
 
 		return props;
 	}
