@@ -13,7 +13,7 @@
 	<DocumentClassification ClassificationSystem="VDI2770:2018">
 		<ClassId>02-01</ClassId>
 		<ClassName Language="de">Technische Spezifikation</ClassName>
-		<ClassName Language="en">technical specification</ClassName>
+		<ClassName Language="en">Technical specification</ClassName>
 	</DocumentClassification>
 	<DocumentClassification ClassificationSystem="IEC61355">
 		<ClassId>DA</ClassId>
