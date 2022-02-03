@@ -80,3 +80,20 @@ The following parameters are used to detect ZIP bombs.
 size.
 
 ``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.
+
+=== Strict Validation
+
+The processor provides validation features for PDF files, XML files and container files. 
+Enabling strict validation results in the following affects
+
+* Container files
+** VDI2770_Main.xml or VDI2770_Metadata.xml file must be present in the ZIP container file. 
+Otherwise, the processor tries to process any other XML file.
+
+* PDF files
+** Strict XMP meta data processing is enabled.
+
+* XML files
+** Class names of VDI 2770 classes must meet the requirements of table 1 in VDI 2770:2020 (including
+lower and upper case). Otherwise, class name must only match in lower case.
+
