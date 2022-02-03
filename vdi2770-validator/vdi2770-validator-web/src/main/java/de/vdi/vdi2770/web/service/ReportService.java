@@ -113,32 +113,39 @@ public class ReportService {
 			logLevel = MessageLevel.ERROR;
 		}
 
-		// probe content type of the given file
-		try {
-			mimeType = Files.probeContentType(file.toPath());
-		} catch (final IOException e) {
-			log.error("can not get MIME type", e);
-			result = new Report(locale, file, logLevel);
-			result.addMessage(new Message(MessageLevel.ERROR,
-					MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
-		}
+		if (!file.isDirectory()) {
+			// probe content type of the given file
+			try {
+				mimeType = Files.probeContentType(file.toPath());
+			} catch (final IOException e) {
+				log.error("can not get MIME type", e);
+				result = new Report(locale, file, logLevel);
+				result.addMessage(new Message(MessageLevel.ERROR,
+						MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
+			}
 
-		// validate PDF file
-		if (MediaType.PDF.toString().equals(mimeType)) {
-			result = validatePdfFile(file, locale, logLevel, config.isEnableStrictMode());
-		}
-		// validate container file
-		else if (ZipUtils.ZIP_CONTENT_TYPE.contains(mimeType)) {
-			result = validateContainerFile(file, locale, logLevel, config.isEnableStrictMode());
-		}
-		// validate XML meta data file
-		else if (MediaType.APPLICATION_XML_UTF_8.withoutParameters().toString().equals(mimeType)
-				|| "text/xml".equals(mimeType)) {
-			result = validateXmlFile(file, locale, logLevel, config.isEnableStrictMode());
+			// validate PDF file
+			if (MediaType.PDF.toString().equals(mimeType)) {
+				result = validatePdfFile(file, locale, logLevel, config.isEnableStrictMode());
+			}
+			// validate container file
+			else if (ZipUtils.ZIP_CONTENT_TYPE.contains(mimeType)) {
+				result = validateContainerFile(file, locale, logLevel, config.isEnableStrictMode());
+			}
+			// validate XML meta data file
+			else if (MediaType.APPLICATION_XML_UTF_8.withoutParameters().toString().equals(mimeType)
+					|| "text/xml".equals(mimeType)) {
+				result = validateXmlFile(file, locale, logLevel, config.isEnableStrictMode());
+			} else {
+				result = new Report(locale, file, logLevel);
+				result.addMessage(new Message(MessageLevel.ERROR,
+						MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
+			}
 		} else {
+			log.error("Given file is a directory: " + file.getAbsolutePath());
 			result = new Report(locale, file, logLevel);
-			result.addMessage(new Message(MessageLevel.ERROR,
-					MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
+			result.addMessage(new Message(MessageLevel.ERROR, MessageFormat
+					.format(bundle.getString("RS_MESSAGE_001"), "application/x-directory")));
 		}
 
 		// save statistics, if allowed
