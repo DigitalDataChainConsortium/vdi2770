@@ -58,7 +58,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		final MainDocument main = new MainDocument(doc);
 
-		final List<ValidationFault> faults = main.validate(this.locale);
+		final List<ValidationFault> faults = main.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -87,7 +87,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		main.getDocumentVersion().get(0).setDigitalFile(getMainDocumentDigitalFiles());
 
-		final List<ValidationFault> faults = main.validate(this.locale);
+		final List<ValidationFault> faults = main.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -122,7 +122,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		mainDoc.getDocumentVersion().get(0).setDigitalFile(getMainDocumentDigitalFiles());
 
-		List<ValidationFault> faults = mainDoc.validate(this.locale);
+		List<ValidationFault> faults = mainDoc.validate(this.locale, true);
 
 		List<?> errors = Fault.filter(faults, FaultLevel.ERROR);
 
@@ -153,7 +153,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 		MainDocument mainDoc = new MainDocument(doc);
 		mainDoc.getDocumentVersion().get(0).setDigitalFile(getMainDocumentDigitalFiles());
 
-		List<ValidationFault> faults = mainDoc.validate(this.locale);
+		List<ValidationFault> faults = mainDoc.validate(this.locale, true);
 
 		List<?> errors = Fault.filter(faults, FaultLevel.ERROR);
 

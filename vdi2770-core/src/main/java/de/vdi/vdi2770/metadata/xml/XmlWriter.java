@@ -45,6 +45,7 @@ public class XmlWriter {
 
 	private final ResourceBundle bundle;
 	private final Locale locale;
+	private final boolean isStrictMode;
 
 	/**
 	 * ctor
@@ -52,12 +53,23 @@ public class XmlWriter {
 	 * @param locale Desired {@link Locale} for validation messages.
 	 */
 	public XmlWriter(final Locale locale) {
+		this(locale, false);
+	}
+
+	/**
+	 * ctor
+	 *
+	 * @param locale       Desired {@link Locale} for validation messages.
+	 * @param isStrictMode Enable or disable strict validation.
+	 */
+	public XmlWriter(final Locale locale, final boolean isStrictMode) {
 		super();
 
 		Preconditions.checkArgument(locale != null);
 
 		this.bundle = ResourceBundle.getBundle("i8n.metadata", locale);
 		this.locale = (Locale) locale.clone();
+		this.isStrictMode = isStrictMode;
 	}
 
 	/**
@@ -113,7 +125,8 @@ public class XmlWriter {
 		Preconditions.checkArgument(xmlFile != null);
 		Preconditions.checkArgument(document != null);
 
-		final List<ValidationFault> documentFaults = document.validate(this.locale);
+		final List<ValidationFault> documentFaults = document.validate(this.locale,
+				this.isStrictMode);
 
 		if (Fault.hasErrors(documentFaults)) {
 			throw new XmlValidationException(this.bundle.getString("XmlWriter_EX1"),

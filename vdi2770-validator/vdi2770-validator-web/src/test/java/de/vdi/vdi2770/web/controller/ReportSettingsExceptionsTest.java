@@ -73,7 +73,7 @@ public class ReportSettingsExceptionsTest extends BaseControllerTest {
 		ObjectMapper objectMapper = new ObjectMapper();
 		String json = objectMapper.writeValueAsString(props);
 		
-		formData.add("settings", json.replaceAll("false", "FOO"));
+		formData.add("settings", json.replaceAll("true", "FOO"));
 
 		return formData;
 	}

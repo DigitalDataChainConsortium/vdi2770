@@ -86,7 +86,7 @@ public class XmlValidationTest {
 
 		final Document xmlDocument = reader.read(xmlFile);
 
-		final List<ValidationFault> errors = xmlDocument.validate(Locale.getDefault());
+		final List<ValidationFault> errors = xmlDocument.validate(Locale.getDefault(), true);
 
 		errors.stream().forEach(f -> log.debug(f.toString()));
 

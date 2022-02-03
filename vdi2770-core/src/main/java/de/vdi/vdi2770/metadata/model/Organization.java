@@ -69,12 +69,14 @@ public class Organization implements ModelEntity {
 	/**
 	 * Validate this instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s, if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale, boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 

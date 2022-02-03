@@ -55,7 +55,7 @@ public class ObjectIdTest {
 		id.setObjectType(ObjectType.Type);
 		id.setRefType("Something");
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -74,7 +74,7 @@ public class ObjectIdTest {
 		id.setObjectType(ObjectType.Individual);
 		id.setRefType("Something");
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -92,7 +92,7 @@ public class ObjectIdTest {
 		id.setObjectType(ObjectType.Individual);
 		id.setRefType("Something");
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -109,7 +109,7 @@ public class ObjectIdTest {
 		id.setId("My ID");
 		id.setObjectType(ObjectType.Individual);
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -126,7 +126,7 @@ public class ObjectIdTest {
 		id.setObjectType(ObjectType.Individual);
 		id.setRefType("Something");
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -151,7 +151,7 @@ public class ObjectIdTest {
 		id.setId("My ID");
 		id.setRefType("Something");
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

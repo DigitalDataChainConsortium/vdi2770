@@ -91,7 +91,7 @@ public class ReadXmlTest {
 	@Test
 	public void validateXml() {
 
-		final List<ValidationFault> errors = this.xmlDocument.validate(Locale.getDefault());
+		final List<ValidationFault> errors = this.xmlDocument.validate(Locale.getDefault(), true);
 
 		assertTrue(errors.size() == 0);
 	}
@@ -182,12 +182,12 @@ public class ReadXmlTest {
 		final TranslatableString firstName = firstClassification.getClassName().get(0);
 
 		assertTrue(StringUtils.equals(firstName.getLanguage(), "de"));
-		assertTrue(StringUtils.equals(firstName.getText(), "Montage, Inbetriebnahme, Demontage"));
+		assertTrue(StringUtils.equals(firstName.getText(), "Montage, Demontage"));
 
 		final TranslatableString secondName = firstClassification.getClassName().get(1);
 
 		assertTrue(StringUtils.equals(secondName.getLanguage(), "en"));
-		assertTrue(StringUtils.equals(secondName.getText(), "assembly, disassembly"));
+		assertTrue(StringUtils.equals(secondName.getText(), "Assembly, disassembly"));
 
 		final DocumentClassification secondClassification = classifications.get(1);
 

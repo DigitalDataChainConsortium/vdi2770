@@ -55,7 +55,7 @@ public class DocumentIdDomainTest {
 
 		final DocumentIdDomain domain = new DocumentIdDomain("DOMAIN", party);
 
-		final List<ValidationFault> faults = domain.validate(this.locale);
+		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -76,7 +76,7 @@ public class DocumentIdDomainTest {
 
 		final DocumentIdDomain domain = new DocumentIdDomain("", party);
 
-		final List<ValidationFault> faults = domain.validate(this.locale);
+		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -92,7 +92,7 @@ public class DocumentIdDomainTest {
 		final DocumentIdDomain domain = new DocumentIdDomain();
 		domain.setDocumentDomainId("DOMAINID");
 
-		final List<ValidationFault> faults = domain.validate(this.locale);
+		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -113,7 +113,7 @@ public class DocumentIdDomainTest {
 
 		final DocumentIdDomain domain = new DocumentIdDomain("DOMAIN", party);
 
-		final List<ValidationFault> faults = domain.validate(this.locale);
+		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

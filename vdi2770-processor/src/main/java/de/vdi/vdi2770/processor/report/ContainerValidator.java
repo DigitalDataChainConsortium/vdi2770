@@ -695,9 +695,9 @@ public class ContainerValidator {
 			Document document = reader.read(xmlFile);
 			if (document.isMainDocument()) {
 				MainDocument main = new MainDocument(document);
-				faults = main.validate(this.locale);
+				faults = main.validate(this.locale, this.isStrictMode);
 			} else {
-				faults = document.validate(null, this.locale);
+				faults = document.validate(null, this.locale, this.isStrictMode);
 			}
 
 			// add validation messages to report

@@ -112,12 +112,14 @@ public class DocumentDescription implements ModelEntity {
 	/**
 	 * Validate this instance of <em>DocumentDescription</em>.
 	 *
-	 * @param parent The name of the parent entity.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale, boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 

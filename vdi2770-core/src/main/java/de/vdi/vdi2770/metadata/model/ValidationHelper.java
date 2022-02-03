@@ -54,7 +54,8 @@ public class ValidationHelper {
 	 *         warnings. Otherwise, an empty {@link List} will return.
 	 */
 	public static List<ValidationFault> validateEntityList(final List<? extends ModelEntity> list,
-			final String parent, final String propertyName, final Locale locale) {
+			final String parent, final String propertyName, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 		Preconditions.checkArgument(list != null, "list must not be null");
@@ -81,7 +82,7 @@ public class ValidationHelper {
 				faults.add(fault);
 			} else {
 				// validate the entity
-				final List<ValidationFault> validationFaults = entity.validate(parent, locale);
+				final List<ValidationFault> validationFaults = entity.validate(parent, locale, strict);
 				if (!validationFaults.isEmpty()) {
 					for (final ValidationFault fault : validationFaults) {
 						fault.setIndex(Integer.valueOf(i));

@@ -38,34 +38,52 @@ public interface ModelEntity {
 	 * Validate this model instance.
 	 *
 	 * @param locale Desired {@link Locale} for validation messages.
-	 * @return A {@link List} of {@link ValidationFault}s if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	public default List<ValidationFault> validate(final Locale locale) {
 		Preconditions.checkArgument(locale != null, "locale is null");
 
-		return validate(null, locale);
+		return validate(null, locale, false);
+	}
+	
+	public default List<ValidationFault> validate(final Locale locale, boolean strict) {
+		Preconditions.checkArgument(locale != null, "locale is null");
+
+		return validate(null, locale, strict);
 	}
 
 	/**
 	 * Validate this model instance.
 	 *
 	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	public default List<ValidationFault> validate(final String parent) {
-		return validate(parent, Locale.getDefault());
+		return validate(parent, Locale.getDefault(), false);
+	}
+
+	/**
+	 * Validate this model instance. Strict validation is disabled.
+	 *
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
+	 */
+	public default List<ValidationFault> validate(final String parent, final Locale locale) {
+		return validate(parent, locale, false);
 	}
 
 	/**
 	 * Validate this model instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
 	 * @param locale Desired {@link Locale} for validation messages.
-	 * @return A {@link List} of {@link ValidationFault}s if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
-	public List<ValidationFault> validate(final String parent, final Locale locale);
-
+	public List<ValidationFault> validate(final String parent, final Locale locale, boolean strict);
 }

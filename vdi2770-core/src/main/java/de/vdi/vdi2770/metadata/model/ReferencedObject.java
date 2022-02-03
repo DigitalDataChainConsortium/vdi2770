@@ -273,12 +273,15 @@ public class ReferencedObject implements ModelEntity {
 	/**
 	 * Validate this instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s, if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -293,7 +296,7 @@ public class ReferencedObject implements ModelEntity {
 			faults.add(fault);
 		} else {
 			faults.addAll(ValidationHelper.validateEntityList(this.objectId, ENTITY, Fields.party,
-					locale));
+					locale, strict));
 
 			final List<ObjectId> serialIds = this.objectId.stream()
 					.filter(o -> o.getObjectType() == ObjectType.Individual)
@@ -315,8 +318,8 @@ public class ReferencedObject implements ModelEntity {
 			fault.setMessage(bundle.getString(ENTITY + "_VAL4"));
 			faults.add(fault);
 		} else {
-			faults.addAll(
-					ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party, locale));
+			faults.addAll(ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party,
+					locale, strict));
 
 			// party must contain manufacturer
 			if (this.party.stream().filter(p -> p.getRole() == Role.Manufacturer).count() == 0) {
@@ -329,7 +332,7 @@ public class ReferencedObject implements ModelEntity {
 
 		if (!CollectionUtils.isEmpty(this.description)) {
 			faults.addAll(ValidationHelper.validateEntityList(this.description, ENTITY,
-					Fields.description, locale));
+					Fields.description, locale, strict));
 		}
 
 		if (!CollectionUtils.isEmpty(this.projectId)) {

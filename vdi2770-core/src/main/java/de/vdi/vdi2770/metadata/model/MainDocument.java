@@ -96,11 +96,12 @@ public class MainDocument extends Document implements ModelEntity {
 	 * Validate this instance
 	 *
 	 * @param locale Desired {@link Locale} for validation messages.
-	 * @return A {@link List} of {@link ValidationFault}s if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final Locale locale) {
+	public List<ValidationFault> validate(final Locale locale, boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -109,7 +110,7 @@ public class MainDocument extends Document implements ModelEntity {
 		final List<ValidationFault> faults = new ArrayList<>();
 
 		// call Document validation
-		faults.addAll(super.validate(locale));
+		faults.addAll(super.validate(locale, strict));
 
 		// a main document must only have one document version
 		if (getDocumentVersion().size() != 1) {

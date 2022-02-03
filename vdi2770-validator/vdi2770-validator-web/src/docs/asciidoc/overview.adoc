@@ -42,9 +42,7 @@ no report warnings return (default is ``false``).
 ``allowStatistics``:: To allow statistics collections, set ``allowStatistics`` to 
 ``true`` (default is `false`). Anonymized results are persisted in a CSV file.
 
-``enableStrictMode``:: If set to ``true``, container files
-shall contain VDI2770_Main.xml or VDI2770_Metadata.xml file. If ``false``, the validator tries
-to check other XML files that which are not named according to the specification.
+``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly.
 
 === JSON report
 

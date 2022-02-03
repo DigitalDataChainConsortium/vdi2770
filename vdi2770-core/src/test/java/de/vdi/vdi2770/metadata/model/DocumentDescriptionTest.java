@@ -58,7 +58,7 @@ public class DocumentDescriptionTest {
 		description.setLanguage("en");
 		description.setKeyWords(Arrays.asList("Test1", "Test2"));
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		assertTrue(faults.size() == 0);
 
@@ -78,7 +78,7 @@ public class DocumentDescriptionTest {
 		description.setLanguage("gasd");
 		description.setKeyWords(Arrays.asList("Test1", "Test2"));
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -104,7 +104,7 @@ public class DocumentDescriptionTest {
 		description.setLanguage("de");
 		description.setKeyWords(Arrays.asList("Test1", "Test2"));
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -130,7 +130,7 @@ public class DocumentDescriptionTest {
 		description.setLanguage("de");
 		description.setKeyWords(Arrays.asList("Test1", "Test2"));
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -155,7 +155,7 @@ public class DocumentDescriptionTest {
 		description.setSummary("asdasd");
 		description.setLanguage("de");
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -181,7 +181,7 @@ public class DocumentDescriptionTest {
 		description.setLanguage("de");
 		description.setKeyWords(Arrays.asList("A", "A"));
 
-		final List<ValidationFault> faults = description.validate(this.locale);
+		final List<ValidationFault> faults = description.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

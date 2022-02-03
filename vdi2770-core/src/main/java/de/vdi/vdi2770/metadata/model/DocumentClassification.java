@@ -123,12 +123,15 @@ public class DocumentClassification implements ModelEntity {
 	/**
 	 * Validate this instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s, if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -148,7 +151,7 @@ public class DocumentClassification implements ModelEntity {
 		if (!CollectionUtils.isEmpty(this.className)) {
 
 			faults.addAll(ValidationHelper.validateEntityList(this.className, ENTITY,
-					Fields.className, locale));
+					Fields.className, locale, strict));
 
 			// check for duplicate languages
 			if (this.className.stream().map(d -> d.getLanguage()).collect(Collectors.toSet())
@@ -204,8 +207,7 @@ public class DocumentClassification implements ModelEntity {
 									|| "de-de".equalsIgnoreCase(name.getLanguage()))) {
 
 						// German names are specified in VDI 2770 guideline
-						if (!Constants.getVdi2770GermanCategoryNames().values()
-								.contains(name.getText())) {
+						if (!Constants.isVdi2770GermanCategoryName(name.getText(), strict)) {
 
 							final ValidationFault fault = new ValidationFault(ENTITY,
 									Fields.className, FaultLevel.ERROR,
@@ -223,8 +225,7 @@ public class DocumentClassification implements ModelEntity {
 									|| "en-US".equalsIgnoreCase(name.getLanguage()))) {
 
 						// English names are specified in VDI 2770 guideline
-						if (!Constants.getVdi2770EnglishCategoryNames().values()
-								.contains(name.getText())) {
+						if (!Constants.isVdi2770EnglishCategoryName(name.getText(), strict)) {
 
 							final ValidationFault fault = new ValidationFault(ENTITY,
 									Fields.className, FaultLevel.ERROR,
