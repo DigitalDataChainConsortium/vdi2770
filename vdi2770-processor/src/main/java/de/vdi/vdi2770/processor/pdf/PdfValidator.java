@@ -51,8 +51,6 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.net.MediaType;
 
-import de.vdi.vdi2770.processor.ProcessorException;
-import de.vdi.vdi2770.processor.common.Check;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -72,8 +70,6 @@ public class PdfValidator {
 
 	// prefix is PV
 	private final ResourceBundle bundle;
-	private final Locale locale;
-
 	private final boolean isStrictMode;
 
 	// PDF type constants
@@ -144,7 +140,6 @@ public class PdfValidator {
 
 		Preconditions.checkArgument(locale != null);
 
-		this.locale = locale;
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
 		this.isStrictMode = isStrictMode;
 
@@ -327,6 +322,14 @@ public class PdfValidator {
 		}
 	}
 
+	/**
+	 * Check, if a file is a PDF file. 
+	 * 
+	 * @param pdfFile An existing file
+	 * @throws IllegalArgumentException The given file is <code>null</code>, 
+	 * does not exist or is not a PDF file.
+	 * @return <code>true</code>.
+	 */
 	public static boolean isPdfFile(final File pdfFile) {
 
 		try {
@@ -341,6 +344,17 @@ public class PdfValidator {
 		}
 	}
 
+	/**
+	 * Check, if the PDF file is encrypted. 
+	 * 
+	 * <p>According to VDI 2770:2020 PDF must not be encrypted or
+	 * password protected.</p>
+	 * 
+	 * @param pdfFile An existing PDF file
+	 * @throws IllegalArgumentException The given file is <code>null</code>, 
+	 * does not exist or is not a PDF file.
+	 * @return <code>true</code>, if the given PDF File is encrypted. 
+	 */
 	public boolean isEncrypted(final File pdfFile) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
