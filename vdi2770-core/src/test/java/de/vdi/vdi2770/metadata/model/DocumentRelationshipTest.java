@@ -66,7 +66,7 @@ public class DocumentRelationshipTest {
 
 		relation.setDocumentVersionId(Arrays.asList("00.02", "00.01"));
 
-		final List<ValidationFault> faults = relation.validate(this.locale);
+		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -93,7 +93,7 @@ public class DocumentRelationshipTest {
 
 		relation.setType(DocumentRelationshipType.RefersTo);
 
-		final List<ValidationFault> faults = relation.validate(this.locale);
+		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -117,7 +117,7 @@ public class DocumentRelationshipTest {
 
 		relation.setDocumentVersionId(Arrays.asList("00.02", "00.01"));
 
-		final List<ValidationFault> faults = relation.validate(this.locale);
+		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -136,7 +136,7 @@ public class DocumentRelationshipTest {
 
 		relation.setDocumentVersionId(Arrays.asList("00.02", "00.01"));
 
-		final List<ValidationFault> faults = relation.validate(this.locale);
+		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -164,7 +164,7 @@ public class DocumentRelationshipTest {
 
 		relation.setDocumentVersionId(Arrays.asList("00.02", "00.01"));
 
-		final List<ValidationFault> faults = relation.validate(this.locale);
+		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

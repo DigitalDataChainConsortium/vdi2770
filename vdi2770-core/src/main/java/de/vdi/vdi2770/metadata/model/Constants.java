@@ -21,10 +21,16 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
+import org.apache.commons.lang3.StringUtils;
+
+import com.google.common.base.Preconditions;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 
 /**
@@ -136,7 +142,7 @@ public final class Constants {
 		map.put(VDI2770_DRAWINGS_CATEGORY, "Zeichnungen, Pläne");
 		map.put(VDI2770_ASSEMBLY_CATEGORY, "Bauteile");
 		map.put(VDI2770_CERTIFICATE_CATEGORY, "Zeugnisse, Zertifikate, Bescheinigungen");
-		map.put(VDI2770_MOUNT_CATEGORY, "Montage, Inbetriebnahme, Demontage");
+		map.put(VDI2770_MOUNT_CATEGORY, "Montage, Demontage");
 		map.put(VDI2770_OPERATION_CATEGORY, "Bedienung");
 		map.put(VDI2770_SAFETY_CATEGORY, "Allgemeine Sicherheit");
 		map.put(VDI2770_MAINTENANCE_CATEGORY, "Inspektion, Wartung, Prüfung");
@@ -145,6 +151,10 @@ public final class Constants {
 		map.put(VDI2770_CONTRACT_CATEGORY, "Vertragsunterlagen");
 
 		return map;
+	}
+	
+	public static boolean isVdi2770GermanCategoryName(final String category, boolean strict) {
+		return isCategoryName(getVdi2770GermanCategoryNames().values(), category, strict);
 	}
 
 	/**
@@ -157,20 +167,44 @@ public final class Constants {
 
 		final Map<String, String> map = new HashMap<>();
 
-		map.put(VDI2770_IDENTIFICATION_CATEGORY, "identification");
-		map.put(VDI2770_TECHNICAL_SPECIFICATON_CATEGORY, "technical specification");
-		map.put(VDI2770_DRAWINGS_CATEGORY, "drawings, plans");
-		map.put(VDI2770_ASSEMBLY_CATEGORY, "components");
-		map.put(VDI2770_CERTIFICATE_CATEGORY, "certificates");
-		map.put(VDI2770_MOUNT_CATEGORY, "assembly, disassembly");
-		map.put(VDI2770_OPERATION_CATEGORY, "operation");
-		map.put(VDI2770_SAFETY_CATEGORY, "general safety");
-		map.put(VDI2770_MAINTENANCE_CATEGORY, "inspection, maintenance");
-		map.put(VDI2770_REPAIR_CATEGORY, "repair");
-		map.put(VDI2770_SPAREPARTS_CATEGORY, "spare parts");
+		map.put(VDI2770_IDENTIFICATION_CATEGORY, "Identification");
+		map.put(VDI2770_TECHNICAL_SPECIFICATON_CATEGORY, "Technical specification");
+		map.put(VDI2770_DRAWINGS_CATEGORY, "Drawings, plans");
+		map.put(VDI2770_ASSEMBLY_CATEGORY, "Components");
+		map.put(VDI2770_CERTIFICATE_CATEGORY, "Certificates");
+		map.put(VDI2770_MOUNT_CATEGORY, "Assembly, disassembly");
+		map.put(VDI2770_OPERATION_CATEGORY, "Operation");
+		map.put(VDI2770_SAFETY_CATEGORY, "General safety");
+		map.put(VDI2770_MAINTENANCE_CATEGORY, "Inspection, maintenance");
+		map.put(VDI2770_REPAIR_CATEGORY, "Repair");
+		map.put(VDI2770_SPAREPARTS_CATEGORY, "Spare parts");
 		map.put(VDI2770_CONTRACT_CATEGORY, "contract documents");
 
 		return map;
+	}
+
+	public static boolean isVdi2770EnglishCategoryName(final String category, boolean strict) {
+
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(category), "category is empty");
+
+		return isCategoryName(getVdi2770EnglishCategoryNames().values(), category, strict);
+	}
+
+	private static boolean isCategoryName(final Collection<String> categories,
+			final String category, boolean strict) {
+
+		Preconditions.checkArgument(categories != null, "categories is empty");
+
+		if(Strings.isNullOrEmpty(category)) {
+			return false;
+		}
+		
+		if (strict) {
+			return categories.contains(category);
+		}
+
+		return categories.stream().map(v -> v.toLowerCase()).collect(Collectors.toList())
+				.contains(StringUtils.lowerCase(category));
 	}
 
 	/**

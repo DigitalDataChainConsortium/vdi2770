@@ -74,7 +74,7 @@ public enum Role {
 
 		try {
 			valueOf(text);
-		} catch (final IllegalArgumentException e) {
+		} catch (@SuppressWarnings("unused") final IllegalArgumentException e) {
 			return false;
 		}
 

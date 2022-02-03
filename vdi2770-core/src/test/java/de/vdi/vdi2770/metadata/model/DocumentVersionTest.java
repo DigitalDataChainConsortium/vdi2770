@@ -141,7 +141,7 @@ public class DocumentVersionTest {
 
 		version.setDocumentRelationship(Arrays.asList(createReleation()));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -169,7 +169,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -206,7 +206,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -243,7 +243,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -277,7 +277,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -313,7 +313,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -348,7 +348,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -382,7 +382,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -417,7 +417,7 @@ public class DocumentVersionTest {
 
 		version.setNumberOfPages(Integer.valueOf(-100));
 
-		final List<ValidationFault> faults = version.validate(this.locale);
+		final List<ValidationFault> faults = version.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

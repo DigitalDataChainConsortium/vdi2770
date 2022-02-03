@@ -136,12 +136,15 @@ public class LifeCycleStatus implements ModelEntity {
 	/**
 	 * Validate this instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s, if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -165,8 +168,8 @@ public class LifeCycleStatus implements ModelEntity {
 			faults.add(fault);
 		} else {
 			// validate given list of parties
-			faults.addAll(
-					ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party, locale));
+			faults.addAll(ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party,
+					locale, strict));
 
 			// The list of parties must contain at least one responsible party
 			if (this.party.stream().filter(p -> p.getRole() == Role.Responsible).count() == 0) {
@@ -185,7 +188,7 @@ public class LifeCycleStatus implements ModelEntity {
 		if (!this.comments.isEmpty()) {
 			// validate comments
 			faults.addAll(ValidationHelper.validateEntityList(this.comments, ENTITY,
-					Fields.comments, locale));
+					Fields.comments, locale, strict));
 		}
 
 		return faults;

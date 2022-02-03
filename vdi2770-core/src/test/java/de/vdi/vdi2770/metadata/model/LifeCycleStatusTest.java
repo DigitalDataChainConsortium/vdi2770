@@ -84,7 +84,7 @@ public class LifeCycleStatusTest {
 		comment.setText("Das ist ein kleiner Test");
 		status.setComments(Arrays.asList(comment));
 
-		final List<ValidationFault> faults = status.validate(this.locale);
+		final List<ValidationFault> faults = status.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -110,7 +110,7 @@ public class LifeCycleStatusTest {
 		comment.setText("Das ist ein kleiner Test");
 		status.setComments(Arrays.asList(comment));
 
-		final List<ValidationFault> faults = status.validate(this.locale);
+		final List<ValidationFault> faults = status.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -137,7 +137,7 @@ public class LifeCycleStatusTest {
 		Party party = createParty();
 		status.setParty(Arrays.asList(party));
 
-		final List<ValidationFault> faults = status.validate(this.locale);
+		final List<ValidationFault> faults = status.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

@@ -65,7 +65,7 @@ public class PartyTest {
 		Organization orga = createOrganization();
 		party.setOrganization(orga);
 
-		final List<ValidationFault> faults = party.validate(this.locale);
+		final List<ValidationFault> faults = party.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -83,7 +83,7 @@ public class PartyTest {
 		Organization orga = createOrganization();
 		party.setOrganization(orga);
 
-		final List<ValidationFault> faults = party.validate(this.locale);
+		final List<ValidationFault> faults = party.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -107,7 +107,7 @@ public class PartyTest {
 		final Party party = new Party();
 		party.setRole(Role.Supplier);
 
-		final List<ValidationFault> faults = party.validate(this.locale);
+		final List<ValidationFault> faults = party.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -137,7 +137,7 @@ public class PartyTest {
 
 		party.setOrganization(orga);
 
-		final List<ValidationFault> faults = party.validate(this.locale);
+		final List<ValidationFault> faults = party.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

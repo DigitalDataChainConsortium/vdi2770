@@ -62,6 +62,33 @@ public class PdfValidationTest {
 
 		assertEquals(type, "3A");
 	}
+	
+	@Test
+	public void detect1BPdf() throws PdfValidationException {
+
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		final String type = pdfValidator.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA1b_File.pdf"));
+
+		assertEquals(type, "1B");
+	}
+	
+	@Test
+	public void detect2BPdf() throws PdfValidationException {
+
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		final String type = pdfValidator.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA2b_File.pdf"));
+
+		assertEquals(type, "2B");
+	}
+	
+	@Test
+	public void detect3BPdf() throws PdfValidationException {
+
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		final String type = pdfValidator.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA3b_File.pdf"));
+
+		assertEquals(type, "3B");
+	}
 
 	/**
 	 * Check a regular PDF file.

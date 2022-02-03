@@ -25,6 +25,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.nio.charset.Charset;
 import java.text.MessageFormat;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -131,7 +133,7 @@ public class ProcessorConfiguration {
 		final File appConfigFile = new File("./" + APP_PROPERTIES_FILE_NAME);
 		if (appConfigFile.exists()) {
 			try (InputStream input = new FileInputStream(appConfigFile)) {
-				this.properties.load(input);
+				this.properties.load(new InputStreamReader(input, Charset.forName("UTF-8")));
 			} catch (final IOException e) {
 				log.warn(this.bundle.getString("PC_WARN_001"), e);
 			}
@@ -139,7 +141,7 @@ public class ProcessorConfiguration {
 			// load app properties from resources
 			try (InputStream input = ProcessorConfiguration.class
 					.getResourceAsStream("/" + APP_PROPERTIES_FILE_NAME)) {
-				this.properties.load(input);
+				this.properties.load(new InputStreamReader(input, Charset.forName("UTF-8")));
 			} catch (final IOException e) {
 				log.warn(this.bundle.getString("PC_WARN_002"), e);
 			}

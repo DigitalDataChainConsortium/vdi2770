@@ -52,7 +52,7 @@ public class DocumentIdTest {
 
 		final DocumentId id = new DocumentId("DOMAIN", "IDVALUE", Boolean.FALSE);
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -67,7 +67,7 @@ public class DocumentIdTest {
 
 		final DocumentId id = new DocumentId("DOMAIN", "IDVALUE", Boolean.TRUE);
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -83,8 +83,8 @@ public class DocumentIdTest {
 		final DocumentId id1 = new DocumentId("DOMAIN", "IDVALUE", Boolean.FALSE);
 		final DocumentId id2 = new DocumentId("DOMAIN1", "IDVALUE1", Boolean.FALSE);
 
-		final List<ValidationFault> faults = ValidationHelper
-				.validateEntityList(Arrays.asList(id1, id2), "Demo", "Test", Locale.getDefault());
+		final List<ValidationFault> faults = ValidationHelper.validateEntityList(
+				Arrays.asList(id1, id2), "Demo", "Test", Locale.getDefault(), true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -102,7 +102,8 @@ public class DocumentIdTest {
 		final DocumentId id3 = null;
 
 		final List<ValidationFault> faults = ValidationHelper.validateEntityList(
-				Arrays.asList(id1, id2, id3), "Document", "documentId", Locale.getDefault());
+				Arrays.asList(id1, id2, id3), "Document", "documentId", Locale.getDefault(),
+				true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -117,7 +118,7 @@ public class DocumentIdTest {
 
 		final DocumentId id = new DocumentId("", "IDVALUE", Boolean.TRUE);
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -135,7 +136,7 @@ public class DocumentIdTest {
 
 		final DocumentId id = new DocumentId("DOMAIN", "", Boolean.TRUE);
 
-		final List<ValidationFault> faults = id.validate(this.locale);
+		final List<ValidationFault> faults = id.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

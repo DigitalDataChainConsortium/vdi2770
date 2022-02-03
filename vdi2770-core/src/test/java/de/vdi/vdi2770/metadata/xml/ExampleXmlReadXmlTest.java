@@ -65,8 +65,16 @@ public class ExampleXmlReadXmlTest {
 			for (final File xmlFile : xmlFiles) {
 				final XmlReader reader = new XmlReader(Locale.getDefault());
 				final Document xmlDocument = reader.read(xmlFile);
-				final List<ValidationFault> errors = xmlDocument.validate(Locale.getDefault());
-				assertTrue(errors.size() == 0 || errors.stream()
+
+				// validate with strict mode
+				final List<ValidationFault> strictErrors = xmlDocument.validate(Locale.getDefault(),
+						true);
+				assertTrue(strictErrors.size() == 0 || strictErrors.stream()
+						.filter(f -> f.getLevel() == FaultLevel.ERROR).count() == 0);
+
+				final List<ValidationFault> NonStrictErrors = xmlDocument
+						.validate(Locale.getDefault(), false);
+				assertTrue(NonStrictErrors.size() == 0 || NonStrictErrors.stream()
 						.filter(f -> f.getLevel() == FaultLevel.ERROR).count() == 0);
 			}
 		}

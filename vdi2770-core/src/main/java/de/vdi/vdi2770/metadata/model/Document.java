@@ -265,12 +265,15 @@ public class Document implements ModelEntity {
 	/**
 	 * Validate this instance of <em>Document</em>.
 	 *
-	 * @param parent The name of the parent entity.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -287,7 +290,7 @@ public class Document implements ModelEntity {
 		} else {
 			// Validate each entry in the list of document IDs
 			faults.addAll(ValidationHelper.validateEntityList(this.documentId, ENTITY,
-					Fields.documentId, locale));
+					Fields.documentId, locale, strict));
 
 			// more than one document ID defined?
 			if (this.documentId.size() >= 2) {
@@ -312,7 +315,7 @@ public class Document implements ModelEntity {
 		} else {
 			// Validate the list of document versions
 			faults.addAll(ValidationHelper.validateEntityList(this.documentVersion, ENTITY,
-					Fields.documentVersion, locale));
+					Fields.documentVersion, locale, strict));
 		}
 
 		// each document must be at least classified according to VDI 2770
@@ -324,7 +327,7 @@ public class Document implements ModelEntity {
 		} else {
 			// Validate each entry in the list of document classifications
 			faults.addAll(ValidationHelper.validateEntityList(this.documentClassification, ENTITY,
-					Fields.documentClassification, locale));
+					Fields.documentClassification, locale, strict));
 
 			// No classification according to VDI 2770 given?
 			if (this.documentClassification.stream().map(c -> c.getClassificationSystem())
@@ -358,7 +361,7 @@ public class Document implements ModelEntity {
 		} else {
 			// Validate each document domain ID
 			faults.addAll(ValidationHelper.validateEntityList(this.documentIdDomain, ENTITY,
-					Fields.documentIdDomain, locale));
+					Fields.documentIdDomain, locale, strict));
 		}
 
 		// Each document must refer at least to one reference object
@@ -370,7 +373,7 @@ public class Document implements ModelEntity {
 		} else {
 			// Validate each reference object in the list
 			faults.addAll(ValidationHelper.validateEntityList(this.referencedObject, ENTITY,
-					Fields.referencedObject, locale));
+					Fields.referencedObject, locale, strict));
 		}
 
 		return faults;

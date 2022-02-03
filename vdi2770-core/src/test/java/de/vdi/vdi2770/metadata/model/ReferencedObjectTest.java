@@ -74,7 +74,7 @@ public class ReferencedObjectTest {
 				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
 				Arrays.asList(createParty()));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -95,7 +95,7 @@ public class ReferencedObjectTest {
 						RefType.DIN_SPEC_91406_ID)),
 				Arrays.asList(createParty(), createParty(Role.Supplier)));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -113,7 +113,7 @@ public class ReferencedObjectTest {
 				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
 				new ArrayList<>());
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		assertTrue(faults.size() == 1);
 
@@ -137,7 +137,7 @@ public class ReferencedObjectTest {
 				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
 				null);
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		assertTrue(faults.size() == 1);
 
@@ -160,7 +160,7 @@ public class ReferencedObjectTest {
 		final ReferencedObject reference = new ReferencedObject(new ArrayList<>(),
 				Arrays.asList(createParty(), createParty(Role.Supplier)));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -185,7 +185,7 @@ public class ReferencedObjectTest {
 		final ReferencedObject reference = new ReferencedObject(new ArrayList<>(),
 				Arrays.asList(createParty(), createParty(Role.Supplier)));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -212,7 +212,7 @@ public class ReferencedObjectTest {
 						RefType.SERIAL_NUMBER)),
 				Arrays.asList(createParty(Role.Supplier), createParty(Role.Author)));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -242,7 +242,7 @@ public class ReferencedObjectTest {
 								RefType.SERIAL_NUMBER)),
 				Arrays.asList(createParty(Role.Manufacturer)));
 
-		final List<ValidationFault> faults = reference.validate(this.locale);
+		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
