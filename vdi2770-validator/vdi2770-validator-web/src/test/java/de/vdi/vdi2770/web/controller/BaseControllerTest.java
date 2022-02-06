@@ -38,8 +38,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-
 import de.vdi.vdi2770.web.transfer.Report;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 

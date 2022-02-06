@@ -88,6 +88,6 @@ public class VersionController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		return new ResponseEntity<String>(service.getVersion(), responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<String>(this.service.getVersion(), responseHeaders, HttpStatus.OK);
 	}
 }

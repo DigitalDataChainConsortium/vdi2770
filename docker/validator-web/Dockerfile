@@ -1,7 +1,9 @@
 #FROM openjdk:18
 FROM debian:bullseye-slim
 
-LABEL org.opencontainers.image.authors="Johannes Schmidt"
+LABEL org.opencontainers.image.authors="Johannes Schmidt" \
+      org.opencontainers.image.vendor="DigitalDataChainConsortium" \
+      org.opencontainers.image.licenses="MIT"
 
 RUN apt update && apt upgrade --yes && apt install locales locales-all openjdk-17-jre-headless --yes
 
