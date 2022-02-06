@@ -1,5 +1,18 @@
 = Changelog
 
+== v0.9.7
+2022-02-06
+
+* [bug] douple document validation
+* [bug] add missing license information for Docker images
+* [bug] invalid English name validation
+* [bug] PDF/A-{1,2,3}b files not allowed for certificates
+* [bug] Detection of PDA/A conformance failed
+* [bug] Incorrect validation message for ZU_MESSAGE_001 
+* [bug] PDF info messages contain warn messages 
+* [bug] Set properties file enconding to UTF-8
+
+
 == v0.9.6
 2022-01-23
 
