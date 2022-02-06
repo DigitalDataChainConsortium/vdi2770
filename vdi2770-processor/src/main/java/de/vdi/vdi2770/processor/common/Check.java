@@ -22,6 +22,7 @@
 package de.vdi.vdi2770.processor.common;
 
 import java.io.File;
+import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -34,6 +35,7 @@ import com.google.common.base.Strings;
 import de.vdi.vdi2770.processor.ProcessorException;
 import de.vdi.vdi2770.processor.pdf.PdfValidator;
 import de.vdi.vdi2770.processor.zip.ZipUtils;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * This class is a utility class for common check operations like missing files
@@ -43,6 +45,7 @@ import de.vdi.vdi2770.processor.zip.ZipUtils;
  *         Informatics InfAI)
  *
  */
+@Log4j2
 public class Check {
 
 	private final ResourceBundle bundle;
@@ -214,7 +217,19 @@ public class Check {
 
 	public void isPdfFile(final File file, final String messageCode) throws ProcessorException {
 
-		if (!PdfValidator.isPdfFile(file)) {
+		Preconditions.checkArgument(file != null, "file is null");
+
+		boolean isPdfFile = false;
+
+		try {
+			isPdfFile = PdfValidator.isPdfFile(file);
+		} catch (final IOException e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Can not read file " + file.getAbsolutePath(), e);
+			}
+		}
+
+		if (!isPdfFile) {
 			throw new ProcessorException(MessageFormat.format(this.bundle.getString(messageCode),
 					file.getAbsolutePath()));
 		}

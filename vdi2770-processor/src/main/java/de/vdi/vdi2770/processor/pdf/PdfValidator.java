@@ -26,7 +26,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -41,6 +43,13 @@ import org.apache.pdfbox.io.RandomAccessBufferedFileInputStream;
 import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
+import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.apache.pdfbox.preflight.PreflightDocument;
+import org.apache.pdfbox.preflight.ValidationResult;
+import org.apache.pdfbox.preflight.ValidationResult.ValidationError;
+import org.apache.pdfbox.preflight.exception.SyntaxValidationException;
+import org.apache.pdfbox.preflight.parser.PreflightParser;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.tika.Tika;
 import org.apache.xmpbox.XMPMetadata;
 import org.apache.xmpbox.schema.PDFAIdentificationSchema;
@@ -51,6 +60,8 @@ import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.net.MediaType;
 
+import de.vdi.vdi2770.processor.common.Message;
+import de.vdi.vdi2770.processor.common.MessageLevel;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -126,12 +137,12 @@ public class PdfValidator {
 	public PdfValidator(final Locale locale) {
 		this(locale, false);
 	}
-	
+
 	/**
 	 * ctor
 	 * 
-	 * @param locale Desired {@link Locale} for validation messages; must not be
-	 *               <code>null</code>.
+	 * @param locale       Desired {@link Locale} for validation messages; must not
+	 *                     be <code>null</code>.
 	 * @param isStrictMode Enable or disable strict validation.
 	 */
 	public PdfValidator(final Locale locale, final boolean isStrictMode) {
@@ -209,7 +220,7 @@ public class PdfValidator {
 
 		final PDMetadata metadata = pdfDocument.getDocumentCatalog().getMetadata();
 		if (metadata == null) {
-			if(log.isWarnEnabled()) {
+			if (log.isWarnEnabled()) {
 				log.warn("XMP meta data is null");
 			}
 			// can not read metadata
@@ -323,39 +334,39 @@ public class PdfValidator {
 	}
 
 	/**
-	 * Check, if a file is a PDF file. 
+	 * Check, if a file is a PDF file.
 	 * 
 	 * @param pdfFile An existing file
-	 * @throws IllegalArgumentException The given file is <code>null</code>, 
-	 * does not exist or is not a PDF file.
+	 * @throws IOException              Error read the PDF file
+	 * @throws IllegalArgumentException The given file is <code>null</code>, does
+	 *                                  not exist or is not a PDF file.
 	 * @return <code>true</code>.
 	 */
-	public static boolean isPdfFile(final File pdfFile) {
+	public static boolean isPdfFile(final File pdfFile) throws IOException {
 
-		try {
-			final Tika tika = new Tika();
-			final String fileMimeType = tika.detect(pdfFile);
-			return StringUtils.equals(fileMimeType, MediaType.PDF.toString());
-		} catch (final IOException e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Can not detect mime type of file " + pdfFile.getAbsolutePath(), e);
-			}
-			return false;
-		}
+		final Tika tika = new Tika();
+		final String fileMimeType = tika.detect(pdfFile);
+		return StringUtils.equals(fileMimeType, MediaType.PDF.toString());
 	}
 
 	/**
-	 * Check, if the PDF file is encrypted. 
+	 * Check, if the PDF file is encrypted.
 	 * 
-	 * <p>According to VDI 2770:2020 PDF must not be encrypted or
-	 * password protected.</p>
+	 * <p>
+	 * Password protection is handled as encrypted.
+	 * </p>
+	 * 
+	 * <p>
+	 * According to VDI 2770:2020 PDF must not be encrypted or password protected.
+	 * </p>
 	 * 
 	 * @param pdfFile An existing PDF file
-	 * @throws IllegalArgumentException The given file is <code>null</code>, 
-	 * does not exist or is not a PDF file.
-	 * @return <code>true</code>, if the given PDF File is encrypted. 
+	 * @throws IOException              Error while reading the PDF file
+	 * @throws IllegalArgumentException The given file is <code>null</code>, does
+	 *                                  not exist or is not a PDF file.
+	 * @return <code>true</code>, if the given PDF File is encrypted.
 	 */
-	public boolean isEncrypted(final File pdfFile) {
+	public boolean isEncrypted(final File pdfFile) throws IOException {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
 		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
@@ -363,13 +374,76 @@ public class PdfValidator {
 
 		try (PDDocument d = PDDocument.load(pdfFile)) {
 			return d.isEncrypted();
-		} catch (final IOException e) {
-			if (log.isWarnEnabled()) {
-				log.warn("Can not read encryption settings for file  " + pdfFile.getAbsolutePath(),
-						e);
-			}
-			return false;
+		} catch (final InvalidPasswordException e) {
+			log.warn("PDF file " + pdfFile.getAbsolutePath() + " is password protected: ",
+					e.getMessage());
+			// password protected is not allowed, too
+			return true;
+		}
+	}
+
+	public boolean hasText(final File pdfFile) throws IOException {
+
+		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
+		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
+		Preconditions.checkArgument(isPdfFile(pdfFile), "pdfFile is not a PDF file");
+
+		try (PDDocument d = PDDocument.load(pdfFile)) {
+			PDFTextStripper pdfStripper = new PDFTextStripper();
+			String extractedText = pdfStripper.getText(d);
+			return !StringUtils.isEmpty(extractedText);
+		}
+	}
+
+	public Collection<Message> preflight(final File pdfFile) throws IOException {
+
+		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
+		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
+		Preconditions.checkArgument(isPdfFile(pdfFile), "pdfFile is not a PDF file");
+
+		boolean isPdfA1 = false;
+		try {
+			String version = getPdfAVersion(pdfFile);
+			isPdfA1 = StringUtils.containsIgnoreCase(version, "1");
+		} catch (@SuppressWarnings("unused") final Exception e) {
+			// ignore exception
 		}
 
+		if (isPdfA1) {
+			return preflight1(pdfFile);
+		}
+		return new ArrayList<>();
+	}
+
+	private Collection<Message> preflight1(final File pdfFile) throws IOException {
+
+		// init result
+		ValidationResult result = null;
+		PreflightParser parser = new PreflightParser(pdfFile);
+		parser.parse();
+
+		try (PreflightDocument document = parser.getPreflightDocument()) {
+			document.validate();
+			result = document.getResult();
+		} catch (SyntaxValidationException e) {
+			result = e.getResult();
+		}
+
+		final Collection<Message> messages = new ArrayList<>();
+
+		// return validation result
+		if (result.isValid()) {
+			messages.add(new Message(MessageFormat.format(this.bundle.getString("PV_MESSAGE_001"),
+					pdfFile.getName())));
+		} else {
+			messages.add(new Message(MessageFormat.format(this.bundle.getString("PV_MESSAGE_002"),
+					pdfFile.getName())));
+			for (ValidationError error : result.getErrorsList()) {
+				messages.add(new Message(MessageLevel.ERROR,
+						error.getErrorCode() + ": " + error.getDetails()));
+			}
+		}
+
+		return messages;
 	}
 }
