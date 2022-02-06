@@ -39,6 +39,7 @@ public class Application {
 	 *
 	 * @param args
 	 */
+	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		// rename application properties file name

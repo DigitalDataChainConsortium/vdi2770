@@ -327,7 +327,7 @@ public class ProcessorConfiguration {
 
 		try {
 			return Integer.parseInt(factor);
-		} catch (final NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") final NumberFormatException e) {
 			return defaultValue;
 		}
 	}
@@ -351,7 +351,7 @@ public class ProcessorConfiguration {
 
 		try {
 			return Integer.parseInt(factor);
-		} catch (final NumberFormatException e) {
+		} catch (@SuppressWarnings("unused") final NumberFormatException e) {
 			return defaultValue;
 		}
 	}
