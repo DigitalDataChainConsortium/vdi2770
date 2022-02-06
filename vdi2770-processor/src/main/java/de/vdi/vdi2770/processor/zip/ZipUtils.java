@@ -864,8 +864,12 @@ public class ZipUtils {
 						final ZipFault fault = new ZipFault(FaultLevel.WARNING,
 								header.getFileName(), FaultType.HAS_INVALID_VALUE);
 						fault.setMessage(MessageFormat.format(
-								this.bundle.getString("ZU_MESSAGE_001"), header.getFileName()));
+								this.bundle.getString("ZU_MESSAGE_001"), zipFile.getName()));
 						faults.add(fault);
+
+						// we do not want to list the folder names, because
+						// they are not allowed in general
+						break;
 					}
 				}
 			}

@@ -58,7 +58,7 @@ class DocumentBaseTest {
 
 		final TranslatableString englishName = new TranslatableString();
 		englishName.setLanguage("en");
-		englishName.setText("assembly, disassembly");
+		englishName.setText("Assembly, disassembly");
 
 		classification.addClassName(englishName);
 

@@ -61,7 +61,7 @@ public class DocumentTest extends DocumentBaseTest {
 
 		final Document doc = getTestDocument();
 
-		final List<ValidationFault> faults = doc.validate(this.locale);
+		final List<ValidationFault> faults = doc.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -79,7 +79,7 @@ public class DocumentTest extends DocumentBaseTest {
 
 		doc.setDocumentId(getInvalidDocumentIds());
 
-		final List<ValidationFault> faults = doc.validate(this.locale);
+		final List<ValidationFault> faults = doc.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -94,7 +94,7 @@ public class DocumentTest extends DocumentBaseTest {
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 
 	}
-
+	
 	/**
 	 * {@link Document} is not a main document test.
 	 */

@@ -62,6 +62,7 @@ public class ContainerProcessor {
 	// Prefix is CP
 	private final ResourceBundle bundle;
 	private final Locale locale;
+	private final boolean isStrictMode;
 
 	/**
 	 * ctor
@@ -69,12 +70,23 @@ public class ContainerProcessor {
 	 * @param locale Desired {@link Locale} for validation messages.
 	 */
 	public ContainerProcessor(final Locale locale) {
+		this(locale, false);
+	}
+
+	/**
+	 * ctor
+	 *
+	 * @param locale       Desired {@link Locale} for validation messages.
+	 * @param isStrictMode Enable or disable strict validation.
+	 */
+	public ContainerProcessor(final Locale locale, final boolean isStrictMode) {
 		super();
 
 		Preconditions.checkArgument(locale != null);
 
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
 		this.locale = (Locale) locale.clone();
+		this.isStrictMode = isStrictMode;
 	}
 
 	/**
@@ -444,7 +456,7 @@ public class ContainerProcessor {
 		try {
 			Document document = reader.read(metadataFile);
 
-			final List<ValidationFault> errors = document.validate(this.locale);
+			final List<ValidationFault> errors = document.validate(this.locale, this.isStrictMode);
 			if (Fault.hasErrors(errors)) {
 				throw new ProcessorException(MessageFormat.format(
 						this.bundle.getString("CP_EXCEPTION_006"), metadataFile.getAbsolutePath()));

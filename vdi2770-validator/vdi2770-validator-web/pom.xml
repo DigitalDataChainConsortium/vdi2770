@@ -10,7 +10,7 @@
 	<parent>
 		<groupId>de.vdi.vdi2770</groupId>
 		<artifactId>vdi2770</artifactId>
-		<version>0.9.6</version>
+		<version>0.9.7</version>
 		<relativePath>../../pom.xml</relativePath>
 	</parent>
 

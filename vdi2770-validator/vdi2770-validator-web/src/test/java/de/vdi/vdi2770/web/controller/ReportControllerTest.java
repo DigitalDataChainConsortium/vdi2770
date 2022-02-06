@@ -63,6 +63,7 @@ import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 public class ReportControllerTest extends BaseControllerTest {
 
 	private static final String DEMO_VDI_ZIP = "demo_vdi.zip";
+	private static final String INVALID_DOC_TYPE_ZIP = "demo_invalid_doc_type_names.zip";
 
 	/**
 	 * Generated port
@@ -210,5 +211,36 @@ public class ReportControllerTest extends BaseControllerTest {
 		final Tika tika = new Tika();
 		final String fileMimeType = tika.detect(pdfFile);
 		assertTrue(fileMimeType.equals(com.google.common.net.MediaType.PDF.toString()));
+	}
+
+	/**
+	 * Validate a documentation container.
+	 * 
+	 * The English class name of the main document is invalid
+	 * In AB393.zip, the Germany class name is invalid
+	 */
+	@Test
+	public void invalidDocumentTypeTest() {
+
+		// REST call
+		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
+				new File(EXAMPLES_FOLDER, INVALID_DOC_TYPE_ZIP), this.port);
+
+		assertTrue(response.getStatusCode() == HttpStatus.OK);
+		assertTrue(response.getBody() != null);
+
+		final Report result = response.getBody();
+
+		// Report validation
+		assertTrue(result != null);
+		assertTrue(result.getMessages().stream()
+				.filter(m -> StringUtils.startsWith(m.getText(), "DC_004")).count() > 0);
+		
+		for(Report sub : result.getSubReports()) {
+			if("AB393.zip".equals(sub.getFileName())) {
+				assertTrue(sub.getMessages().stream()
+						.filter(m -> StringUtils.startsWith(m.getText(), "DC_003")).count() > 0);	
+			}
+		}
 	}
 }

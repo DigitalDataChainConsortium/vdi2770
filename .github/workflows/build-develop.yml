@@ -1,7 +1,4 @@
-# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
-# For more information see: https://help.github.com/actions/language-and-framework-guides/building-and-testing-java-with-maven
-
-name: Java CI with Maven
+name: Build and publish develop to GitHub Packages
 
 on:
 
@@ -61,6 +58,8 @@ jobs:
       uses: docker/metadata-action@v3
       with:
         images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+        labels: |
+            org.opencontainers.image.licenses=MIT
      
     - name: Build and push Docker image
       uses: docker/build-push-action@v2
@@ -68,4 +67,4 @@ jobs:
         context: ./docker/validator-web
         push: true
         tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}}}}}}}}}}}
+        labels: ${{ steps.meta.outputs.labels }}

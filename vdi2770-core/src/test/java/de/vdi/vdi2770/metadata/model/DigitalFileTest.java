@@ -53,7 +53,7 @@ public class DigitalFileTest {
 
 		final DigitalFile file = new DigitalFile("Demo.zip", MediaType.ZIP.toString());
 
-		final List<ValidationFault> faults = file.validate(this.locale);
+		final List<ValidationFault> faults = file.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -69,7 +69,7 @@ public class DigitalFileTest {
 
 		final DigitalFile file = new DigitalFile("", MediaType.ZIP.toString());
 
-		final List<ValidationFault> faults = file.validate(this.locale);
+		final List<ValidationFault> faults = file.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -92,7 +92,7 @@ public class DigitalFileTest {
 
 		final DigitalFile file = new DigitalFile("Demo.zip", "");
 
-		final List<ValidationFault> faults = file.validate(this.locale);
+		final List<ValidationFault> faults = file.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -118,7 +118,7 @@ public class DigitalFileTest {
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.ZIP.toString());
 
-		final List<ValidationFault> faults = file.validate(this.locale);
+		final List<ValidationFault> faults = file.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 
@@ -145,7 +145,7 @@ public class DigitalFileTest {
 
 		final DigitalFile file = new DigitalFile("Demo.zip", MediaType.PDF.toString());
 
-		final List<ValidationFault> faults = file.validate(this.locale);
+		final List<ValidationFault> faults = file.validate(this.locale, true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

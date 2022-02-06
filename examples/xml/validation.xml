@@ -20,8 +20,8 @@
 	<DocumentClassification
 		ClassificationSystem="VDI2770:2018">
 		<ClassId>03-01</ClassId>
-		<ClassName Language="de">Montage, Inbetriebnahme, Demontage</ClassName>
-		<ClassName Language="en">assembly, disassembly</ClassName>
+		<ClassName Language="de">Montage, Demontage</ClassName>
+		<ClassName Language="en">Assembly, disassembly</ClassName>
 	</DocumentClassification>
 	<DocumentClassification
 		ClassificationSystem="IEC61355">

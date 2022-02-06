@@ -101,20 +101,13 @@ public class ContainerValidator {
 	 *               <code>null</code>.
 	 */
 	public ContainerValidator(final Locale locale) {
-		super();
-
-		Preconditions.checkArgument(locale != null);
-
-		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
-		this.locale = (Locale) locale.clone();
-		this.isStrictMode = false;
+		this(locale, false);
 	}
 
 	/**
 	 * ctor
 	 * 
 	 * @param isStrictMode Enable or disable strict validation.
-	 * 
 	 * @param locale       Desired {@link Locale} for validation messages; must not
 	 *                     be <code>null</code>.
 	 */
@@ -319,7 +312,7 @@ public class ContainerValidator {
 			if (currentDocument.getDocumentVersion().stream().map(v -> v.getDocumentRelationship())
 					.flatMap(Collection::stream).count() == 0) {
 
-				// Document has not relationsships
+				// Document has no relationships
 				return;
 			}
 
@@ -702,10 +695,9 @@ public class ContainerValidator {
 			Document document = reader.read(xmlFile);
 			if (document.isMainDocument()) {
 				MainDocument main = new MainDocument(document);
-				faults = main.validate(this.locale);
+				faults = main.validate(this.locale, this.isStrictMode);
 			} else {
-				document.validate(null, this.locale);
-				faults = document.validate(null, this.locale);
+				faults = document.validate(null, this.locale, this.isStrictMode);
 			}
 
 			// add validation messages to report
@@ -762,12 +754,15 @@ public class ContainerValidator {
 			}
 		}
 
-		boolean allowPdfA1Only = document.getDocumentClassification().stream()
+		// query: is the document classified as VDI 2770 02-04?
+		// if true, PDF/A-{1,2,3}b files are allowed
+		// see VDI 2770:2020 page 30
+		boolean allowPdfAOnly = document.getDocumentClassification().stream()
 				.filter(s -> StringUtils.equals(s.getClassificationSystem(),
 						Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))
 				.map(s -> s.getClassId())
 				.filter(i -> StringUtils.equals(i, Constants.VDI2770_CERTIFICATE_CATEGORY))
-				.count() > 0;
+				.count() == 0;
 
 		// look for files that are defined in the metadata but do not exist
 		for (final DigitalFile storedFile : storedFiles) {
@@ -784,24 +779,22 @@ public class ContainerValidator {
 						MessageFormat.format(this.bundle.getString("REP_MESSAGE_008"), fileName),
 						indentLevel));
 
-				reportContentType(storedFile, localFile, allowPdfA1Only, report, indentLevel);
+				reportContentType(storedFile, localFile, allowPdfAOnly, report, indentLevel);
 			}
 		}
 	}
 
 	private void reportContentType(final DigitalFile storedFile, final File localFile,
-			boolean allowAModeOnly, final Report report, final int indentLevel) {
+			boolean allowPdfAOnly, final Report report, final int indentLevel) {
 
 		Preconditions.checkArgument(storedFile != null);
 		Preconditions.checkArgument(localFile != null);
 		Preconditions.checkArgument(localFile.exists());
-		Preconditions.checkArgument(localFile != null);
+		Preconditions.checkArgument(report != null);
 
 		try {
 			final String contentType = storedFile.getFileFormat();
 			if (contentType != null) {
-
-//				final String contentType = Files.probeContentType(localFile.toPath());
 
 				final Tika tika = new Tika();
 				final String fileMimeType = tika.detect(localFile);
@@ -815,7 +808,7 @@ public class ContainerValidator {
 				}
 
 				if (contentType.equals(MediaType.PDF.toString())) {
-					report.addMessages(validatePdfFile(localFile, allowAModeOnly, indentLevel));
+					report.addMessages(validatePdfFile(localFile, allowPdfAOnly, indentLevel));
 				}
 			} else {
 				report.addMessage(new Message(MessageLevel.ERROR, MessageFormat
@@ -843,13 +836,13 @@ public class ContainerValidator {
 	 *
 	 * @param pdfFile        A PDF {@link File}; must not be <code>null</code> and
 	 *                       exist.
-	 * @param allowAModeOnly In general, only PDF/A-1A, PDF/A-2A and PDF/A-3A files
+	 * @param allowPdfAOnly In general, only PDF/A-1A, PDF/A-2A and PDF/A-3A files
 	 *                       are allowed.
 	 * @param indentLevel    Level of indent.
 	 * @return A {@link List} of {@link Message} including Information, warnings and
 	 *         errors.
 	 */
-	public List<Message> validatePdfFile(final File pdfFile, boolean allowAModeOnly,
+	public List<Message> validatePdfFile(final File pdfFile, boolean allowPdfAOnly,
 			final int indentLevel) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
@@ -866,7 +859,7 @@ public class ContainerValidator {
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
-			if (allowAModeOnly && !pdfVersion.toLowerCase().endsWith("a")) {
+			if (allowPdfAOnly && !pdfVersion.toLowerCase().endsWith("a")) {
 				messages.add(new Message(MessageLevel.ERROR,
 						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
@@ -876,26 +869,10 @@ public class ContainerValidator {
 					MessageLevel.ERROR, MessageFormat
 							.format(this.bundle.getString("REP_MESSAGE_017"), pdfFile.getName()),
 					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error reading PDF/A level", e);
+			if (log.isWarnEnabled()) {
+				log.warn("Error reading PDF/A level", e);
 			}
 			return messages;
-		}
-
-		try {
-			PdfValidator pdfValidator = new PdfValidator(this.locale);
-			for (final Message message : pdfValidator.validate(pdfFile)) {
-				message.setIndent(indentLevel);
-				messages.add(message);
-			}
-		} catch (final PdfValidationException e) {
-			messages.add(new Message(
-					MessageLevel.ERROR, MessageFormat
-							.format(this.bundle.getString("REP_MESSAGE_019"), pdfFile.getName()),
-					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error validating PDF/A level", e);
-			}
 		}
 
 		return messages;

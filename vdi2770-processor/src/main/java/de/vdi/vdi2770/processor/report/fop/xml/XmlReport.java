@@ -28,6 +28,7 @@ import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlElementWrapper;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 
 import de.vdi.vdi2770.processor.common.Message;
+import de.vdi.vdi2770.processor.common.MessageLevel;
 import de.vdi.vdi2770.processor.report.Report;
 import lombok.AccessLevel;
 import lombok.Data;
@@ -54,15 +55,16 @@ public class XmlReport {
 		this.fileHash = report.getFileHash();
 		this.fileName = report.getFileName();
 
-		List<Message> reportErrors = report.getErrorMessages(false);
-		List<Message> reportWarnings = report.getWarnMessages(false, true);
+		List<Message> reportErrors = report.filterExact(MessageLevel.ERROR, false);
+		List<Message> reportWarnings = report.filterExact(MessageLevel.WARN, false);
+		List<Message> reportInfos = report.filterExact(MessageLevel.INFO, false);
 
 		this.errorCount = reportErrors.size();
 		this.warnCount = reportWarnings.size();
 
 		reportErrors.stream().forEach(m -> this.errors.add(m.getText()));
 		reportWarnings.stream().forEach(m -> this.warnings.add(m.getText()));
-		report.getInfoMessages(false, true).stream().forEach(m -> this.infos.add(m.getText()));
+		reportInfos.stream().forEach(m -> this.infos.add(m.getText()));
 
 		for (Report sub : report.getSubReports()) {
 			this.subReports.add(new XmlSubReport(sub.getId(), sub.getFileName()));

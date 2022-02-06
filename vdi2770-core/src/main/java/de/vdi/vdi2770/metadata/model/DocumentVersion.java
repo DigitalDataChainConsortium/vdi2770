@@ -232,12 +232,15 @@ public class DocumentVersion implements ModelEntity {
 	/**
 	 * Validate this instance.
 	 *
-	 * @param parent The name of a parent element. Can be null.
-	 * @return A {@link List} of {@link ValidationFault}s, if there are errors or
-	 *         warnings. Otherwise, an empty {@link List} will return.
+	 * @param parent The name of a parent element. Can be <code>null</code>.
+	 * @param locale Desired {@link Locale} for validation messages.
+	 * @param strict If <code>true</code>, strict validation is enabled.
+	 * @return A {@link List} of {@link ValidationFault}s indicating validation
+	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 
@@ -288,8 +291,8 @@ public class DocumentVersion implements ModelEntity {
 			faults.add(fault);
 		} else {
 			// list must not contain null entries
-			faults.addAll(
-					ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party, locale));
+			faults.addAll(ValidationHelper.validateEntityList(this.party, ENTITY, Fields.party,
+					locale, strict));
 
 			// list of party must contain at least one Author
 			if (this.party.stream().filter(p -> p.getRole() == Role.Author).count() == 0) {
@@ -313,7 +316,7 @@ public class DocumentVersion implements ModelEntity {
 
 			// list of descriptions must not contain null entry
 			faults.addAll(ValidationHelper.validateEntityList(this.documentDescription, ENTITY,
-					Fields.documentDescription, locale));
+					Fields.documentDescription, locale, strict));
 
 			// only one entry per language allowed
 			if (this.documentDescription.stream().map(d -> d.getLanguage())
@@ -345,7 +348,7 @@ public class DocumentVersion implements ModelEntity {
 			faults.add(fault);
 		} else {
 			faults.addAll(ValidationHelper.validateEntityList(this.digitalFile, ENTITY,
-					Fields.digitalFile, locale));
+					Fields.digitalFile, locale, strict));
 
 			// no duplicate file names allowed
 			if (this.digitalFile.stream().map(f -> f.getFileName()).collect(Collectors.toSet())

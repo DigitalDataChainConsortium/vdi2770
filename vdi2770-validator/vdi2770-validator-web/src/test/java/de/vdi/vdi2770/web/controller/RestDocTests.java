@@ -104,7 +104,7 @@ public class RestDocTests {
 		props.setAllowStatistics(true);
 		props.setRenderInfo(true);
 		props.setRenderWarning(true);
-		props.setEnableStrictMode(false);
+		props.setEnableStrictMode(true);
 
 		final File containerFile = new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP);
 		byte[] bytes = Files.readAllBytes(containerFile.toPath());
