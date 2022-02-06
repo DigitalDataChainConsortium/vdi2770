@@ -53,6 +53,8 @@ jobs:
         uses: docker/metadata-action@v3
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          labels: |
+            org.opencontainers.image.licenses=MIT
        
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
