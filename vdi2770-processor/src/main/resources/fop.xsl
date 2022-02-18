@@ -35,7 +35,7 @@
 	<xsl:param name="PAGE" />
 	
 	<xsl:param name="LANG">en</xsl:param>
-	<xsl:param name="FONTFAMILY">Roboto</xsl:param>
+	<xsl:param name="FONTFAMILY">Roboto,BabelStoneHan</xsl:param>
 
 	<xsl:param name="RENDER_INFOS" />
 	<xsl:param name="RENDER_WARNINGS" />
