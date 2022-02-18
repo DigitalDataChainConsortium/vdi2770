@@ -851,6 +851,8 @@ public class ContainerValidator {
 		final List<Message> messages = new ArrayList<>();
 
 		final PdfValidator pdfValidator = new PdfValidator(this.locale);
+
+		// read and check PDF/A conformance level
 		try {
 
 			String pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
@@ -872,6 +874,7 @@ public class ContainerValidator {
 			}
 		}
 
+		// PDF files shall not be encrypted
 		boolean isEncrypted = false;
 		try {
 			isEncrypted = pdfValidator.isEncrypted(pdfFile);
@@ -889,6 +892,7 @@ public class ContainerValidator {
 					indentLevel));
 		}
 
+		// if not encryped, try to extract text from PDF
 		if (!isEncrypted) {
 			try {
 				boolean hasText = pdfValidator.hasText(pdfFile);
@@ -913,8 +917,29 @@ public class ContainerValidator {
 						this.bundle.getString("REP_MESSAGE_045"), pdfFile.getName()), indentLevel));
 			}
 
+			// try to execute preflight
+			// only PDF/A1a and PDF/A-1b are supported at the moment
 			try {
-				messages.addAll(pdfValidator.preflight(pdfFile));
+				final List<Message> validationMessages = pdfValidator.preflight(pdfFile);
+
+				if (Message.filter(validationMessages, MessageLevel.WARN).size() > 0) {
+					messages.add(
+							new Message(MessageLevel.WARN,
+									MessageFormat.format(this.bundle.getString("REP_MESSAGE_021"),
+											Integer.valueOf(validationMessages.size())),
+									indentLevel));
+				}
+
+				for (final Message m : validationMessages) {
+					if (m.getLevel() == MessageLevel.INFO) {
+						messages.add(m);
+					} else {
+						messages.add(new Message(m.getLevel(),
+								MessageFormat.format(this.bundle.getString("REP_MESSAGE_047"),
+										m.getLevel() + ": " + m.getText()),
+								indentLevel));
+					}
+				}
 			} catch (IOException e) {
 				if (log.isWarnEnabled()) {
 					log.warn("Error while PDF preflight", e);

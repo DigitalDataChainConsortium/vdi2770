@@ -44,6 +44,7 @@ import org.apache.pdfbox.pdfparser.PDFParser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.common.PDMetadata;
 import org.apache.pdfbox.pdmodel.encryption.InvalidPasswordException;
+import org.apache.pdfbox.preflight.Format;
 import org.apache.pdfbox.preflight.PreflightDocument;
 import org.apache.pdfbox.preflight.ValidationResult;
 import org.apache.pdfbox.preflight.ValidationResult.ValidationError;
@@ -382,45 +383,98 @@ public class PdfValidator {
 		}
 	}
 
+	/**
+	 * VDI 2770 requires full-text search for PDF documents.
+	 * 
+	 * <p>
+	 * This simple method tries to extract text from a PDF document. If any text
+	 * could be extracted, this method returns true. But, it is not possible to
+	 * extract the semantic of the text. We cannot check, whether the extracted text
+	 * has any sense.
+	 * </p>
+	 * 
+	 * @param pdfFile An existing, non-<code>null</code> PDF file
+	 * @return True, if any text can be extracted, otherwise <code>false</code>.
+	 * @throws IOException              There was an error reading the PDF file.
+	 * @throws IllegalArgumentException The given {@link File} is <code>null</code>,
+	 *                                  does not exist or is not a PDF file.
+	 */
 	public boolean hasText(final File pdfFile) throws IOException {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
 		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
 		Preconditions.checkArgument(isPdfFile(pdfFile), "pdfFile is not a PDF file");
 
+		// try to load the PDF document
 		try (PDDocument d = PDDocument.load(pdfFile)) {
-			PDFTextStripper pdfStripper = new PDFTextStripper();
-			String extractedText = pdfStripper.getText(d);
-			return !StringUtils.isEmpty(extractedText);
+
+			// iterate over pages
+			int numPages = d.getNumberOfPages();
+			for (int i = 1; i <= numPages; i++) {
+
+				// text extractor class
+				final PDFTextStripper pdfStripper = new PDFTextStripper();
+				pdfStripper.setStartPage(i);
+				pdfStripper.setEndPage(i);
+				String extractedText = pdfStripper.getText(d);
+				if (!StringUtils.isEmpty(extractedText)) {
+					return true;
+				}
+			}
 		}
+
+		return false;
 	}
 
-	public Collection<Message> preflight(final File pdfFile) throws IOException {
+	/**
+	 * Execute PDF/A preflight for a PDF document.
+	 * 
+	 * <p>
+	 * At the moment, only preflight of PDF/A-1a and PDF/A-1b is supported. In case
+	 * of PDF/A{2,3}-{a,b} files, validation is skipped.
+	 * </p>
+	 * 
+	 * @param pdfFile An existing, non-<code>null</code> PDF file
+	 * @return A {@link Collection} of validation {@link Message}s.
+	 * @throws IOException              There was an error reading the PDF file.
+	 * @throws IllegalArgumentException The given {@link File} is <code>null</code>,
+	 *                                  does not exist or is not a PDF file.
+	 */
+	public List<Message> preflight(final File pdfFile) throws IOException {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
 		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
 		Preconditions.checkArgument(isPdfFile(pdfFile), "pdfFile is not a PDF file");
 
 		boolean isPdfA1 = false;
+		boolean isPDFAa = false;
 		try {
 			String version = getPdfAVersion(pdfFile);
+
+			// is PDF/A-1{a,b}?
 			isPdfA1 = StringUtils.containsIgnoreCase(version, "1");
-		} catch (@SuppressWarnings("unused") final Exception e) {
-			// ignore exception
+
+			// is PDF/A-{1,2,3}a?
+			isPDFAa = StringUtils.endsWithIgnoreCase(version, "a");
+		} catch (final Exception e) {
+			if (log.isWarnEnabled()) {
+				log.warn("Can not read PDF/A conformance level: " + e.getMessage());
+			}
 		}
 
 		if (isPdfA1) {
-			return preflight1(pdfFile);
+			return preflight1(pdfFile, isPDFAa);
 		}
+
 		return new ArrayList<>();
 	}
 
-	private Collection<Message> preflight1(final File pdfFile) throws IOException {
+	private List<Message> preflight1(final File pdfFile, boolean isPdfA) throws IOException {
 
 		// init result
 		ValidationResult result = null;
 		PreflightParser parser = new PreflightParser(pdfFile);
-		parser.parse();
+		parser.parse(isPdfA ? Format.PDF_A1A : Format.PDF_A1B);
 
 		try (PreflightDocument document = parser.getPreflightDocument()) {
 			document.validate();
@@ -429,7 +483,7 @@ public class PdfValidator {
 			result = e.getResult();
 		}
 
-		final Collection<Message> messages = new ArrayList<>();
+		final List<Message> messages = new ArrayList<>();
 
 		// return validation result
 		if (result.isValid()) {
