@@ -92,6 +92,12 @@ REP_019:: Internal error during validation of the PDF file.
 REP_022:: The PDF file is valid.
 REP_038:: The PDF file shall have the type PDF/A-1A, PDF/A-2A, or PDF/A-3A. Only documents of 
 category 02-04 are excluded. See section 9.1 in link:{url-vdi2770}[VDI 2770].
+REP_040:: The PDF file is encrypted or password protected.
+REP_041:: The PDF file is not encrypted or password protected.
+REP_043:: The PDF file contains text. See section 9.1 in link:{url-vdi2770}[VDI 2770].
+REP_043:: Could not extract text from PDF file. 
+REP_046:: There are preflight problems. At the moment, preflight for PDF/A-1{a,b} files are 
+implemented.
 
 If the container file is a documentation container, an extended check is performed.
 
