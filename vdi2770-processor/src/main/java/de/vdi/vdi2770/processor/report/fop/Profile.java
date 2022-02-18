@@ -72,11 +72,7 @@ public class Profile {
 		// using font https://www.cufonfonts.com/font/babelstone-han
 		// see also https://www.babelstone.co.uk/Fonts/Han.html
 		String fontFamily = "Roboto,BabelStoneHan";
-		if ("zh".equals(this.locale.getLanguage())) {
-			// using font https://www.cufonfonts.com/font/babelstone-han
-			// see also https://www.babelstone.co.uk/Fonts/Han.html
-			fontFamily = "BabelStoneHan,Roboto";
-		}
+
 		transformer.setParameter("FONTFAMILY", fontFamily);
 
 		transformer.setParameter("SECOVERVIEW", this.bundle.getString("RD_LABEL_SEC_OVERVIEW"));
