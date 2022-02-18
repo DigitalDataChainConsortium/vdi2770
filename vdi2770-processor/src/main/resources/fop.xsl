@@ -39,6 +39,7 @@
 
 	<xsl:param name="RENDER_INFOS" />
 	<xsl:param name="RENDER_WARNINGS" />
+	<xsl:param name="RENDER_SHA256" />
 
 	<xsl:param name="AUTHOR">
 		Universität Leipzig
@@ -438,6 +439,11 @@
 							<xsl:value-of select="$SECREPORT" /> &#160;<xsl:value-of select="fileName" />
 						</xsl:with-param>
 					</xsl:call-template>
+					<xsl:if test="$RENDER_SHA256 = 'ON'">
+						<fo:block font-size="10pt">
+							SHA265 <xsl:value-of select="fileHash" />
+						</fo:block>
+					</xsl:if>
 					<xsl:apply-templates select="Errors" />
 					<xsl:if test="$RENDER_WARNINGS = 'ON'">
 						<xsl:apply-templates select="Warnings" />
