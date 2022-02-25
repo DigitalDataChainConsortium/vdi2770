@@ -152,7 +152,7 @@ public class ReportController extends BaseController {
 
 				FopReport doc = new FopReport(locale);
 				byte[] pdfBytes = doc.createPdf(result, config.isRenderWarning(),
-						config.isRenderInfo());
+						config.isRenderInfo(), config.isRenderFileHash());
 				return toResponse(pdfBytes);
 
 			} finally {

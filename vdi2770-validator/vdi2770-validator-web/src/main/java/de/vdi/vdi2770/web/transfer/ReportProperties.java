@@ -35,5 +35,6 @@ public class ReportProperties {
 	private boolean renderWarning = true;
 	private boolean allowStatistics = true;
 	private boolean enableStrictMode = false;
+	private boolean renderFileHash = false;
 
 }

@@ -29,7 +29,8 @@ data structure that is defined as follows:
   "renderInfo": "boolean",
   "renderWarning": "boolean",
   "allowStatistics": "boolean",
-  "enableStrictMode": "boolean"
+  "enableStrictMode": "boolean",
+  "renderFileHash": "boolean"
 }
 ----
 
@@ -43,6 +44,10 @@ no report warnings return (default is ``false``).
 ``true`` (default is `false`). Anonymized results are persisted in a CSV file.
 
 ``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly.
+
+``renderFileHash``:: If set to ``true``, a SHA256 hash will be rendered for each container file
+(nested container files are included).
+
 
 === JSON report
 

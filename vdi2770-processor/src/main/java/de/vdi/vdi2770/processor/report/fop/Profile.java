@@ -67,12 +67,12 @@ public class Profile {
 
 		transformer.setParameter("LANG", this.locale.getISO3Language());
 
-		String fontFamily = "Roboto";
-		if ("zh".equals(this.locale.getLanguage())) {
-			// using font https://www.cufonfonts.com/font/babelstone-han
-			// see also https://www.babelstone.co.uk/Fonts/Han.html
-			fontFamily = "BabelStoneHan";
-		}
+		// using google font Roboto
+		// https://fonts.google.com/specimen/Roboto
+		// using font https://www.cufonfonts.com/font/babelstone-han
+		// see also https://www.babelstone.co.uk/Fonts/Han.html
+		String fontFamily = "Roboto,BabelStoneHan";
+
 		transformer.setParameter("FONTFAMILY", fontFamily);
 
 		transformer.setParameter("SECOVERVIEW", this.bundle.getString("RD_LABEL_SEC_OVERVIEW"));
