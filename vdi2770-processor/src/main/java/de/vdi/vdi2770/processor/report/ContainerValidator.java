@@ -842,7 +842,7 @@ public class ContainerValidator {
 	 * @return A {@link List} of {@link Message} including Information, warnings and
 	 *         errors.
 	 */
-	public List<Message> validatePdfFile(final File pdfFile, boolean certificateClass,
+	public List<Message> validatePdfFile(final File pdfFile, boolean isCertificateClass,
 			final int indentLevel) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
@@ -859,7 +859,7 @@ public class ContainerValidator {
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
-			if (certificateClass && !pdfVersion.toLowerCase().endsWith("a")) {
+			if (isCertificateClass && !pdfVersion.toLowerCase().endsWith("a")) {
 				messages.add(new Message(MessageLevel.ERROR,
 						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
