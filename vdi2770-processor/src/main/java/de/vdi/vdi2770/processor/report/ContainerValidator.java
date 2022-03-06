@@ -902,7 +902,7 @@ public class ContainerValidator {
 							indentLevel));
 				} else {
 					messages.add(
-							new Message(certificateClass ? MessageLevel.INFO : MessageLevel.ERROR,
+							new Message(isCertificateClass ? MessageLevel.INFO : MessageLevel.WARN,
 									MessageFormat.format(this.bundle.getString("REP_MESSAGE_044"),
 											pdfFile.getName()),
 									indentLevel));
