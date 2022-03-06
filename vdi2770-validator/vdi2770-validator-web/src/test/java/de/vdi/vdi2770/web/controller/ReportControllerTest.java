@@ -116,7 +116,7 @@ public class ReportControllerTest extends BaseControllerTest {
 		assertTrue(StringUtils.equals(result.getFileName(), DEMO_VDI_ZIP));
 
 		assertTrue(result.getLocale().equals(Locale.forLanguageTag("de")));
-		assertTrue(result.getMessages().size() == 17);
+		assertTrue(result.getMessages().size() == 19);
 		assertTrue(result.getSubReports().size() == 2);
 	}
 

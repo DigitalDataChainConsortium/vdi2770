@@ -59,6 +59,10 @@
 		</dependency>
 		<dependency>
 			<groupId>org.apache.pdfbox</groupId>
+			<artifactId>preflight</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.pdfbox</groupId>
 			<artifactId>xmpbox</artifactId>
 		</dependency>
 		<dependency>

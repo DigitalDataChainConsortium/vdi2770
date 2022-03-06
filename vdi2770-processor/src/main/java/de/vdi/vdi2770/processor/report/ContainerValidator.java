@@ -820,8 +820,8 @@ public class ContainerValidator {
 					MessageLevel.ERROR, MessageFormat
 							.format(this.bundle.getString("REP_MESSAGE_017"), localFile.getName()),
 					indentLevel));
-			if (log.isDebugEnabled()) {
-				log.debug("Error reading PDF/A level", e);
+			if (log.isWarnEnabled()) {
+				log.warn("Error reading file mime type", e);
 			}
 		}
 	}
@@ -834,15 +834,15 @@ public class ContainerValidator {
 	 * Containers in PDF are not allowed.
 	 * </p>
 	 *
-	 * @param pdfFile        A PDF {@link File}; must not be <code>null</code> and
-	 *                       exist.
-	 * @param allowPdfAOnly In general, only PDF/A-1A, PDF/A-2A and PDF/A-3A files
-	 *                       are allowed.
-	 * @param indentLevel    Level of indent.
+	 * @param pdfFile          A PDF {@link File}; must not be <code>null</code> and
+	 *                         exist.
+	 * @param certificateClass Document is a certificate class (see class 02-04 in
+	 *                         VI 2770)
+	 * @param indentLevel      Level of indent.
 	 * @return A {@link List} of {@link Message} including Information, warnings and
 	 *         errors.
 	 */
-	public List<Message> validatePdfFile(final File pdfFile, boolean allowPdfAOnly,
+	public List<Message> validatePdfFile(final File pdfFile, boolean isCertificateClass,
 			final int indentLevel) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
@@ -850,16 +850,16 @@ public class ContainerValidator {
 
 		final List<Message> messages = new ArrayList<>();
 
-		String pdfVersion = null;
+		final PdfValidator pdfValidator = new PdfValidator(this.locale);
+
+		// read and check PDF/A conformance level
 		try {
 
-			PdfValidator pdfValidator = new PdfValidator(this.locale);
-			pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
-
+			String pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
-			if (allowPdfAOnly && !pdfVersion.toLowerCase().endsWith("a")) {
+			if (isCertificateClass && !pdfVersion.toLowerCase().endsWith("a")) {
 				messages.add(new Message(MessageLevel.ERROR,
 						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
@@ -870,9 +870,83 @@ public class ContainerValidator {
 							.format(this.bundle.getString("REP_MESSAGE_017"), pdfFile.getName()),
 					indentLevel));
 			if (log.isWarnEnabled()) {
-				log.warn("Error reading PDF/A level", e);
+				log.warn("Error reading PDF/A level", e.getMessage());
 			}
-			return messages;
+		}
+
+		// PDF files shall not be encrypted
+		boolean isEncrypted = false;
+		try {
+			isEncrypted = pdfValidator.isEncrypted(pdfFile);
+			if (isEncrypted) {
+				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
+						this.bundle.getString("REP_MESSAGE_040"), pdfFile.getName()), indentLevel));
+			} else {
+				messages.add(new Message(MessageLevel.INFO, MessageFormat.format(
+						this.bundle.getString("REP_MESSAGE_041"), pdfFile.getName()), indentLevel));
+			}
+		} catch (final IOException e) {
+			messages.add(new Message(MessageLevel.ERROR,
+					MessageFormat.format(this.bundle.getString("REP_MESSAGE_042"),
+							pdfFile.getName(), e.getMessage()),
+					indentLevel));
+		}
+
+		// if not encryped, try to extract text from PDF
+		if (!isEncrypted) {
+			try {
+				boolean hasText = pdfValidator.hasText(pdfFile);
+				if (hasText) {
+					messages.add(new Message(MessageLevel.INFO, MessageFormat
+							.format(this.bundle.getString("REP_MESSAGE_043"), pdfFile.getName()),
+							indentLevel));
+				} else {
+					messages.add(
+							new Message(isCertificateClass ? MessageLevel.INFO : MessageLevel.WARN,
+									MessageFormat.format(this.bundle.getString("REP_MESSAGE_044"),
+											pdfFile.getName()),
+									indentLevel));
+				}
+			} catch (final IOException e) {
+
+				if (log.isWarnEnabled()) {
+					log.warn("Can not extract text from file " + pdfFile.getAbsolutePath(), e);
+				}
+
+				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
+						this.bundle.getString("REP_MESSAGE_045"), pdfFile.getName()), indentLevel));
+			}
+
+			// try to execute preflight
+			// only PDF/A1a and PDF/A-1b are supported at the moment
+			try {
+				final List<Message> validationMessages = pdfValidator.preflight(pdfFile);
+
+				if (Message.filter(validationMessages, MessageLevel.WARN).size() > 0) {
+					messages.add(
+							new Message(MessageLevel.WARN,
+									MessageFormat.format(this.bundle.getString("REP_MESSAGE_021"),
+											Integer.valueOf(validationMessages.size())),
+									indentLevel));
+				}
+
+				for (final Message m : validationMessages) {
+					if (m.getLevel() == MessageLevel.INFO) {
+						messages.add(m);
+					} else {
+						messages.add(new Message(m.getLevel(),
+								MessageFormat.format(this.bundle.getString("REP_MESSAGE_047"),
+										m.getLevel() + ": " + m.getText()),
+								indentLevel));
+					}
+				}
+			} catch (IOException e) {
+				if (log.isWarnEnabled()) {
+					log.warn("Error while PDF preflight", e);
+				}
+				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
+						this.bundle.getString("REP_MESSAGE_046"), pdfFile.getName()), indentLevel));
+			}
 		}
 
 		return messages;
