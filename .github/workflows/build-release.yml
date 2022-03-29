@@ -8,6 +8,11 @@ on:
   workflow_dispatch:
     branches: [main]
 
+env:
+
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
 jobs:
 
   build-and-push-release:
@@ -44,7 +49,7 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v1
         with:
-          registry: ${{ env.REGISTRY }}
+          registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
        
@@ -52,7 +57,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: ghcr.io/${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.licenses=MIT
        
@@ -62,4 +67,4 @@ jobs:
           context: ./docker/validator-web
           push: true
           tags: ${{ env.RELEASE_VERSION }}
-          labels: ${{ steps.meta.outputs.labels }}}}}}}}}}}}}
+          labels: ${{ steps.meta.outputs.labels }}

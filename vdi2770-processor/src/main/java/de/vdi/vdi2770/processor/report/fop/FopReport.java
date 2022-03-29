@@ -126,20 +126,20 @@ public class FopReport {
 	}
 
 	public void createPdf(final Report report, final File outFile, boolean renderWarning,
-			boolean renderInfo) throws IOException, FopReportException {
+			boolean renderInfo, boolean renderFileHash) throws IOException, FopReportException {
 
 		Preconditions.checkArgument(report != null, "report is null");
 
-		byte[] pdfBytes = convertToPDF(report, renderWarning, renderInfo);
+		byte[] pdfBytes = convertToPDF(report, renderWarning, renderInfo, renderFileHash);
 		Files.write(pdfBytes, outFile);
 	}
 
-	public byte[] createPdf(final Report report, boolean renderWarning, boolean renderInfo)
-			throws FopReportException {
+	public byte[] createPdf(final Report report, boolean renderWarning, boolean renderInfo,
+			boolean renderFileHash) throws FopReportException {
 
 		Preconditions.checkArgument(report != null, "report is null");
 
-		return convertToPDF(report, renderWarning, renderInfo);
+		return convertToPDF(report, renderWarning, renderInfo, renderFileHash);
 	}
 
 	private static String convertReport(final Report report) throws JsonProcessingException {
@@ -150,8 +150,8 @@ public class FopReport {
 		return xmlMapper.writeValueAsString(new XmlReportContent(report));
 	}
 
-	private byte[] convertToPDF(final Report report, boolean renderWarning, boolean renderInfo)
-			throws FopReportException {
+	private byte[] convertToPDF(final Report report, boolean renderWarning, boolean renderInfo,
+			boolean renderFileHash) throws FopReportException {
 
 		try (ByteArrayOutputStream out = new ByteArrayOutputStream()) {
 
@@ -171,6 +171,7 @@ public class FopReport {
 
 			transformer.setParameter("RENDER_INFOS", renderInfo ? "ON" : "OFF");
 			transformer.setParameter("RENDER_WARNINGS", renderWarning ? "ON" : "OFF");
+			transformer.setParameter("RENDER_SHA256", renderFileHash ? "ON" : "OFF");
 
 			Profile profile = new Profile(this.locale);
 			profile.configure(transformer, foUserAgent);

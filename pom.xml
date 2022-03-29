@@ -4,7 +4,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.vdi.vdi2770</groupId>
-	<version>0.9.7</version>
+	<version>0.9.8</version>
 	<artifactId>vdi2770</artifactId>
 	<name>vdi2770</name>
 	<packaging>pom</packaging>
@@ -109,7 +109,7 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.8.1</version>
+					<version>3.10.1</version>
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
@@ -141,17 +141,17 @@
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-site-plugin</artifactId>
-					<version>3.10.0</version>
+					<version>3.11.0</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-project-info-reports-plugin</artifactId>
-					<version>3.1.2</version>
+					<version>3.2.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>3.2.0</version>
+					<version>3.3.0</version>
 					<executions>
 						<execution>
 							<id>copy-dependencies</id>
@@ -240,7 +240,7 @@
 						<dependency>
 							<groupId>org.glassfish.jaxb</groupId>
 							<artifactId>jaxb-runtime</artifactId>
-							<version>2.3.5</version>
+							<version>2.3.6</version>
 						</dependency>
 					</dependencies>
 					<configuration>
@@ -259,7 +259,7 @@
 				<plugin>
 					<groupId>org.asciidoctor</groupId>
 					<artifactId>asciidoctor-maven-plugin</artifactId>
-					<version>2.2.1</version>
+					<version>2.2.2</version>
 					<dependencies>
 						<dependency>
 							<groupId>org.asciidoctor</groupId>

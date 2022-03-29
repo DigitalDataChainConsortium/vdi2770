@@ -22,27 +22,26 @@
 						<to font-family="Roboto" />
 					</substitution>
 				</substitutions>
-				<font kerning="yes" embed-url="Roboto-Regular.ttf" embedding-mode="full">
+				<font kerning="yes" embed-url="Roboto-Regular.ttf" embedding-mode="subset">
 					<font-triplet name="Roboto" style="normal"
 						weight="normal" />
 				</font>
-				<font kerning="yes" embed-url="Roboto-Bold.ttf" embedding-mode="full">
+				<font kerning="yes" embed-url="Roboto-Bold.ttf" embedding-mode="subset">
 					<font-triplet name="Roboto" style="normal"
 						weight="bold" />
 				</font>
-				<font kerning="yes" embed-url="Roboto-Italic.ttf" embedding-mode="full">
+				<font kerning="yes" embed-url="Roboto-Italic.ttf" embedding-mode="subset">
 					<font-triplet name="Roboto" style="italic"
 						weight="normal" />
 				</font>
-				<font kerning="yes" embed-url="Roboto-Italic.ttf" embedding-mode="full">
+				<font kerning="yes" embed-url="Roboto-BoldItalic.ttf" embedding-mode="subset">
 					<font-triplet name="Roboto" style="italic"
 						weight="bold" />
 				</font>
-				<font kerning="yes" embed-url="BabelStoneHan.ttf" embedding-mode="full">
+				<font kerning="yes" embed-url="BabelStoneHan.ttf" embedding-mode="subset">
 					<font-triplet name="BabelStoneHan" style="normal"
 						weight="normal" />
 				</font>
-				<auto-detect />
 			</fonts>
 		</renderer>
 	</renderers>
