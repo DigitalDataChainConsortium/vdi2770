@@ -16,12 +16,11 @@
 
 	<properties>
 		<junit.jupiter.version>5.8.2</junit.jupiter.version>
-		<!-- Fix for CVE-2021-44228 -->
-		<log4j.version>2.17.1</log4j.version>
-		<jackson.version>2.13.1</jackson.version>
+		<log4j.version>2.17.2</log4j.version>
+		<jackson.version>2.13.2</jackson.version>
 		<pdfbox.version>2.0.25</pdfbox.version>
 		<xmlgraphics.version>2.7</xmlgraphics.version>
-		<spring.boot.version>2.6.3</spring.boot.version>
+		<spring.boot.version>2.6.5</spring.boot.version>
 	</properties>
 
 	<dependencyManagement>
@@ -54,7 +53,7 @@
 			<dependency>
 				<groupId>com.google.guava</groupId>
 				<artifactId>guava</artifactId>
-				<version>31.0.1-jre</version>
+				<version>31.1-jre</version>
 			</dependency>
 			<dependency>
 				<groupId>org.projectlombok</groupId>
@@ -102,7 +101,7 @@
 			<dependency>
 				<groupId>net.lingala.zip4j</groupId>
 				<artifactId>zip4j</artifactId>
-				<version>2.9.1</version>
+				<version>2.10.0</version>
 			</dependency>
 			<dependency>
 				<groupId>com.fasterxml.jackson.core</groupId>
@@ -142,7 +141,7 @@
 			<dependency>
 				<groupId>org.apache.tika</groupId>
 				<artifactId>tika-core</artifactId>
-				<version>2.2.1</version>
+				<version>2.3.0</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.pdfbox</groupId>
@@ -162,7 +161,7 @@
 			<dependency>
 				<groupId>joda-time</groupId>
 				<artifactId>joda-time</artifactId>
-				<version>2.10.13</version>
+				<version>2.10.14</version>
 			</dependency>
 			<dependency>
 				<groupId>org.apache.xmlgraphics</groupId>
