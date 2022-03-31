@@ -799,7 +799,7 @@ public class ContainerValidator {
 				final Tika tika = new Tika();
 				final String fileMimeType = tika.detect(localFile);
 
-				if (!StringUtils.equalsIgnoreCase(fileMimeType, contentType)) {
+				if (!StringUtils.startsWithIgnoreCase(fileMimeType, contentType)) {
 					report.addMessage(
 							new Message(MessageLevel.WARN,
 									MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
