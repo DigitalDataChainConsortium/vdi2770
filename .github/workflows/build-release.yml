@@ -62,6 +62,8 @@ jobs:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           labels: |
             org.opencontainers.image.licenses=MIT
+          tags: |
+            type=semver,pattern={{version}},value=${{ env.RELEASE_VERSION }}
        
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
