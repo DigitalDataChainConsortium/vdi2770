@@ -827,10 +827,10 @@ public class ContainerValidator {
 	private void reportContentType(final DigitalFile storedFile, final File localFile,
 			boolean allowPdfAOnly, final Report report, final int indentLevel) {
 
-		Preconditions.checkArgument(storedFile != null);
-		Preconditions.checkArgument(localFile != null);
-		Preconditions.checkArgument(localFile.exists());
-		Preconditions.checkArgument(report != null);
+		Preconditions.checkArgument(storedFile != null, "stored file is null");
+		Preconditions.checkArgument(localFile != null, "local file is null");
+		Preconditions.checkArgument(localFile.exists(), "local file does not exist");
+		Preconditions.checkArgument(report != null, "report is null");
 
 		try {
 			final String contentType = storedFile.getFileFormat();
@@ -841,9 +841,9 @@ public class ContainerValidator {
 
 				if (!mimeTypeEquals(contentType, detectedMimeType)) {
 					report.addMessage(new Message(MessageLevel.WARN,
-									MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
+							MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
 									localFile.getName(), contentType, detectedMimeType),
-									indentLevel));
+							indentLevel));
 				}
 
 				if (contentType.equals(MediaType.PDF.toString())) {
