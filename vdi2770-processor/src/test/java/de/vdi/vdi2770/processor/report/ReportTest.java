@@ -152,4 +152,16 @@ public class ReportTest {
 		assertTrue(result.getErrorMessages(true).size() == 0);
 	}
 
+	@Test
+	public void issue16ReportTest() throws ProcessorException, MetadataException {
+
+		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
+		final Report result = report.validate("../examples/issues/issue16container.zip");
+
+		printReport(result, 0);
+
+		assertTrue(result.getMessages().stream().filter(m -> m.getText().contains("REP_018"))
+				.count() == 0);
+	}
+
 }

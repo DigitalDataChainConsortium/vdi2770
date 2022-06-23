@@ -57,6 +57,7 @@ import de.vdi.vdi2770.metadata.xml.XmlProcessingException;
 import de.vdi.vdi2770.metadata.xml.XmlReader;
 import de.vdi.vdi2770.metadata.xml.XmlValidationFault;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -784,6 +785,45 @@ public class ContainerValidator {
 		}
 	}
 
+	private static boolean mimeTypeContainsParameter(final String mimeType) {
+
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(mimeType), "empty string");
+		return mimeType.contains(";");
+	}
+
+	@VisibleForTesting
+	static boolean mimeTypeEquals(final String sourceType, final String targetType) {
+
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(sourceType), "empty source mime type");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(targetType), "empty target mime type");
+
+		boolean sourceContainsParameter = mimeTypeContainsParameter(sourceType);
+		boolean targetContainsParameter = mimeTypeContainsParameter(targetType);
+		
+		if ((sourceContainsParameter && targetContainsParameter)
+				|| (!sourceContainsParameter && !targetContainsParameter)) {
+			
+			// issue 16: parameter in mime type
+			// image/vnd.dxf == image/vnd.dxf
+			// image/vnd.dxf; format=ascii == image/vnd.dxf; format=ascii 
+			// image/vnd.dxf; format=ascii == image/vnd.dxf;format=ascii
+			// image/vnd.dxf; format=ascii == image/vnd.dxf;"format=ascii"
+			String s = sourceType.replaceAll(" ", "").replaceAll("\"", "");
+			String t = targetType.replaceAll(" ", "").replaceAll("\"", "");
+			return StringUtils.equalsIgnoreCase(s, t);
+		} else if (!sourceContainsParameter && targetContainsParameter) {
+			// issue 16: parameter in mime type
+			// image/vnd.dxf;format=ascii == image/vnd.dxf
+			return StringUtils.startsWithIgnoreCase(targetType, sourceType.trim());
+		} else if (sourceContainsParameter && !targetContainsParameter) {
+			// issue 16: parameter in mime type
+			// image/vnd.dxf;format=ascii == image/vnd.dxf
+			return StringUtils.startsWithIgnoreCase(sourceType, targetType.trim());
+		}
+
+		return false;
+	}
+
 	private void reportContentType(final DigitalFile storedFile, final File localFile,
 			boolean allowPdfAOnly, final Report report, final int indentLevel) {
 
@@ -797,13 +837,12 @@ public class ContainerValidator {
 			if (contentType != null) {
 
 				final Tika tika = new Tika();
-				final String fileMimeType = tika.detect(localFile);
+				final String detectedMimeType = tika.detect(localFile);
 
-				if (!StringUtils.startsWithIgnoreCase(fileMimeType, contentType)) {
-					report.addMessage(
-							new Message(MessageLevel.WARN,
+				if (!mimeTypeEquals(contentType, detectedMimeType)) {
+					report.addMessage(new Message(MessageLevel.WARN,
 									MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
-											localFile.getName(), contentType, fileMimeType),
+									localFile.getName(), contentType, detectedMimeType),
 									indentLevel));
 				}
 

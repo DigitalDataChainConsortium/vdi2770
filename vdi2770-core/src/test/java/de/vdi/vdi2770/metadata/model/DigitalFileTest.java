@@ -160,4 +160,16 @@ public class DigitalFileTest {
 		assertTrue(fault.getType() == FaultType.IS_INCONSISTENT);
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 	}
+
+	/**
+	 * Validate media type only and ignore parameter of media type
+	 */
+	@Test
+	public void issue16test() {
+
+		final DigitalFile file = new DigitalFile("Issue16.zip", "image/vnd.dxf; format=ascii");
+
+		final List<ValidationFault> faults = file.validate(this.locale, true);
+		assertTrue(faults.size() == 0);
+	}
 }
