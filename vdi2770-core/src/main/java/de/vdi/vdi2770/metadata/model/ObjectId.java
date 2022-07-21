@@ -21,10 +21,18 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import java.net.MalformedURLException;
+import java.net.URISyntaxException;
+import java.net.URL;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.lang3.StringUtils;
 
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
@@ -104,8 +112,8 @@ public class ObjectId implements ModelEntity {
 
 		// objectType is required
 		if (this.objectType == null) {
-			ValidationFault fault = new ValidationFault(ENTITY, Fields.objectType, parent,
-					FaultLevel.ERROR, FaultType.IS_EMPTY);
+			ValidationFault fault = new ValidationFault(ENTITY, Fields.objectType, parent, FaultLevel.ERROR,
+					FaultType.IS_EMPTY);
 			fault.setMessage(bundle.getString(ENTITY + "_VAL1"));
 			faults.add(fault);
 		}
@@ -115,6 +123,80 @@ public class ObjectId implements ModelEntity {
 			ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
 					FaultType.IS_EMPTY);
 			fault.setMessage(bundle.getString(ENTITY + "_VAL2"));
+			faults.add(fault);
+		}
+
+		if (!Strings.isNullOrEmpty(this.refType) && !Strings.isNullOrEmpty(this.id)
+				&& StringUtils.equals(RefType.DIN_SPEC_91406_ID, refType)) {
+
+			faults.addAll(validateUrl(this.id, bundle, parent));
+		}
+
+		return faults;
+	}
+
+	private static List<ValidationFault> validateUrl(final String url, final ResourceBundle bundle, final String parent) {
+
+		final List<ValidationFault> faults = new ArrayList<>();
+
+		try {
+			
+			// see Requirement 5.1 in DIN SPEC 91406 
+			// parse the URL string
+			URL parsedUrl = new URL(url);
+
+			// call toURI to validate authority
+			parsedUrl.toURI();
+
+			final String host = parsedUrl.getHost();
+			if (!Strings.isNullOrEmpty(host)) {
+				
+				// Requirement 5.3 in DIN SPEC 91406 
+				if (!StringUtils.equals(parsedUrl.getHost(), parsedUrl.getHost().toLowerCase())) {
+					ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
+							FaultType.HAS_INVALID_VALUE);
+					fault.setMessage(bundle.getString(ENTITY + "_VAL4"));
+					faults.add(fault);
+				}
+			}
+
+			// see Requirement 4 in DIN SPEC 91406
+			if (url.length() > 100) {
+				ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.WARNING,
+						FaultType.HAS_INVALID_VALUE);
+				fault.setMessage(bundle.getString(ENTITY + "_VAL5"));
+				faults.add(fault);
+			}
+
+			// see Requirement 4 in DIN SPEC 91406
+			if (url.length() > 255) {
+				ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
+						FaultType.HAS_INVALID_VALUE);
+				fault.setMessage(bundle.getString(ENTITY + "_VAL6"));
+				faults.add(fault);
+			}
+
+			if (url.toLowerCase().contains("xn--")) {
+				ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.WARNING,
+						FaultType.HAS_INVALID_VALUE);
+				fault.setMessage(bundle.getString(ENTITY + "_VAL7"));
+				faults.add(fault);
+			}
+
+			// see Requirement 5.2 in DIN SPEC 91406
+			Pattern p = Pattern.compile("[^A-Za-z0-9#,$&'()*+\\-./~\\[\\]=?:;!_@]");
+			Matcher m = p.matcher(url);
+			while (m.find()) {
+				ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
+						FaultType.HAS_INVALID_VALUE);
+				fault.setMessage(MessageFormat.format(bundle.getString(ENTITY + "_VAL8"), m.start(), m.end()));
+				faults.add(fault);
+			}
+
+		} catch (final MalformedURLException | URISyntaxException e) {
+			ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
+					FaultType.HAS_INVALID_VALUE);
+			fault.setMessage(bundle.getString(ENTITY + "_VAL3"));
 			faults.add(fault);
 		}
 
