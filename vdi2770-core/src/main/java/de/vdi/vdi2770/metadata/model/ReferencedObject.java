@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
-import java.util.stream.Collectors;
 
 import org.apache.commons.collections.CollectionUtils;
 
@@ -55,7 +54,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "objectId" })
+@ToString(of = { "objectId" })
 @Data
 @FieldNameConstants
 @EqualsAndHashCode(of = { "objectId", "party" })
@@ -87,9 +86,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeObjectId(final ObjectId objectId) {
 		Preconditions.checkArgument(objectId != null);
 
-		if (this.objectId.contains(objectId)) {
-			this.objectId.remove(objectId);
-		}
+		this.objectId.remove(objectId);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -116,9 +113,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeReferenceDesignation(final String referenceDesignation) {
 		Preconditions.checkArgument(referenceDesignation != null);
 
-		if (this.referenceDesignation.contains(referenceDesignation)) {
-			this.referenceDesignation.remove(referenceDesignation);
-		}
+		this.referenceDesignation.remove(referenceDesignation);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -145,9 +140,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeEquipmentId(final String equipmentId) {
 		Preconditions.checkArgument(equipmentId != null);
 
-		if (this.equipmentId.contains(equipmentId)) {
-			this.equipmentId.remove(equipmentId);
-		}
+		this.equipmentId.remove(equipmentId);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -174,9 +167,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeProjectId(final String projectId) {
 		Preconditions.checkArgument(projectId != null);
 
-		if (this.projectId.contains(projectId)) {
-			this.projectId.remove(projectId);
-		}
+		this.projectId.remove(projectId);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -203,9 +194,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeDescription(final TranslatableString description) {
 		Preconditions.checkArgument(description != null);
 
-		if (this.description.contains(description)) {
-			this.description.remove(description);
-		}
+		this.description.remove(description);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -232,9 +221,7 @@ public class ReferencedObject implements ModelEntity {
 	public void removeParty(final Party party) {
 		Preconditions.checkArgument(party != null);
 
-		if (this.party.contains(party)) {
-			this.party.remove(party);
-		}
+		this.party.remove(party);
 	}
 
 	/**
@@ -299,8 +286,7 @@ public class ReferencedObject implements ModelEntity {
 					locale, strict));
 
 			final List<ObjectId> serialIds = this.objectId.stream()
-					.filter(o -> o.getObjectType() == ObjectType.Individual)
-					.collect(Collectors.toList());
+					.filter(o -> o.getObjectType() == ObjectType.Individual).toList();
 
 			// only one serial id is allowed?
 			if (serialIds.size() > 1) {
@@ -322,7 +308,7 @@ public class ReferencedObject implements ModelEntity {
 					locale, strict));
 
 			// party must contain manufacturer
-			if (this.party.stream().filter(p -> p.getRole() == Role.Manufacturer).count() == 0) {
+			if (this.party.stream().noneMatch(p -> p.getRole() == Role.Manufacturer)) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.party, parent,
 						FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 				fault.setMessage(bundle.getString(ENTITY + "_VAL2"));

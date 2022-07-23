@@ -107,10 +107,8 @@ public class MainDocument extends Document implements ModelEntity {
 
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.metadata", locale);
 
-		final List<ValidationFault> faults = new ArrayList<>();
-
 		// call Document validation
-		faults.addAll(super.validate(locale, strict));
+		final List<ValidationFault> faults = new ArrayList<>(super.validate(locale, strict));
 
 		// a main document must only have one document version
 		if (getDocumentVersion().size() != 1) {
@@ -160,7 +158,7 @@ public class MainDocument extends Document implements ModelEntity {
 
 			// should use RefersTo only
 			final Set<DocumentRelationshipType> relTypes = version.getDocumentRelationship()
-					.stream().map(r -> r.getType()).collect(Collectors.toSet());
+					.stream().map(DocumentRelationship::getType).collect(Collectors.toSet());
 
 			if (relTypes.size() != 1 || !relTypes.contains(DocumentRelationshipType.RefersTo)) {
 				final ValidationFault fault = new ValidationFault(
@@ -185,7 +183,7 @@ public class MainDocument extends Document implements ModelEntity {
 
 			// no individual id found?
 			if (object.getObjectId().stream()
-					.filter(o -> o.getObjectType() == ObjectType.Individual).count() == 0) {
+					.noneMatch(o -> o.getObjectType() == ObjectType.Individual)) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Document.Fields.referencedObject, FaultLevel.ERROR,
 						FaultType.HAS_INVALID_VALUE);

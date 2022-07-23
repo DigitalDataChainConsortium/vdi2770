@@ -22,7 +22,7 @@
 package de.vdi.vdi2770.metadata.model;
 
 /**
- * Pre defined ref types for objects accoring to VDII 2770.
+ * Pre-defined ref types for objects according to VDI 2770.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
@@ -50,7 +50,7 @@ public class RefType {
 	public static final String GTIN = "GTIN";
 
 	/**
-	 * Predefined name for a EAN (European article number).
+	 * Predefined name for an EAN (European article number).
 	 */
 	public static final String EAN = "EAN";
 

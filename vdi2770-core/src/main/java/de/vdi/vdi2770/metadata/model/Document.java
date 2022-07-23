@@ -59,7 +59,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "documentId" })
+@ToString(of = { "documentId" })
 @Data
 @FieldNameConstants
 public class Document implements ModelEntity {
@@ -114,9 +114,7 @@ public class Document implements ModelEntity {
 	public void removeDocumentId(final DocumentId documentId) {
 		Preconditions.checkArgument(documentId != null);
 
-		if (this.documentId.contains(documentId)) {
-			this.documentId.remove(documentId);
-		}
+		this.documentId.remove(documentId);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -143,9 +141,7 @@ public class Document implements ModelEntity {
 	public void removeDocumentVersion(final DocumentVersion documentVersion) {
 		Preconditions.checkArgument(documentVersion != null);
 
-		if (this.documentVersion.contains(documentVersion)) {
-			this.documentVersion.remove(documentVersion);
-		}
+		this.documentVersion.remove(documentVersion);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -173,9 +169,7 @@ public class Document implements ModelEntity {
 	public void removeDocumentClassification(final DocumentClassification documentClassification) {
 		Preconditions.checkArgument(documentClassification != null);
 
-		if (this.documentClassification.contains(documentClassification)) {
-			this.documentClassification.remove(documentClassification);
-		}
+		this.documentClassification.remove(documentClassification);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -202,9 +196,7 @@ public class Document implements ModelEntity {
 	public void removeDocumentIdDomain(final DocumentIdDomain documentIdDomain) {
 		Preconditions.checkArgument(documentIdDomain != null);
 
-		if (this.documentIdDomain.contains(documentIdDomain)) {
-			this.documentIdDomain.remove(documentIdDomain);
-		}
+		this.documentIdDomain.remove(documentIdDomain);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -231,9 +223,7 @@ public class Document implements ModelEntity {
 	public void removeReferencedObject(final ReferencedObject referencedObject) {
 		Preconditions.checkArgument(referencedObject != null);
 
-		if (this.referencedObject.contains(referencedObject)) {
-			this.referencedObject.remove(referencedObject);
-		}
+		this.referencedObject.remove(referencedObject);
 	}
 
 	/**
@@ -255,7 +245,7 @@ public class Document implements ModelEntity {
 	public boolean isMainDocument() {
 
 		final Optional<DigitalFile> mainDocumentFile = this.documentVersion.stream()
-				.map(v -> v.getDigitalFile()).flatMap(d -> d.stream()).filter(d -> StringUtils
+				.map(DocumentVersion::getDigitalFile).flatMap(Collection::stream).filter(d -> StringUtils
 						.equalsIgnoreCase(d.getFileName(), FileNames.MAIN_DOCUMENT_PDF_FILE_NAME))
 				.findFirst();
 
@@ -296,7 +286,7 @@ public class Document implements ModelEntity {
 			if (this.documentId.size() >= 2) {
 
 				// exact one id must be primary
-				if (this.documentId.stream().filter(id -> id.getIsPrimary().booleanValue() == true)
+				if (this.documentId.stream().filter(DocumentId::getIsPrimary)
 						.count() != 1) {
 					final ValidationFault fault = new ValidationFault(ENTITY, Fields.documentId,
 							parent, FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
@@ -330,9 +320,10 @@ public class Document implements ModelEntity {
 					Fields.documentClassification, locale, strict));
 
 			// No classification according to VDI 2770 given?
-			if (this.documentClassification.stream().map(c -> c.getClassificationSystem())
-					.filter(s -> StringUtils.equals(s, Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))
-					.count() == 0) {
+			if (this.documentClassification.stream()
+					.map(DocumentClassification::getClassificationSystem).noneMatch(
+							s -> StringUtils.equals(s,
+									Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Fields.documentClassification, parent, FaultLevel.ERROR,
 						FaultType.HAS_INVALID_VALUE);
@@ -341,9 +332,9 @@ public class Document implements ModelEntity {
 			}
 
 			// We recommend to classify the document according to IEC 61355
-			if (this.documentClassification.stream().map(c -> c.getClassificationSystem())
-					.filter(s -> StringUtils.equals(s, Constants.IEC61355_CLASSIFICATION_NAME))
-					.count() == 0) {
+			if (this.documentClassification.stream()
+					.map(DocumentClassification::getClassificationSystem)
+					.noneMatch(s -> StringUtils.equals(s, Constants.IEC61355_CLASSIFICATION_NAME))) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Fields.documentClassification, parent, FaultLevel.INFORMATION,
 						FaultType.IS_INCONSISTENT);
@@ -382,8 +373,7 @@ public class Document implements ModelEntity {
 	/**
 	 * Validate relationships of a {@link Document}.
 	 *
-	 * @param otherDocuments A {@link List} of other {@link Document}s (may be
-	 *                       empty).
+	 * @param otherDocuments A {@link List} of other {@link Document}s (may be empty).
 	 * @param isMainDocument If <code>true</code>, the source {@link Document} is a
 	 *                       main document.
 	 * @param locale         Desired {@link Locale} for validation messages.
@@ -398,8 +388,8 @@ public class Document implements ModelEntity {
 		final List<ValidationFault> errors = new ArrayList<>();
 
 		// read the document IDs from 'otherDocuments'
-		final List<DocumentId> documentIds = otherDocuments.stream().map(d -> d.getDocumentId())
-				.flatMap(id -> id.stream()).collect(Collectors.toList());
+		final List<DocumentId> documentIds = otherDocuments.stream().map(Document::getDocumentId)
+				.flatMap(Collection::stream).collect(Collectors.toList());
 
 		// for each Document Version
 		for (final DocumentVersion version : getDocumentVersion()) {
@@ -438,9 +428,7 @@ public class Document implements ModelEntity {
 			final DocumentId id = rel.getDocumentId();
 			final Optional<ValidationFault> fault = validateDocumentRelations(id, knownDocumentIds,
 					isMainDocument, locale);
-			if (fault.isPresent()) {
-				errors.add(fault.get());
-			}
+			fault.ifPresent(errors::add);
 		}
 
 		return errors;
@@ -471,11 +459,9 @@ public class Document implements ModelEntity {
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.metadata", locale);
 
 		// list of known IDs contains documentId?
-		if (knownDocumentIds.stream()
-				.filter(id -> StringUtils.equalsIgnoreCase(
-						StringRepresentations.documentIdAsText(id),
-						StringRepresentations.documentIdAsText(documentId)))
-				.count() == 0) {
+		if (knownDocumentIds.stream().noneMatch(
+				id -> StringUtils.equalsIgnoreCase(StringRepresentations.documentIdAsText(id),
+						StringRepresentations.documentIdAsText(documentId)))) {
 
 			final Optional<ValidationFault> fault = Optional
 					.of(new ValidationFault(ENTITY, Fields.documentVersion, null,
@@ -497,15 +483,16 @@ public class Document implements ModelEntity {
 			return null;
 		}
 
-		List<ObjectId> objectIds = this.getReferencedObject().stream().map(v -> v.getObjectId())
-				.flatMap(Collection::stream).collect(Collectors.toList());
+		List<ObjectId> objectIds = this.getReferencedObject().stream().map(
+						ReferencedObject::getObjectId)
+				.flatMap(Collection::stream).toList();
 
 		List<ObjectId> parentObjectIds = parent.getReferencedObject().stream()
-				.map(v -> v.getObjectId()).flatMap(Collection::stream).collect(Collectors.toList());
+				.map(ReferencedObject::getObjectId).flatMap(Collection::stream).toList();
 
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.metadata", locale);
 
-		if (!objectIds.stream().anyMatch(parentObjectIds::contains)) {
+		if (objectIds.stream().noneMatch(parentObjectIds::contains)) {
 
 			final ValidationFault fault = new ValidationFault(ENTITY,
 					Document.Fields.referencedObject, FaultLevel.WARNING,

@@ -52,7 +52,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "documentId", "documentVersionId", "type" })
+@ToString(of = { "documentId", "documentVersionId", "type" })
 @Data
 @FieldNameConstants
 public class DocumentRelationship implements ModelEntity {
@@ -85,9 +85,7 @@ public class DocumentRelationship implements ModelEntity {
 	public void removeDocumentVersionId(final String documentVersionId) {
 		Preconditions.checkArgument(documentVersionId != null);
 
-		if (this.documentVersionId.contains(documentVersionId)) {
-			this.documentVersionId.remove(documentVersionId);
-		}
+		this.documentVersionId.remove(documentVersionId);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -114,9 +112,7 @@ public class DocumentRelationship implements ModelEntity {
 	public void removeDescription(final TranslatableString description) {
 		Preconditions.checkArgument(description != null);
 
-		if (this.description.contains(description)) {
-			this.description.remove(description);
-		}
+		this.description.remove(description);
 	}
 
 	private DocumentRelationshipType type;

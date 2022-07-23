@@ -25,7 +25,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 
@@ -203,7 +202,7 @@ public final class Constants {
 			return categories.contains(category);
 		}
 
-		return categories.stream().map(v -> v.toLowerCase()).collect(Collectors.toList())
+		return categories.stream().map(String::toLowerCase).toList()
 				.contains(StringUtils.lowerCase(category));
 	}
 

@@ -57,7 +57,7 @@ import lombok.extern.java.Log;
  *         Informatics InfAI)
  */
 @Log
-@ToString(includeFieldNames = true)
+@ToString
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

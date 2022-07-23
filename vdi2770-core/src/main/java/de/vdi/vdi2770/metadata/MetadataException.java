@@ -21,6 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata;
 
+import java.io.Serial;
+
 /**
  * Basic {@link Exception} that refer to meta data of VDI 2770.
  *
@@ -29,6 +31,7 @@ package de.vdi.vdi2770.metadata;
  */
 public class MetadataException extends Exception {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

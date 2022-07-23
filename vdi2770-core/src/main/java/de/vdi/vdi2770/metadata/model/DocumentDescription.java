@@ -57,7 +57,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "title" })
+@ToString(of = { "title" })
 @Data
 @FieldNameConstants
 @AllArgsConstructor
@@ -97,9 +97,7 @@ public class DocumentDescription implements ModelEntity {
 	public void removeKeyWord(final String keyWord) {
 		Preconditions.checkArgument(keyWord != null);
 
-		if (this.keyWords.contains(keyWord)) {
-			this.keyWords.remove(keyWord);
-		}
+		this.keyWords.remove(keyWord);
 	}
 
 	/**

@@ -105,7 +105,7 @@ public class Application {
 				final List<XmlValidationFault> faults = reader.validate(xmlFile);
 
 				if (Fault.hasWarnings(faults)) {
-					faults.stream().forEach(f -> System.out.println(f.getLevel() + ": "
+					faults.forEach(f -> System.out.println(f.getLevel() + ": "
 							+ f.getMessage() + " [ " + f.getOriginalValue() + "]"));
 				} else {
 					System.out.println("XML is valid");

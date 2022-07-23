@@ -41,13 +41,13 @@ public interface ModelEntity {
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
-	public default List<ValidationFault> validate(final Locale locale) {
+	default List<ValidationFault> validate(final Locale locale) {
 		Preconditions.checkArgument(locale != null, "locale is null");
 
 		return validate(null, locale, false);
 	}
 
-	public default List<ValidationFault> validate(final Locale locale, boolean strict) {
+	default List<ValidationFault> validate(final Locale locale, boolean strict) {
 		Preconditions.checkArgument(locale != null, "locale is null");
 
 		return validate(null, locale, strict);
@@ -60,7 +60,7 @@ public interface ModelEntity {
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
-	public default List<ValidationFault> validate(final String parent) {
+	default List<ValidationFault> validate(final String parent) {
 		return validate(parent, Locale.getDefault(), false);
 	}
 
@@ -72,7 +72,7 @@ public interface ModelEntity {
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
-	public default List<ValidationFault> validate(final String parent, final Locale locale) {
+	default List<ValidationFault> validate(final String parent, final Locale locale) {
 		return validate(parent, locale, false);
 	}
 
@@ -85,5 +85,5 @@ public interface ModelEntity {
 	 * @return A {@link List} of {@link ValidationFault}s indicating validation
 	 *         errors, warnings or information.
 	 */
-	public List<ValidationFault> validate(final String parent, final Locale locale, boolean strict);
+	List<ValidationFault> validate(final String parent, final Locale locale, boolean strict);
 }

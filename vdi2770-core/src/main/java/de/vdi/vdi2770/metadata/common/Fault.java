@@ -43,7 +43,7 @@ import lombok.ToString;
  */
 
 @Data
-@ToString(includeFieldNames = true)
+@ToString
 @RequiredArgsConstructor
 @AllArgsConstructor
 @NoArgsConstructor
@@ -62,7 +62,7 @@ public abstract class Fault {
 	private FaultType type;
 
 	/**
-	 * Index of an validated object in a list of objects.
+	 * Index of a validated object in a list of objects.
 	 */
 	private Integer index;
 

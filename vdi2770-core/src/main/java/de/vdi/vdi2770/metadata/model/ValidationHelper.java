@@ -76,7 +76,7 @@ public class ValidationHelper {
 			if (entity == null) {
 				final ValidationFault fault = new ValidationFault(parent, propertyName,
 						FaultLevel.ERROR, FaultType.IS_NULL);
-				fault.setIndex(Integer.valueOf(i));
+				fault.setIndex(i);
 				fault.setMessage(bundle.getString("ENTITIES_VAL1"));
 				faults.add(fault);
 			} else {
@@ -85,7 +85,7 @@ public class ValidationHelper {
 						strict);
 				if (!validationFaults.isEmpty()) {
 					for (final ValidationFault fault : validationFaults) {
-						fault.setIndex(Integer.valueOf(i));
+						fault.setIndex(i);
 						faults.add(fault);
 					}
 				}
@@ -134,7 +134,7 @@ public class ValidationHelper {
 				final ValidationFault fault = new ValidationFault(entityName, propertyName,
 						FaultLevel.ERROR, FaultType.IS_EMPTY);
 				if (!Strings.isNullOrEmpty(entityName)) {
-					fault.setParentIndex(Integer.valueOf(i));
+					fault.setParentIndex(i);
 				}
 				fault.setMessage(
 						MessageFormat.format(bundle.getString("STRINGS_VAL1"), propertyName));
@@ -147,7 +147,7 @@ public class ValidationHelper {
 				final ValidationFault fault = new ValidationFault(entityName, propertyName,
 						FaultLevel.ERROR, FaultType.HAS_DUPLICATE_VALUE);
 				if (!Strings.isNullOrEmpty(entityName)) {
-					fault.setParentIndex(Integer.valueOf(i));
+					fault.setParentIndex(i);
 				}
 				fault.setMessage(
 						MessageFormat.format(bundle.getString("STRINGS_VAL2"), propertyName));

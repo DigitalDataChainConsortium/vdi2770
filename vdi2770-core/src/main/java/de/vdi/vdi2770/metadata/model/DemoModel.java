@@ -97,7 +97,7 @@ public class DemoModel {
 		version.addLanguage("de");
 		version.addLanguage("en");
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		createParty(version);
 		createDescription(version);

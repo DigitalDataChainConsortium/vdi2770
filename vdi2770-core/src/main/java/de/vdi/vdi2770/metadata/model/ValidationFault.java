@@ -188,7 +188,7 @@ public class ValidationFault extends Fault {
 
 		if (properties.size() > 0) {
 			builder.append("[");
-			builder.append(getProperties().stream().collect(Collectors.joining(",")));
+			builder.append(String.join(",", getProperties()));
 			builder.append("]");
 		}
 

@@ -56,7 +56,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true)
+@ToString
 @Data
 @FieldNameConstants
 public class LifeCycleStatus implements ModelEntity {

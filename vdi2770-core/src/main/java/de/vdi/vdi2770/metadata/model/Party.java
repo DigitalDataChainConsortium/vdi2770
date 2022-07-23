@@ -50,7 +50,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "role" })
+@ToString(of = { "role" })
 @Data
 @FieldNameConstants
 @NoArgsConstructor

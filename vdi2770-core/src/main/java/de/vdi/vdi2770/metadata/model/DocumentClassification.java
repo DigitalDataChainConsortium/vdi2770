@@ -57,7 +57,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "classId", "classificationSystem" })
+@ToString(of = { "classId", "classificationSystem" })
 @Data
 @FieldNameConstants
 public class DocumentClassification implements ModelEntity {
@@ -90,9 +90,7 @@ public class DocumentClassification implements ModelEntity {
 	public void removeClassName(final TranslatableString className) {
 		Preconditions.checkArgument(className != null);
 
-		if (this.className.contains(className)) {
-			this.className.remove(className);
-		}
+		this.className.remove(className);
 	}
 
 	private String classificationSystem;
@@ -154,7 +152,8 @@ public class DocumentClassification implements ModelEntity {
 					Fields.className, locale, strict));
 
 			// check for duplicate languages
-			if (this.className.stream().map(d -> d.getLanguage()).collect(Collectors.toSet())
+			if (this.className.stream().map(
+							TranslatableString::getLanguage).collect(Collectors.toSet())
 					.size() != this.className.size()) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.className, parent,
 						FaultLevel.ERROR, FaultType.HAS_DUPLICATE_VALUE);
@@ -213,7 +212,7 @@ public class DocumentClassification implements ModelEntity {
 									Fields.className, FaultLevel.ERROR,
 									FaultType.HAS_INVALID_VALUE);
 							fault.setMessage(bundle.getString(ENTITY + "_VAL3"));
-							fault.setIndex(Integer.valueOf(i));
+							fault.setIndex(i);
 							fault.setOriginalValue(name.getText());
 							faults.add(fault);
 						}
@@ -231,7 +230,7 @@ public class DocumentClassification implements ModelEntity {
 									Fields.className, FaultLevel.ERROR,
 									FaultType.HAS_INVALID_VALUE);
 							fault.setMessage(bundle.getString(ENTITY + "_VAL4"));
-							fault.setIndex(Integer.valueOf(i));
+							fault.setIndex(i);
 							fault.setOriginalValue(name.getText());
 							faults.add(fault);
 						}

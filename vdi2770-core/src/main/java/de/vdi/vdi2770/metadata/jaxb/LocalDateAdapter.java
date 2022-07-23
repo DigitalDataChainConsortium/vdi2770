@@ -45,7 +45,7 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 	 * @return Date
 	 */
 	@Override
-	public LocalDate unmarshal(final String v) throws Exception {
+	public LocalDate unmarshal(final String v) {
 
 		if (Strings.isNullOrEmpty(v)) {
 			return null;
@@ -61,7 +61,7 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 	 * @return Formatted date as {@link String}
 	 */
 	@Override
-	public String marshal(final LocalDate v) throws Exception {
+	public String marshal(final LocalDate v)  {
 
 		if (v == null) {
 			return null;

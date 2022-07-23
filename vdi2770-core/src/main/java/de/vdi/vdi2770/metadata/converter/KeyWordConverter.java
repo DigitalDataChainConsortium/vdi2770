@@ -45,7 +45,7 @@ public class KeyWordConverter implements CustomConverter {
 	 * Convert keywords
 	 * </p>
 	 * <p>
-	 * Convert a List of Keywords as {@link List} of {@link String}s to a an
+	 * Convert a List of Keywords as {@link java.util.List} of {@link String}s to a an
 	 * instance of {@link KeyWords}
 	 * </p>
 	 */

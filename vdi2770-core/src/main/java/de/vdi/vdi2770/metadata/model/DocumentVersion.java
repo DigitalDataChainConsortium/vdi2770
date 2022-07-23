@@ -60,7 +60,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(includeFieldNames = true, of = { "documentVersionId" })
+@ToString(of = { "documentVersionId" })
 @Data
 @FieldNameConstants
 public class DocumentVersion implements ModelEntity {
@@ -93,9 +93,7 @@ public class DocumentVersion implements ModelEntity {
 	public void removeLanguage(final String language) {
 		Preconditions.checkArgument(language != null);
 
-		if (this.language.contains(language)) {
-			this.language.remove(language);
-		}
+		this.language.remove(language);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -122,9 +120,7 @@ public class DocumentVersion implements ModelEntity {
 	public void removeParty(final Party party) {
 		Preconditions.checkArgument(party != null);
 
-		if (this.party.contains(party)) {
-			this.party.remove(party);
-		}
+		this.party.remove(party);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -151,9 +147,7 @@ public class DocumentVersion implements ModelEntity {
 	public void removeDocumentDescription(final DocumentDescription documentDescription) {
 		Preconditions.checkArgument(documentDescription != null);
 
-		if (this.documentDescription.contains(documentDescription)) {
-			this.documentDescription.remove(documentDescription);
-		}
+		this.documentDescription.remove(documentDescription);
 	}
 
 	private LifeCycleStatus lifeCycleStatus;
@@ -182,9 +176,7 @@ public class DocumentVersion implements ModelEntity {
 	public void removeDocumentRelationship(final DocumentRelationship rel) {
 		Preconditions.checkArgument(rel != null);
 
-		if (this.documentRelationship.contains(rel)) {
-			this.documentRelationship.remove(rel);
-		}
+		this.documentRelationship.remove(rel);
 	}
 
 	@Getter(value = AccessLevel.NONE)
@@ -211,9 +203,7 @@ public class DocumentVersion implements ModelEntity {
 	public void removeDigitalFile(final DigitalFile digitalFile) {
 		Preconditions.checkArgument(digitalFile != null);
 
-		if (this.digitalFile.contains(digitalFile)) {
-			this.digitalFile.remove(digitalFile);
-		}
+		this.digitalFile.remove(digitalFile);
 	}
 
 	private Integer numberOfPages;
@@ -276,7 +266,7 @@ public class DocumentVersion implements ModelEntity {
 							parent, FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 					fault.setMessage(
 							MessageFormat.format(bundle.getString(ENTITY + "_VAL7"), lang));
-					fault.setIndex(Integer.valueOf(i));
+					fault.setIndex(i);
 					fault.setOriginalValue(lang);
 					faults.add(fault);
 				}
@@ -295,7 +285,7 @@ public class DocumentVersion implements ModelEntity {
 					locale, strict));
 
 			// list of party must contain at least one Author
-			if (this.party.stream().filter(p -> p.getRole() == Role.Author).count() == 0) {
+			if (this.party.stream().noneMatch(p -> p.getRole() == Role.Author)) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.party, parent,
 						FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 				fault.setMessage(bundle.getString(ENTITY + "_VAL1"));
@@ -319,7 +309,7 @@ public class DocumentVersion implements ModelEntity {
 					Fields.documentDescription, locale, strict));
 
 			// only one entry per language allowed
-			if (this.documentDescription.stream().map(d -> d.getLanguage())
+			if (this.documentDescription.stream().map(DocumentDescription::getLanguage)
 					.collect(Collectors.toSet()).size() != this.documentDescription.size()) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Fields.documentDescription, parent, FaultLevel.ERROR,
@@ -351,7 +341,7 @@ public class DocumentVersion implements ModelEntity {
 					Fields.digitalFile, locale, strict));
 
 			// no duplicate file names allowed
-			if (this.digitalFile.stream().map(f -> f.getFileName()).collect(Collectors.toSet())
+			if (this.digitalFile.stream().map(DigitalFile::getFileName).collect(Collectors.toSet())
 					.size() != this.digitalFile.size()) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.digitalFile,
 						parent, FaultLevel.ERROR, FaultType.HAS_DUPLICATE_VALUE);
@@ -361,12 +351,11 @@ public class DocumentVersion implements ModelEntity {
 
 			// at least one PDF file must be contained.
 			if (this.digitalFile.stream()
-					.filter(d -> MediaType.PDF.toString().equalsIgnoreCase(d.getFileFormat()))
-					.count() == 0) {
+					.noneMatch(d -> MediaType.PDF.toString().equalsIgnoreCase(d.getFileFormat()))) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.digitalFile,
 						parent, FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 				fault.setMessage(bundle.getString(ENTITY + "_VAL3"));
-				fault.setOriginalValue(this.digitalFile.stream().map(f -> f.getFileFormat())
+				fault.setOriginalValue(this.digitalFile.stream().map(DigitalFile::getFileFormat)
 						.collect(Collectors.joining(", ")));
 				faults.add(fault);
 			}
@@ -375,7 +364,7 @@ public class DocumentVersion implements ModelEntity {
 		if (this.numberOfPages != null) {
 
 			// numberOfPages must be greater than zero
-			if (this.numberOfPages.intValue() < 0) {
+			if (this.numberOfPages < 0) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.numberOfPages,
 						parent, FaultLevel.ERROR, FaultType.EXCEEDS_LOWER_BOUND);
 				fault.setMessage(bundle.getString(ENTITY + "_VAL13"));
@@ -383,9 +372,7 @@ public class DocumentVersion implements ModelEntity {
 			}
 		}
 
-		for (int l = 0; l < this.language.size(); l++) {
-
-			final String lang = this.language.get(l);
+		for (final String lang : this.language) {
 
 			final long descriptionCount = this.documentDescription.stream()
 					.filter(d -> StringUtils.equalsIgnoreCase(d.getLanguage(), lang)).count();

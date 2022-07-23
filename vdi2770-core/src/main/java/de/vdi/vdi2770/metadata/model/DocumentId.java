@@ -54,7 +54,7 @@ import lombok.experimental.FieldNameConstants;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
-@ToString(of = { "id", "domainId" }, includeFieldNames = true)
+@ToString(of = { "id", "domainId" })
 @Data
 @FieldNameConstants
 @AllArgsConstructor

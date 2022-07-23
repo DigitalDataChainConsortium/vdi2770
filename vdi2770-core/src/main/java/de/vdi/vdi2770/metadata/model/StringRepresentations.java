@@ -70,7 +70,7 @@ public class StringRepresentations {
 
 		Preconditions.checkArgument(version != null);
 
-		return version.getLanguage().stream().collect(Collectors.joining(", "));
+		return String.join(", ", version.getLanguage());
 	}
 
 	/**
@@ -92,6 +92,6 @@ public class StringRepresentations {
 		return classification.stream()
 				.filter(c -> StringUtils.equalsIgnoreCase(
 						Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME, c.getClassificationSystem()))
-				.map(c -> c.getClassId()).collect(Collectors.joining(", "));
+				.map(DocumentClassification::getClassId).collect(Collectors.joining(", "));
 	}
 }
