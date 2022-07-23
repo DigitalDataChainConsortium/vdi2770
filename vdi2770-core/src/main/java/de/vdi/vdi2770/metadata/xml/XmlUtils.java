@@ -133,7 +133,7 @@ public class XmlUtils {
 		}
 
 		try {
-			final Marshaller jaxbMarshaller = getMarshaller();
+			final Marshaller jaxbMarshaller = getMarshaler();
 
 			if (exportXsd) {
 				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
@@ -148,17 +148,17 @@ public class XmlUtils {
 	}
 
 	/**
-	 * Get a XML marshaller instance.
+	 * Get a XML marshaler instance.
 	 *
-	 * @return A marshaller
+	 * @return A marshaler
 	 */
-	private Marshaller getMarshaller() throws XmlProcessingException {
+	private Marshaller getMarshaler() throws XmlProcessingException {
 
 		final MarshalUtils utils = new MarshalUtils(this.locale);
 
 		return utils.getMarshaller();
 	}
-	
+
 	/**
 	 * Get a XML reader instance
 	 * 
@@ -167,11 +167,11 @@ public class XmlUtils {
 	 * @throws SAXException
 	 */
 	public XMLReader getXmlReader() throws ParserConfigurationException, SAXException {
-		
+
 		SAXParserFactory parserFactory = SAXParserFactory.newInstance();
-        parserFactory.setNamespaceAware(true);
-        SAXParser parser = parserFactory.newSAXParser();
-        return parser.getXMLReader();
+		parserFactory.setNamespaceAware(true);
+		SAXParser parser = parserFactory.newSAXParser();
+		return parser.getXMLReader();
 	}
 
 	/**
@@ -209,7 +209,7 @@ public class XmlUtils {
 		Preconditions.checkArgument(doc != null, "doc is null");
 
 		try {
-			final Marshaller jaxbMarshaller = getMarshaller();
+			final Marshaller jaxbMarshaller = getMarshaler();
 
 			final StringWriter writer = new StringWriter();
 			jaxbMarshaller.marshal(doc, writer);
@@ -238,7 +238,7 @@ public class XmlUtils {
 		try {
 
 			// XML reader instance
-            XMLReader reader = getXmlReader();
+			XMLReader reader = getXmlReader();
 
 			// instantiate the VDI filter
 			// this filter will append the VDI 2770 namespace to every entity

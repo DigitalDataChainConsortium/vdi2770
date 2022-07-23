@@ -137,24 +137,24 @@ public class PdfValidationTest {
 
 	}
 
-//	@Test
-//	public void getEmbeddedFonts() throws IOException {
-//		
-//		File pdfFile = new File(EXAMPLES_FOLDER, "folders\\VDI2770_Main.pdf");
-//		PDDocument  doc = PDDocument.load(pdfFile);
-//		PDPageTree pages = doc.getDocumentCatalog().getPages();
-//		for(PDPage page: pages){
-//			PDResources resources = page.getResources();
-//			Iterable<COSName> ite = resources.getFontNames();
-//			for(COSName name : ite) {
-//			    PDFont font = resources.getFont(name);
-//			    System.err.println(font.getName());
-//			    boolean isEmbedded = font.isEmbedded();
-//			    System.err.println(isEmbedded);
-//			}
-//		}
-//	}
-	
+	// @Test
+	// public void getEmbeddedFonts() throws IOException {
+	//
+	// File pdfFile = new File(EXAMPLES_FOLDER, "folders\\VDI2770_Main.pdf");
+	// PDDocument doc = PDDocument.load(pdfFile);
+	// PDPageTree pages = doc.getDocumentCatalog().getPages();
+	// for(PDPage page: pages){
+	// PDResources resources = page.getResources();
+	// Iterable<COSName> ite = resources.getFontNames();
+	// for(COSName name : ite) {
+	// PDFont font = resources.getFont(name);
+	// System.err.println(font.getName());
+	// boolean isEmbedded = font.isEmbedded();
+	// System.err.println(isEmbedded);
+	// }
+	// }
+	// }
+
 	@Test
 	public void extractTextFromPdfTest() throws IOException {
 

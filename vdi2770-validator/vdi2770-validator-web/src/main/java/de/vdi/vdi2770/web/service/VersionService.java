@@ -36,11 +36,11 @@ import org.springframework.stereotype.Service;
 public class VersionService {
 
 	/**
-	 * Version string as property 
+	 * Version string as property
 	 */
 	@Value("${vdi2770.version.value:UNKNOWN-VERSION}")
 	private String appVersion;
-	
+
 	/**
 	 * Get Version number of this project
 	 * 
@@ -49,5 +49,5 @@ public class VersionService {
 	public String getVersion() {
 		return this.appVersion;
 	}
-	
+
 }

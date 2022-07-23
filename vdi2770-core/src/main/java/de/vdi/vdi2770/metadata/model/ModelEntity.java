@@ -46,7 +46,7 @@ public interface ModelEntity {
 
 		return validate(null, locale, false);
 	}
-	
+
 	public default List<ValidationFault> validate(final Locale locale, boolean strict) {
 		Preconditions.checkArgument(locale != null, "locale is null");
 

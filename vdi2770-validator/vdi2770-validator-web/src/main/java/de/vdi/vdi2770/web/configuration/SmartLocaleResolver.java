@@ -32,10 +32,12 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
 
 /**
- * With this implementation of an {@link AcceptHeaderLocaleResolver}, we can read the
- * Accept-Language header from requests to set the desired {@link Locale} for report outputs.
+ * With this implementation of an {@link AcceptHeaderLocaleResolver}, we can
+ * read the Accept-Language header from requests to set the desired
+ * {@link Locale} for report outputs.
  *
- * @author Johannes Schmidt (Leipzig University, Institute for Applied Informatics InfAI)
+ * @author Johannes Schmidt (Leipzig University, Institute for Applied
+ *         Informatics InfAI)
  *
  */
 @Component
@@ -53,22 +55,21 @@ public class SmartLocaleResolver extends AcceptHeaderLocaleResolver {
 			// return default locale
 			return Locale.getDefault();
 		}
-		
+
 		// read languages
 		String requestesLanguages = request.getHeader("Accept-Language");
-		List<Locale.LanguageRange> list = Locale.LanguageRange
-				.parse(requestesLanguages);
+		List<Locale.LanguageRange> list = Locale.LanguageRange.parse(requestesLanguages);
 
 		Locale locale = Locale.lookup(list, this.LOCALES);
 
 		if (locale == null) {
 			return Locale.getDefault();
 		}
-		
+
 		if (locale.getLanguage().toLowerCase().equals("zh")) {
 			locale = new Locale("zh", "CN");
 		}
-		
+
 		return locale;
 	}
 }

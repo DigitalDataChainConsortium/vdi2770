@@ -216,8 +216,8 @@ public class ReportControllerTest extends BaseControllerTest {
 	/**
 	 * Validate a documentation container.
 	 * 
-	 * The English class name of the main document is invalid
-	 * In AB393.zip, the Germany class name is invalid
+	 * The English class name of the main document is invalid In AB393.zip, the
+	 * Germany class name is invalid
 	 */
 	@Test
 	public void invalidDocumentTypeTest() {
@@ -235,11 +235,11 @@ public class ReportControllerTest extends BaseControllerTest {
 		assertTrue(result != null);
 		assertTrue(result.getMessages().stream()
 				.filter(m -> StringUtils.startsWith(m.getText(), "DC_004")).count() > 0);
-		
-		for(Report sub : result.getSubReports()) {
-			if("AB393.zip".equals(sub.getFileName())) {
+
+		for (Report sub : result.getSubReports()) {
+			if ("AB393.zip".equals(sub.getFileName())) {
 				assertTrue(sub.getMessages().stream()
-						.filter(m -> StringUtils.startsWith(m.getText(), "DC_003")).count() > 0);	
+						.filter(m -> StringUtils.startsWith(m.getText(), "DC_003")).count() > 0);
 			}
 		}
 	}

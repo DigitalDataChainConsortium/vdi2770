@@ -34,7 +34,6 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 import de.vdi.vdi2770.web.transfer.Report;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {

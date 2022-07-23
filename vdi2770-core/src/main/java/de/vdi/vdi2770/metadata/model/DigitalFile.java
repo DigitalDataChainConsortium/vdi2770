@@ -80,7 +80,8 @@ public class DigitalFile implements ModelEntity {
 	 *         errors, warnings or information.
 	 */
 	@Override
-	public List<ValidationFault> validate(final String parent, final Locale locale, boolean strict) {
+	public List<ValidationFault> validate(final String parent, final Locale locale,
+			boolean strict) {
 
 		Preconditions.checkArgument(locale != null);
 

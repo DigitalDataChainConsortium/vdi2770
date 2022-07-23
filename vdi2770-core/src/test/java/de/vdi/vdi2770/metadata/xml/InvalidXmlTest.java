@@ -34,7 +34,8 @@ import de.vdi.vdi2770.metadata.common.Fault;
 /**
  * Tests for corrupted XML files.
  *
- * @author Johannes Schmidt (Leipzig University, Institute for Applied Informatics InfAI)
+ * @author Johannes Schmidt (Leipzig University, Institute for Applied
+ *         Informatics InfAI)
  */
 class InvalidXmlTest {
 
@@ -56,8 +57,8 @@ class InvalidXmlTest {
 	}
 
 	/**
-	 * Same as invalidXmlFile1 but check, whether validation messages return in the desired
-	 * language.
+	 * Same as invalidXmlFile1 but check, whether validation messages return in the
+	 * desired language.
 	 * 
 	 * @throws XmlProcessingException
 	 */
@@ -111,7 +112,8 @@ class InvalidXmlTest {
 		assertTrue(Fault.hasErrors(faults));
 
 		fault = faults.get(0);
-		assertTrue(fault.getMessage().startsWith("cvc-complex-type.2.4.a: Ungültiger Content wurde"));
+		assertTrue(
+				fault.getMessage().startsWith("cvc-complex-type.2.4.a: Ungültiger Content wurde"));
 
 	}
 

@@ -799,13 +799,13 @@ public class ContainerValidator {
 
 		boolean sourceContainsParameter = mimeTypeContainsParameter(sourceType);
 		boolean targetContainsParameter = mimeTypeContainsParameter(targetType);
-		
+
 		if ((sourceContainsParameter && targetContainsParameter)
 				|| (!sourceContainsParameter && !targetContainsParameter)) {
-			
+
 			// issue 16: parameter in mime type
 			// image/vnd.dxf == image/vnd.dxf
-			// image/vnd.dxf; format=ascii == image/vnd.dxf; format=ascii 
+			// image/vnd.dxf; format=ascii == image/vnd.dxf; format=ascii
 			// image/vnd.dxf; format=ascii == image/vnd.dxf;format=ascii
 			// image/vnd.dxf; format=ascii == image/vnd.dxf;"format=ascii"
 			String s = sourceType.replaceAll(" ", "").replaceAll("\"", "");

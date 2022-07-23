@@ -103,7 +103,7 @@ public class StatsControllerTest extends BaseControllerTest {
 		// read validation statistics
 		final String serverUrl = "http://localhost:" + this.port + "/rest/stats";
 		ResponseEntity<ReportStatistics[]> response = this.restTemplate.exchange(serverUrl,
-				HttpMethod.GET, new HttpEntity<>(getHeaders(Locale.LanguageRange.parse("de"))), 
+				HttpMethod.GET, new HttpEntity<>(getHeaders(Locale.LanguageRange.parse("de"))),
 				ReportStatistics[].class);
 
 		assertTrue(response.getStatusCode() == HttpStatus.OK);

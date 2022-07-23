@@ -102,8 +102,7 @@ public class DocumentIdTest {
 		final DocumentId id3 = null;
 
 		final List<ValidationFault> faults = ValidationHelper.validateEntityList(
-				Arrays.asList(id1, id2, id3), "Document", "documentId", Locale.getDefault(),
-				true);
+				Arrays.asList(id1, id2, id3), "Document", "documentId", Locale.getDefault(), true);
 
 		faults.stream().forEach(f -> log.debug(f.toString()));
 

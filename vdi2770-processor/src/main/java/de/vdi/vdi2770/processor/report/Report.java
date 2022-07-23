@@ -448,7 +448,7 @@ public class Report {
 
 		return result;
 	}
-	
+
 	public List<Message> filterExact(final MessageLevel level, boolean deep) {
 
 		final List<Message> result = new ArrayList<>();

@@ -94,7 +94,7 @@ public class DocumentTest extends DocumentBaseTest {
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 
 	}
-	
+
 	/**
 	 * {@link Document} is not a main document test.
 	 */

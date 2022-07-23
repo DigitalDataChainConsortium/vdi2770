@@ -243,7 +243,7 @@ public class DocumentClassificationTest {
 		assertTrue(fault.getType() == FaultType.HAS_DUPLICATE_VALUE);
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 	}
-	
+
 	@Test
 	public void invalidStrictVdi2770ClassName() {
 
@@ -257,7 +257,7 @@ public class DocumentClassificationTest {
 		List<ValidationFault> faults = system.validate(this.locale, true);
 		faults.stream().forEach(f -> log.debug(f.toString()));
 		assertTrue(faults.size() == 1);
-		
+
 		// strict mode disabled
 		faults = system.validate(this.locale, false);
 		faults.stream().forEach(f -> log.debug(f.toString()));

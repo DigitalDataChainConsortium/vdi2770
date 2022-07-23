@@ -178,12 +178,12 @@ class MarshalUtils {
 		// log warnings and errors by a custom handler
 		// this handler does not throw exceptions but collect all messages
 		validator.setErrorHandler(errorHandler);
-		
+
 		Locale errorLocale = this.locale;
-		if(!Locale.getDefault().equals(Locale.ENGLISH) && errorLocale.equals(Locale.ENGLISH)) {
+		if (!Locale.getDefault().equals(Locale.ENGLISH) && errorLocale.equals(Locale.ENGLISH)) {
 			errorLocale = Locale.ROOT;
 		}
-		
+
 		validator.setProperty("http://apache.org/xml/properties/locale", errorLocale);
 
 		return validator;

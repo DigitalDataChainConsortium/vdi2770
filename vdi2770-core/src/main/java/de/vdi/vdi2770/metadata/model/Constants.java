@@ -152,7 +152,7 @@ public final class Constants {
 
 		return map;
 	}
-	
+
 	public static boolean isVdi2770GermanCategoryName(final String category, boolean strict) {
 		return isCategoryName(getVdi2770GermanCategoryNames().values(), category, strict);
 	}
@@ -195,10 +195,10 @@ public final class Constants {
 
 		Preconditions.checkArgument(categories != null, "categories is empty");
 
-		if(Strings.isNullOrEmpty(category)) {
+		if (Strings.isNullOrEmpty(category)) {
 			return false;
 		}
-		
+
 		if (strict) {
 			return categories.contains(category);
 		}
