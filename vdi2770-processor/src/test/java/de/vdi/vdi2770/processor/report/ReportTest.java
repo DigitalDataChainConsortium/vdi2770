@@ -164,8 +164,15 @@ public class ReportTest {
 				.count() == 0);
 	}
 	
+	/**
+	 * Do not report an error, if there is a valid PDF/A file and another PDF file that is not
+	 * conform to the PDF/A specification
+	 * 
+	 * @throws ProcessorException
+	 * @throws MetadataException
+	 */
 	@Test
-	public void issue18ReportTest() throws ProcessorException, MetadataException {
+	public void issue17ReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
 		final Report result = report.validate("../examples/container/morethanonepdfcontainer.zip");
