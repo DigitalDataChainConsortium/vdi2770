@@ -21,6 +21,7 @@
  ******************************************************************************/
 package de.vdi.vdi2770.web.transfer;
 
+import de.vdi.vdi2770.processor.common.IndentUtils;
 import de.vdi.vdi2770.processor.common.MessageLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

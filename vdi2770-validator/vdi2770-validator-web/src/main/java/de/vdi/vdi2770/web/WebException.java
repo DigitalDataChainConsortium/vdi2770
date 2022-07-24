@@ -21,6 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.web;
 
+import java.io.Serial;
+
 /**
  * This exception indicates, that there was an error in the web server.
  *
@@ -30,6 +32,7 @@ package de.vdi.vdi2770.web;
  */
 public class WebException extends Exception {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

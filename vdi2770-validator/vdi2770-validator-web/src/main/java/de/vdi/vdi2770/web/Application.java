@@ -37,9 +37,8 @@ public class Application {
 	/**
 	 * Start the application
 	 *
-	 * @param args
+	 * @param args Command line arguments
 	 */
-	@SuppressWarnings("resource")
 	public static void main(String[] args) {
 
 		// rename application properties file name

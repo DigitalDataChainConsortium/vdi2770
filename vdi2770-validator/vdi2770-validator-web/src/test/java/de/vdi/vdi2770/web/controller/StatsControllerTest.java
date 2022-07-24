@@ -21,7 +21,9 @@
  ******************************************************************************/
 package de.vdi.vdi2770.web.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.File;
 import java.util.Locale;
@@ -71,7 +73,7 @@ public class StatsControllerTest extends BaseControllerTest {
 	/**
 	 * Get report statistics
 	 * 
-	 * @throws Exception
+	 * @throws Exception There was an error reading the statistic file
 	 */
 	@Test
 	public void readStatistics() throws Exception {
@@ -106,14 +108,14 @@ public class StatsControllerTest extends BaseControllerTest {
 				HttpMethod.GET, new HttpEntity<>(getHeaders(Locale.LanguageRange.parse("de"))),
 				ReportStatistics[].class);
 
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 
 		final ReportStatistics[] result = response.getBody();
-		assertTrue(result.length == 1);
+		assertEquals(1, result.length);
 
-		assertTrue(result[0].getErrorIds().size() == 2);
-		assertTrue(result[0].getWarningIds().size() == 0);
+		assertEquals(2, result[0].getErrorIds().size());
+		assertEquals(0, result[0].getWarningIds().size());
 
 		FileUtils.forceDelete(statsFile);
 	}

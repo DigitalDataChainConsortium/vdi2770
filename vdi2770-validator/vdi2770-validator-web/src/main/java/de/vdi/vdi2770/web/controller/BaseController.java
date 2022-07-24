@@ -66,12 +66,11 @@ public class BaseController {
 
 		Preconditions.checkArgument(request != null, "request is null");
 
-		final Locale locale = this.localeResolver.resolveLocale(request);
-		return locale;
+		return this.localeResolver.resolveLocale(request);
 	}
 
 	/**
-	 * Convert an exception to a HTTP response
+	 * Convert an exception to an HTTP response
 	 * 
 	 * @param exception A non-<code>null</code> exception.
 	 * @return A HTTP {@link ResponseEntity}
@@ -118,18 +117,17 @@ public class BaseController {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setCacheControl(CacheControl.noCache().getHeaderValue());
 
-		ResponseEntity<byte[]> response = new ResponseEntity<>(file, headers, HttpStatus.OK);
-		return response;
+		return new ResponseEntity<>(file, headers, HttpStatus.OK);
 	}
 
 	/**
-	 * Create a temporary folder, that will be be deleted on exit.
+	 * Create a temporary folder, that will be deleted on exit.
 	 * 
 	 * @return A {@link File} instance.
 	 * 
 	 * @throws IOException There was an error while creating the folder.
 	 */
-	protected final static File createTempFolder() throws IOException {
+	protected static File createTempFolder() throws IOException {
 
 		final Path tempFolder = Files.createTempDirectory("vdi2770_");
 
@@ -146,7 +144,7 @@ public class BaseController {
 	 * @return A {@link File}
 	 * @throws IOException Error while transferring the file content to local file.
 	 */
-	protected final static File transferFile(final MultipartFile file) throws IOException {
+	protected static File transferFile(final MultipartFile file) throws IOException {
 
 		Preconditions.checkArgument(file != null, "file is null");
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(file.getOriginalFilename()),
@@ -154,10 +152,10 @@ public class BaseController {
 
 		final File tmpFile = createTempFolder();
 
-		final File transferdFile = new File(tmpFile, file.getOriginalFilename());
-		transferdFile.deleteOnExit();
-		file.transferTo(transferdFile);
+		final File transferredFile = new File(tmpFile, file.getOriginalFilename());
+		transferredFile.deleteOnExit();
+		file.transferTo(transferredFile);
 
-		return transferdFile;
+		return transferredFile;
 	}
 }

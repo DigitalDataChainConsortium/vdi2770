@@ -27,6 +27,7 @@ import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 
+import lombok.NonNull;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.i18n.AcceptHeaderLocaleResolver;
@@ -48,7 +49,7 @@ public class SmartLocaleResolver extends AcceptHeaderLocaleResolver {
 			new Locale("zh"));
 
 	@Override
-	public Locale resolveLocale(HttpServletRequest request) {
+	public @NonNull Locale resolveLocale(HttpServletRequest request) {
 
 		// Accept-Language header exists?
 		if (!StringUtils.hasText(request.getHeader("Accept-Language"))) {
@@ -57,8 +58,8 @@ public class SmartLocaleResolver extends AcceptHeaderLocaleResolver {
 		}
 
 		// read languages
-		String requestesLanguages = request.getHeader("Accept-Language");
-		List<Locale.LanguageRange> list = Locale.LanguageRange.parse(requestesLanguages);
+		String requestedLanguages = request.getHeader("Accept-Language");
+		List<Locale.LanguageRange> list = Locale.LanguageRange.parse(requestedLanguages);
 
 		Locale locale = Locale.lookup(list, this.LOCALES);
 
@@ -66,7 +67,7 @@ public class SmartLocaleResolver extends AcceptHeaderLocaleResolver {
 			return Locale.getDefault();
 		}
 
-		if (locale.getLanguage().toLowerCase().equals("zh")) {
+		if (locale.getLanguage().equalsIgnoreCase("zh")) {
 			locale = new Locale("zh", "CN");
 		}
 

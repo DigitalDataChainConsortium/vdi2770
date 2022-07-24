@@ -101,8 +101,7 @@ public class ReportService {
 		// prefix is RS
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.web", locale);
 
-		Report result = null;
-
+		Report result;
 		String mimeType = "UNKNOWN";
 
 		MessageLevel logLevel = MessageLevel.INFO;

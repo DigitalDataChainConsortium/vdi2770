@@ -22,7 +22,8 @@
 
 package de.vdi.vdi2770.web.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.File;
 import java.util.Locale;
@@ -89,8 +90,8 @@ public class ReportSettingsExceptionsTest extends BaseControllerTest {
 		ResponseEntity<Report> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
 				Report.class);
 
-		assertTrue(response != null);
-		assertTrue(response.getStatusCode() == HttpStatus.BAD_REQUEST);
+		assertNotNull(response);
+		assertSame(response.getStatusCode(), HttpStatus.BAD_REQUEST);
 	}
 
 }

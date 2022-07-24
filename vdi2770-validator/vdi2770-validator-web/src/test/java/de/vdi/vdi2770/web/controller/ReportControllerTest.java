@@ -22,6 +22,9 @@
 
 package de.vdi.vdi2770.web.controller;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -90,10 +93,8 @@ public class ReportControllerTest extends BaseControllerTest {
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData,
 				headers);
 		final String serverUrl = "http://localhost:" + this.port + "/rest/reportpdf";
-		ResponseEntity<byte[]> response = this.restTemplate.exchange(serverUrl, HttpMethod.POST,
+		return this.restTemplate.exchange(serverUrl, HttpMethod.POST,
 				requestEntity, byte[].class);
-
-		return response;
 	}
 
 	/**
@@ -106,22 +107,22 @@ public class ReportControllerTest extends BaseControllerTest {
 		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP), this.port);
 
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 
 		final Report result = response.getBody();
 
 		// Report validation
-		assertTrue(result.getContainerType() == ContainerType.DOCUMENTATION_CONTAINER);
+		assertSame(result.getContainerType(), ContainerType.DOCUMENTATION_CONTAINER);
 		assertTrue(StringUtils.equals(result.getFileName(), DEMO_VDI_ZIP));
 
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("de")));
-		assertTrue(result.getMessages().size() == 19);
-		assertTrue(result.getSubReports().size() == 2);
+		assertEquals(result.getLocale(), Locale.forLanguageTag("de"));
+		assertEquals(19, result.getMessages().size());
+		assertEquals(2, result.getSubReports().size());
 	}
 
 	/**
-	 * Use the REST validation API call to test language support.
+	 * Use the REST validation API to test language support.
 	 * 
 	 * <p>
 	 * This test demonstrates the processing of the accept language header.
@@ -135,57 +136,57 @@ public class ReportControllerTest extends BaseControllerTest {
 		// use language and country language tag
 		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("en-US"),
 				upload, this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		Report result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("en")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("en"));
 
 		// request Spanish language and return English
 		response = requestReportRest(Locale.LanguageRange.parse("es"), upload, this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("en")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("en"));
 
 		// use a list of languages (first two are not supported)
 		response = requestReportRest(Locale.LanguageRange.parse("es,ja,de"), upload, this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("de")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("de"));
 
 		// use a list of languages (first two are not supported) and use
 		// country code
 		response = requestReportRest(Locale.LanguageRange.parse("es,ja,de-AT,en"), upload,
 				this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("de")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("de"));
 
 		// use a list of languages (first two are not supported) and use
 		// country code
 		response = requestReportRest(Locale.LanguageRange.parse("es,ja,en,de-AT"), upload,
 				this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("en")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("en"));
 
 		// use a list of languages (first two are not supported) and use
 		// country code
 		response = requestReportRest(Locale.LanguageRange.parse("zh"), upload, this.port);
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 		result = response.getBody();
-		assertTrue(result.getLocale().equals(Locale.forLanguageTag("zh-cn")));
+		assertEquals(result.getLocale(), Locale.forLanguageTag("zh-cn"));
 	}
 
 	/**
 	 * Call /rest/reportpdf API endpoint and check, whether the result bytes are a
 	 * PDF file.
 	 * 
-	 * @throws IOException
+	 * @throws IOException There was an error while creating the PDF report
 	 */
 	@Test
 	public void validateContainerPdf() throws IOException {
@@ -194,12 +195,12 @@ public class ReportControllerTest extends BaseControllerTest {
 		ResponseEntity<byte[]> response = requestReportPdf(Locale.LanguageRange.parse("de"));
 
 		// HTTP 200
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 
 		// check body
 		final byte[] result = response.getBody();
-		assertTrue(result != null);
+		assertNotNull(result);
 		assertTrue(result.length > 0);
 
 		// save as PDF file (and delete after test run)
@@ -207,10 +208,10 @@ public class ReportControllerTest extends BaseControllerTest {
 		pdfFile.deleteOnExit();
 		Files.write(result, pdfFile);
 
-		// Check mediatype
+		// Check media-type
 		final Tika tika = new Tika();
 		final String fileMimeType = tika.detect(pdfFile);
-		assertTrue(fileMimeType.equals(com.google.common.net.MediaType.PDF.toString()));
+		assertEquals(fileMimeType, com.google.common.net.MediaType.PDF.toString());
 	}
 
 	/**
@@ -226,20 +227,20 @@ public class ReportControllerTest extends BaseControllerTest {
 		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, INVALID_DOC_TYPE_ZIP), this.port);
 
-		assertTrue(response.getStatusCode() == HttpStatus.OK);
-		assertTrue(response.getBody() != null);
+		assertSame(response.getStatusCode(), HttpStatus.OK);
+		assertNotNull(response.getBody());
 
 		final Report result = response.getBody();
 
 		// Report validation
-		assertTrue(result != null);
+		assertNotNull(result);
 		assertTrue(result.getMessages().stream()
-				.filter(m -> StringUtils.startsWith(m.getText(), "DC_004")).count() > 0);
+				.anyMatch(m -> StringUtils.startsWith(m.getText(), "DC_004")));
 
 		for (Report sub : result.getSubReports()) {
 			if ("AB393.zip".equals(sub.getFileName())) {
 				assertTrue(sub.getMessages().stream()
-						.filter(m -> StringUtils.startsWith(m.getText(), "DC_003")).count() > 0);
+						.anyMatch(m -> StringUtils.startsWith(m.getText(), "DC_003")));
 			}
 		}
 	}

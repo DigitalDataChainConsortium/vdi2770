@@ -66,8 +66,7 @@ public class BaseControllerTest {
 	/**
 	 * Get default settings for Report API
 	 * 
-	 * @return
-	 * @throws JsonProcessingException
+	 * @return report properties
 	 */
 	protected static ReportProperties createReportProperties() {
 		final ReportProperties props = new ReportProperties();
@@ -82,7 +81,7 @@ public class BaseControllerTest {
 	/**
 	 * Build the form data
 	 * 
-	 * @return
+	 * @return form data to submit
 	 */
 	protected static MultiValueMap<String, Object> createFormData(final File file) {
 		MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
@@ -108,10 +107,8 @@ public class BaseControllerTest {
 				getHeaders(languages));
 
 		final String serverUrl = "http://localhost:" + port + "/rest/report";
-		ResponseEntity<Report> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
+		return this.restTemplate.postForEntity(serverUrl, requestEntity,
 				Report.class);
-
-		return response;
 	}
 
 }

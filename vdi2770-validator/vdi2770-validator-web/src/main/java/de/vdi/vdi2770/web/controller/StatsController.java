@@ -58,10 +58,11 @@ public class StatsController {
 	@RequestMapping(path = "/stats", method = { RequestMethod.GET }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
 	public List<ReportStatistics> getStatistics(
-			@RequestParam(name = "timestamp", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime requestTimesamp)
+			@RequestParam(name = "timestamp", required = false)
+			@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDateTime requestTimestamp)
 			throws IOException {
 
-		List<ReportStatistics> result = new ArrayList<ReportStatistics>();
+		List<ReportStatistics> result = new ArrayList<>();
 
 		if (this.logFile == null || !this.logFile.exists()) {
 			return result;
@@ -82,7 +83,7 @@ public class StatsController {
 						.forPattern("yyyy-MM-dd'T'HH:mm:ss");
 				LocalDateTime t = LocalDateTime.parse(timestamp, formatter);
 
-				if (requestTimesamp == null || t.isAfter(requestTimesamp)) {
+				if (requestTimestamp == null || t.isAfter(requestTimestamp)) {
 
 					String[] errors = new String[] {};
 					if (tokens.length > 2 && !StringUtils.isEmpty(tokens[2])) {

@@ -71,9 +71,9 @@ public class VersionController {
 	}
 
 	/**
-	 * Return version as String
+	 * Return application version as String
 	 * 
-	 * @return
+	 * @return The application version number
 	 */
 	@RequestMapping(path = "/version", method = { RequestMethod.GET }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
@@ -88,7 +88,7 @@ public class VersionController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		return new ResponseEntity<String>(this.service.getVersion(), responseHeaders,
+		return new ResponseEntity<>(this.service.getVersion(), responseHeaders,
 				HttpStatus.OK);
 	}
 }

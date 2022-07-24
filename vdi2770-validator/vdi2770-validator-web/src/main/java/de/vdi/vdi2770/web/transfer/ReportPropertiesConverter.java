@@ -21,6 +21,7 @@
  ******************************************************************************/
 package de.vdi.vdi2770.web.transfer;
 
+import lombok.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
@@ -42,7 +43,7 @@ public class ReportPropertiesConverter implements Converter<String, ReportProper
 
 	@Override
 	@SneakyThrows
-	public ReportProperties convert(String source) {
+	public ReportProperties convert(@NonNull String source) {
 		return this.objectMapper.readValue(source, ReportProperties.class);
 	}
 }

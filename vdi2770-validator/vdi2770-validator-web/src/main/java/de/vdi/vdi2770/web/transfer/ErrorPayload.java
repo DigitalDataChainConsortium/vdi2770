@@ -42,17 +42,17 @@ public class ErrorPayload {
 	/**
 	 * Timestamp of the error
 	 */
-	private Date timestamp;
+	Date timestamp;
 
 	/**
 	 * HTTP error code (type of error)
 	 */
-	private String error;
+	String error;
 
 	/**
 	 * An error message
 	 */
-	private String message;
+	String message;
 
 	public ErrorPayload(final String message, final HttpStatus status) {
 

@@ -168,7 +168,7 @@ public class ReportController extends BaseController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		return new ResponseEntity<Report>(report, responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<>(report, responseHeaders, HttpStatus.OK);
 	}
 
 }

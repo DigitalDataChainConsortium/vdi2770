@@ -22,7 +22,8 @@
 
 package de.vdi.vdi2770.web.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.io.File;
 import java.util.Locale;
@@ -57,7 +58,7 @@ public class ReportFileTooLargeTest extends BaseControllerTest {
 		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP), this.port);
 
-		assertTrue(response != null);
-		assertTrue(response.getStatusCode() == HttpStatus.PAYLOAD_TOO_LARGE);
+		assertNotNull(response);
+		assertSame(response.getStatusCode(), HttpStatus.PAYLOAD_TOO_LARGE);
 	}
 }

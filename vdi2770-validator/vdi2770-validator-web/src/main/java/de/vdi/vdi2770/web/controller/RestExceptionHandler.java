@@ -102,16 +102,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		// prefix is REH
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.web", locale);
 
-		String message = null;
+		String message;
 		if (!Strings.isNullOrEmpty(this.fileSize)) {
 			message = MessageFormat.format(bundle.getString("REH_MESSAGE_001"), this.fileSize);
 		} else {
 			message = bundle.getString("REH_MESSAGE_002");
 		}
 
-		ErrorPayload error = new ErrorPayload(message, HttpStatus.PAYLOAD_TOO_LARGE);
-
-		return error;
+		return new ErrorPayload(message, HttpStatus.PAYLOAD_TOO_LARGE);
 	}
 
 	/**
@@ -138,8 +136,6 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.web", locale);
 
 		final String message = bundle.getString("REH_MESSAGE_003");
-		ErrorPayload error = new ErrorPayload(message, HttpStatus.BAD_REQUEST);
-
-		return error;
+		return new ErrorPayload(message, HttpStatus.BAD_REQUEST);
 	}
 }
