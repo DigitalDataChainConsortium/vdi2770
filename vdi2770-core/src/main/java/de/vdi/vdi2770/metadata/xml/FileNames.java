@@ -52,8 +52,8 @@ public class FileNames {
 	public static final String MAIN_DOCUMENT_PDF_FILE_NAME = "VDI2770_Main.pdf";
 
 	/**
-	 * Check, whether the name of a given {@link File} conforms to the name of a
-	 * PDF main document.
+	 * Check, whether the name of a given {@link File} conforms to the name of a PDF
+	 * main document.
 	 *
 	 * @param file A file to be checked.
 	 * @return <code>true</code>, if the file name conforms to the specification.
@@ -68,8 +68,8 @@ public class FileNames {
 	}
 
 	/**
-	 * Check, whether the name of a given {@link File} conforms to the name of a
-	 * VDI 2770 metadata file.
+	 * Check, whether the name of a given {@link File} conforms to the name of a VDI
+	 * 2770 metadata file.
 	 *
 	 * @param file A file to be checked.
 	 * @return <code>true</code>, if the file name conforms to the specification.

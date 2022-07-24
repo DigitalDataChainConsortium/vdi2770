@@ -144,8 +144,7 @@ public class ReadXmlTest {
 
 		assertEquals(firstOrganization.getOrganizationId(), "ULE");
 		assertEquals(firstOrganization.getOrganizationName(), "Uni Leipzig");
-		assertEquals(firstOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig");
+		assertEquals(firstOrganization.getOrganizationOfficialName(), "Universität Leipzig");
 
 		final DocumentIdDomain secondDomain = domains.get(1);
 
@@ -159,8 +158,7 @@ public class ReadXmlTest {
 
 		assertEquals(secondOrganization.getOrganizationId(), "CUS");
 		assertEquals(secondOrganization.getOrganizationName(), "Customer");
-		assertEquals(secondOrganization.getOrganizationOfficialName(),
-				"Customer GmbH");
+		assertEquals(secondOrganization.getOrganizationOfficialName(), "Customer GmbH");
 
 	}
 
@@ -303,8 +301,7 @@ public class ReadXmlTest {
 
 		assertEquals(firstOrganization.getOrganizationId(), "ULE");
 		assertEquals(firstOrganization.getOrganizationName(), "Uni Leipzig");
-		assertEquals(firstOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig");
+		assertEquals(firstOrganization.getOrganizationOfficialName(), "Universität Leipzig");
 
 		assertEquals(2, version.getDigitalFile().size());
 
@@ -338,16 +335,14 @@ public class ReadXmlTest {
 
 		assertEquals(statusOrganization.getOrganizationId(), "ULE");
 		assertEquals(statusOrganization.getOrganizationName(), "Uni Leipzig");
-		assertEquals(statusOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig");
+		assertEquals(statusOrganization.getOrganizationOfficialName(), "Universität Leipzig");
 
 		assertEquals(2, status.getComments().size());
 
 		final TranslatableString firstCommment = status.getComments().get(0);
 
 		assertEquals(firstCommment.getLanguage(), "de");
-		assertEquals(firstCommment.getText(),
-				"Die Version ist frei erfunden, aber freigegeben.");
+		assertEquals(firstCommment.getText(), "Die Version ist frei erfunden, aber freigegeben.");
 
 		assertEquals(2, version.getDocumentDescription().size());
 
@@ -355,8 +350,7 @@ public class ReadXmlTest {
 
 		assertEquals(firstDesc.getLanguage(), "de");
 		assertEquals(firstDesc.getTitle(), "Demo Bericht");
-		assertEquals(firstDesc.getSubTitle(),
-				"Ein kleines Beispiel für einen Untertitel");
+		assertEquals(firstDesc.getSubTitle(), "Ein kleines Beispiel für einen Untertitel");
 		assertEquals(firstDesc.getSummary(),
 				"Dies ist eine Zusammenfassung in deutsch für den beispielhaften Demo Bericht");
 		assertEquals(2, firstDesc.getKeyWords().size());

@@ -63,8 +63,8 @@ public class ExampleXmlReadXmlTest {
 				// validate with strict mode
 				final List<ValidationFault> strictErrors = xmlDocument.validate(Locale.getDefault(),
 						true);
-				assertTrue(strictErrors.size() == 0 || strictErrors.stream()
-						.noneMatch(f -> f.getLevel() == FaultLevel.ERROR));
+				assertTrue(strictErrors.size() == 0
+						|| strictErrors.stream().noneMatch(f -> f.getLevel() == FaultLevel.ERROR));
 
 				final List<ValidationFault> NonStrictErrors = xmlDocument
 						.validate(Locale.getDefault(), false);

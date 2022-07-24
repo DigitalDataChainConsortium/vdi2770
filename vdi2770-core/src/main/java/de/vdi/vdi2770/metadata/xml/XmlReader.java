@@ -50,7 +50,7 @@ import lombok.extern.log4j.Log4j2;
  * specifications of VDI 2770 guideline.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
- * Informatics InfAI)
+ *         Informatics InfAI)
  */
 @Log4j2
 public class XmlReader {
@@ -74,7 +74,7 @@ public class XmlReader {
 	 *
 	 * @param file A file to be checked; must not be <code>null</code>
 	 * @return <code>true</code>, if the given file is an XML metadata file for a
-	 * main document.
+	 *         main document.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public boolean isMetadataFileForMainDocument(final File file) {
@@ -91,7 +91,7 @@ public class XmlReader {
 	 *
 	 * @param file A file to be checked; must not be <code>null</code>
 	 * @return <code>true</code>, if the given file is a XML meta data file for a
-	 * document.
+	 *         document.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public boolean isMetadataFileForDocument(final File file) {
@@ -199,7 +199,7 @@ public class XmlReader {
 	 *
 	 * @param file A file representing XML metadata; must not be <code>null</code>.
 	 * @return a {@link de.vdi.vdi2770.metadata.model.Document} or
-	 * <code>null</code>.
+	 *         <code>null</code>.
 	 * @see XmlReader#read(File)
 	 */
 	public de.vdi.vdi2770.metadata.model.Document tryRead(final File file) {
@@ -216,14 +216,15 @@ public class XmlReader {
 	}
 
 	/**
-	 * Read an XML metadata file and return the {@link de.vdi.vdi2770.metadata.model.Document} POJO.
-	 * While reading, the XML is validated according to the specification of the VDI 2770 DTD.
-	 * There is no logical validation.
+	 * Read an XML metadata file and return the
+	 * {@link de.vdi.vdi2770.metadata.model.Document} POJO. While reading, the XML
+	 * is validated according to the specification of the VDI 2770 DTD. There is no
+	 * logical validation.
 	 *
 	 * @param xmlFile A file representing XML metadata; must not be
 	 *                <code>null</code>.
-	 * @return A new instance of {@link de.vdi.vdi2770.metadata.model.Document} which is the POJO
-	 * representation of the XML file.
+	 * @return A new instance of {@link de.vdi.vdi2770.metadata.model.Document}
+	 *         which is the POJO representation of the XML file.
 	 * @throws XmlProcessingException   There was an error reading the XML stream.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */

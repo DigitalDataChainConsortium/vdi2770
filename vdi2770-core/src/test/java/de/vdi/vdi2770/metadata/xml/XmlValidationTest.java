@@ -144,10 +144,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
-						"DocumentVersion"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_001")
+				&& StringUtils.equals(e.getParent(), "DocumentVersion")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -157,10 +155,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
-						"DocumentVersion"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_002")
+				&& StringUtils.equals(e.getParent(), "DocumentVersion")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -199,10 +195,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("S_001") && e.getEntity()
-						.equals("DocumentDescription"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("S_001")
+				&& e.getEntity().equals("DocumentDescription")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("DocumentDescription", error.get().getEntity());
@@ -211,10 +205,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
-						"LifeCycleStatus"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_001")
+				&& StringUtils.equals(e.getParent(), "LifeCycleStatus")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -224,10 +216,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
-						"LifeCycleStatus"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_002")
+				&& StringUtils.equals(e.getParent(), "LifeCycleStatus")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -341,10 +331,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream()
-				.filter(e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
-						"Document"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_001")
+				&& StringUtils.equals(e.getParent(), "Document")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -354,10 +342,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream()
-				.filter(e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
-						"Document"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_002")
+				&& StringUtils.equals(e.getParent(), "Document")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -378,10 +364,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
-						"ReferencedObject"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_001")
+				&& StringUtils.equals(e.getParent(), "ReferencedObject")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -391,10 +375,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
-						"ReferencedObject"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("O_002")
+				&& StringUtils.equals(e.getParent(), "ReferencedObject")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("Organization", error.get().getEntity());
@@ -415,10 +397,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("TS_001") && StringUtils.equals(e.getParent(),
-						"ReferencedObject"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("TS_001")
+				&& StringUtils.equals(e.getParent(), "ReferencedObject")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("TranslatableString", error.get().getEntity());
@@ -428,10 +408,8 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("TS_002") && StringUtils.equals(e.getParent(),
-						"ReferencedObject"))
-				.findFirst();
+		error = errors.stream().filter(e -> e.getMessage().startsWith("TS_002")
+				&& StringUtils.equals(e.getParent(), "ReferencedObject")).findFirst();
 		assertTrue(error.isPresent());
 
 		assertEquals("TranslatableString", error.get().getEntity());
@@ -452,9 +430,9 @@ public class XmlValidationTest {
 		assertSame(error.get().getType(), FaultType.IS_EMPTY);
 		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		ValidationFault empty = errors.stream()
-				.filter(e -> e.getEntity().equals("ReferencedObject") && e.getMessage()
-						.startsWith("S_001")).toList().get(1);
+		ValidationFault empty = errors.stream().filter(
+				e -> e.getEntity().equals("ReferencedObject") && e.getMessage().startsWith("S_001"))
+				.toList().get(1);
 
 		assertEquals("ReferencedObject", empty.getEntity());
 		assertEquals(1, empty.getProperties().size());
@@ -462,9 +440,9 @@ public class XmlValidationTest {
 		assertSame(empty.getType(), FaultType.IS_EMPTY);
 		assertSame(empty.getLevel(), FaultLevel.ERROR);
 
-		empty = errors.stream().filter(e -> e.getEntity().equals("ReferencedObject")
-				&& e.getMessage()
-				.startsWith("S_001")).toList().get(2);
+		empty = errors.stream().filter(
+				e -> e.getEntity().equals("ReferencedObject") && e.getMessage().startsWith("S_001"))
+				.toList().get(2);
 
 		assertEquals("ReferencedObject", empty.getEntity());
 		assertEquals(1, empty.getProperties().size());

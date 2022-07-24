@@ -63,8 +63,7 @@ public class RequestResponseLoggingFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 
 		if (log.isInfoEnabled()) {
-			log.info("{} - REST Request {} : {}", counter, req.getMethod(),
-					req.getRequestURI());
+			log.info("{} - REST Request {} : {}", counter, req.getMethod(), req.getRequestURI());
 		}
 
 		chain.doFilter(request, response);

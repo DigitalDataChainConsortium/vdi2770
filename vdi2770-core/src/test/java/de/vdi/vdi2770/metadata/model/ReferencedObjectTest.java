@@ -71,9 +71,9 @@ public class ReferencedObjectTest {
 	@Test
 	public void validSimple() {
 
-		final ReferencedObject reference = new ReferencedObject(
-				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
-						RefType.SERIAL_NUMBER)), List.of(createParty()));
+		final ReferencedObject reference = new ReferencedObject(List.of(
+				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
+				List.of(createParty()));
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
@@ -110,9 +110,8 @@ public class ReferencedObjectTest {
 	@Test
 	public void emptyParties() {
 
-		final ReferencedObject reference = new ReferencedObject(
-				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
-						RefType.SERIAL_NUMBER)),
+		final ReferencedObject reference = new ReferencedObject(List.of(
+				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
 				new ArrayList<>());
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
@@ -135,9 +134,8 @@ public class ReferencedObjectTest {
 	@Test
 	public void nullParties() {
 
-		final ReferencedObject reference = new ReferencedObject(
-				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
-						RefType.SERIAL_NUMBER)),
+		final ReferencedObject reference = new ReferencedObject(List.of(
+				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
 				null);
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
@@ -237,12 +235,11 @@ public class ReferencedObjectTest {
 	@Test
 	public void duplicateIndividualIds() {
 
-		final ReferencedObject reference = new ReferencedObject(
-				Arrays.asList(
-						new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
-								RefType.SERIAL_NUMBER),
-						new ObjectId(ObjectType.Individual, "471211", Boolean.FALSE,
-								RefType.SERIAL_NUMBER)), List.of(createParty(Role.Manufacturer)));
+		final ReferencedObject reference = new ReferencedObject(Arrays.asList(
+				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER),
+				new ObjectId(ObjectType.Individual, "471211", Boolean.FALSE,
+						RefType.SERIAL_NUMBER)),
+				List.of(createParty(Role.Manufacturer)));
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 

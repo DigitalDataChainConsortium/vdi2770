@@ -70,7 +70,8 @@ class MarshalUtils {
 	/**
 	 * Generate XML file including schema location for VDI 2770 XML schema file.
 	 *
-	 * @param enable If True, schema location will be generated in the XML schema file.
+	 * @param enable If True, schema location will be generated in the XML schema
+	 *               file.
 	 */
 	public void setEnableSchemaLocation(final boolean enable) {
 		this.enableSchemaLocation = enable;
@@ -167,8 +168,8 @@ class MarshalUtils {
 	 * @param errorHandler A VDI 2770 validation error handler that collects
 	 *                     warnings and error messages during XML validation.
 	 * @return The validator instance.
-	 * @throws SAXException There was an error while instantiate and configure
-	 * the XML validator
+	 * @throws SAXException There was an error while instantiate and configure the
+	 *                      XML validator
 	 */
 	public Validator getValidator(final VdiValidationErrorHandler errorHandler)
 			throws SAXException {

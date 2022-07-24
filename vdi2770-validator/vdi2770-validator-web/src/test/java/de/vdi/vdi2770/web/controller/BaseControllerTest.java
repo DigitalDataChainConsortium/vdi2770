@@ -107,8 +107,7 @@ public class BaseControllerTest {
 				getHeaders(languages));
 
 		final String serverUrl = "http://localhost:" + port + "/rest/report";
-		return this.restTemplate.postForEntity(serverUrl, requestEntity,
-				Report.class);
+		return this.restTemplate.postForEntity(serverUrl, requestEntity, Report.class);
 	}
 
 }

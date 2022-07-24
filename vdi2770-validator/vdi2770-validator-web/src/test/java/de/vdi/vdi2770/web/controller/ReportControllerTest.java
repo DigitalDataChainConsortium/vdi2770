@@ -93,8 +93,7 @@ public class ReportControllerTest extends BaseControllerTest {
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData,
 				headers);
 		final String serverUrl = "http://localhost:" + this.port + "/rest/reportpdf";
-		return this.restTemplate.exchange(serverUrl, HttpMethod.POST,
-				requestEntity, byte[].class);
+		return this.restTemplate.exchange(serverUrl, HttpMethod.POST, requestEntity, byte[].class);
 	}
 
 	/**

@@ -61,7 +61,7 @@ public class LocalDateAdapter extends XmlAdapter<String, LocalDate> {
 	 * @return Formatted date as {@link String}
 	 */
 	@Override
-	public String marshal(final LocalDate v)  {
+	public String marshal(final LocalDate v) {
 
 		if (v == null) {
 			return null;

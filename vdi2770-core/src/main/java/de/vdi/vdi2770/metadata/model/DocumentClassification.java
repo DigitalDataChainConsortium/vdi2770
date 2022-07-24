@@ -152,9 +152,8 @@ public class DocumentClassification implements ModelEntity {
 					Fields.className, locale, strict));
 
 			// check for duplicate languages
-			if (this.className.stream().map(
-							TranslatableString::getLanguage).collect(Collectors.toSet())
-					.size() != this.className.size()) {
+			if (this.className.stream().map(TranslatableString::getLanguage)
+					.collect(Collectors.toSet()).size() != this.className.size()) {
 				final ValidationFault fault = new ValidationFault(ENTITY, Fields.className, parent,
 						FaultLevel.ERROR, FaultType.HAS_DUPLICATE_VALUE);
 				fault.setMessage(bundle.getString(ENTITY + "_VAL1"));

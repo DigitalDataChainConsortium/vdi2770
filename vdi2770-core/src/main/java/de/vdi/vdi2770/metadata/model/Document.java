@@ -245,8 +245,9 @@ public class Document implements ModelEntity {
 	public boolean isMainDocument() {
 
 		final Optional<DigitalFile> mainDocumentFile = this.documentVersion.stream()
-				.map(DocumentVersion::getDigitalFile).flatMap(Collection::stream).filter(d -> StringUtils
-						.equalsIgnoreCase(d.getFileName(), FileNames.MAIN_DOCUMENT_PDF_FILE_NAME))
+				.map(DocumentVersion::getDigitalFile).flatMap(Collection::stream)
+				.filter(d -> StringUtils.equalsIgnoreCase(d.getFileName(),
+						FileNames.MAIN_DOCUMENT_PDF_FILE_NAME))
 				.findFirst();
 
 		return mainDocumentFile.isPresent();
@@ -286,8 +287,7 @@ public class Document implements ModelEntity {
 			if (this.documentId.size() >= 2) {
 
 				// exact one id must be primary
-				if (this.documentId.stream().filter(DocumentId::getIsPrimary)
-						.count() != 1) {
+				if (this.documentId.stream().filter(DocumentId::getIsPrimary).count() != 1) {
 					final ValidationFault fault = new ValidationFault(ENTITY, Fields.documentId,
 							parent, FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 					fault.setMessage(bundle.getString(ENTITY + "_VAL1"));
@@ -321,9 +321,8 @@ public class Document implements ModelEntity {
 
 			// No classification according to VDI 2770 given?
 			if (this.documentClassification.stream()
-					.map(DocumentClassification::getClassificationSystem).noneMatch(
-							s -> StringUtils.equals(s,
-									Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))) {
+					.map(DocumentClassification::getClassificationSystem).noneMatch(s -> StringUtils
+							.equals(s, Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Fields.documentClassification, parent, FaultLevel.ERROR,
 						FaultType.HAS_INVALID_VALUE);
@@ -333,8 +332,8 @@ public class Document implements ModelEntity {
 
 			// We recommend to classify the document according to IEC 61355
 			if (this.documentClassification.stream()
-					.map(DocumentClassification::getClassificationSystem)
-					.noneMatch(s -> StringUtils.equals(s, Constants.IEC61355_CLASSIFICATION_NAME))) {
+					.map(DocumentClassification::getClassificationSystem).noneMatch(
+							s -> StringUtils.equals(s, Constants.IEC61355_CLASSIFICATION_NAME))) {
 				final ValidationFault fault = new ValidationFault(ENTITY,
 						Fields.documentClassification, parent, FaultLevel.INFORMATION,
 						FaultType.IS_INCONSISTENT);
@@ -373,7 +372,8 @@ public class Document implements ModelEntity {
 	/**
 	 * Validate relationships of a {@link Document}.
 	 *
-	 * @param otherDocuments A {@link List} of other {@link Document}s (may be empty).
+	 * @param otherDocuments A {@link List} of other {@link Document}s (may be
+	 *                       empty).
 	 * @param isMainDocument If <code>true</code>, the source {@link Document} is a
 	 *                       main document.
 	 * @param locale         Desired {@link Locale} for validation messages.
@@ -459,8 +459,9 @@ public class Document implements ModelEntity {
 		final ResourceBundle bundle = ResourceBundle.getBundle("i8n.metadata", locale);
 
 		// list of known IDs contains documentId?
-		if (knownDocumentIds.stream().noneMatch(
-				id -> StringUtils.equalsIgnoreCase(StringRepresentations.documentIdAsText(id),
+		if (knownDocumentIds.stream()
+				.noneMatch(id -> StringUtils.equalsIgnoreCase(
+						StringRepresentations.documentIdAsText(id),
 						StringRepresentations.documentIdAsText(documentId)))) {
 
 			final Optional<ValidationFault> fault = Optional
@@ -483,9 +484,8 @@ public class Document implements ModelEntity {
 			return null;
 		}
 
-		List<ObjectId> objectIds = this.getReferencedObject().stream().map(
-						ReferencedObject::getObjectId)
-				.flatMap(Collection::stream).toList();
+		List<ObjectId> objectIds = this.getReferencedObject().stream()
+				.map(ReferencedObject::getObjectId).flatMap(Collection::stream).toList();
 
 		List<ObjectId> parentObjectIds = parent.getReferencedObject().stream()
 				.map(ReferencedObject::getObjectId).flatMap(Collection::stream).toList();

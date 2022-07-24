@@ -170,12 +170,14 @@ public class XmlUtils {
 	/**
 	 * Get an XML reader instance
 	 *
-	 * <p>The reader instance is namespace aware.</p>
+	 * <p>
+	 * The reader instance is namespace aware.
+	 * </p>
 	 *
 	 * @return A configured Java SAX {@link XMLReader} instance.
-	 * @throws ParserConfigurationException if a parser cannot be created which satisfies
-	 * the requested configuration.
-	 * @throws SAXException for SAX errors
+	 * @throws ParserConfigurationException if a parser cannot be created which
+	 *                                      satisfies the requested configuration.
+	 * @throws SAXException                 for SAX errors
 	 */
 	public XMLReader getXmlReader() throws ParserConfigurationException, SAXException {
 

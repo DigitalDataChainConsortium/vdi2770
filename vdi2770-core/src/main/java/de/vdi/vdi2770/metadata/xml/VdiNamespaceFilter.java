@@ -56,7 +56,7 @@ public class VdiNamespaceFilter extends XMLFilterImpl {
 	 * Filter a start document event.
 	 *
 	 * @throws org.xml.sax.SAXException The client may throw an exception during
-	 *                                     processing.
+	 *                                  processing.
 	 */
 	@Override
 	public void startDocument() throws SAXException {
@@ -89,7 +89,7 @@ public class VdiNamespaceFilter extends XMLFilterImpl {
 	 * @param qName     The element's qualified (prefixed) name, or the empty
 	 *                  string.
 	 * @throws org.xml.sax.SAXException The client may throw an exception during
-	 *                                     processing.
+	 *                                  processing.
 	 */
 	@Override
 	public void endElement(String uri, String localName, String qName) throws SAXException {
@@ -103,7 +103,7 @@ public class VdiNamespaceFilter extends XMLFilterImpl {
 	 * @param prefix The Namespace prefix.
 	 * @param uri    The Namespace URI.
 	 * @throws org.xml.sax.SAXException The client may throw an exception during
-	 *                                     processing.
+	 *                                  processing.
 	 */
 	@Override
 	public void startPrefixMapping(String prefix, String uri) throws SAXException {
