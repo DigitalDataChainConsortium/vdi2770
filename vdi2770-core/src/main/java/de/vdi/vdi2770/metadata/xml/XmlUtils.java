@@ -38,6 +38,7 @@ import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 import javax.xml.transform.sax.SAXSource;
 
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -56,6 +57,7 @@ import com.google.common.base.Strings;
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
  */
+@Log4j2
 public class XmlUtils {
 
 	private final ResourceBundle bundle;
@@ -93,7 +95,7 @@ public class XmlUtils {
 
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(filePath),
 				"The given path is null or empty");
-		Preconditions.checkArgument(document != null, "Can not save a docment that is null");
+		Preconditions.checkArgument(document != null, "Can not save a document that is null");
 
 		final File file = new File(filePath);
 
@@ -113,7 +115,7 @@ public class XmlUtils {
 			throws XmlProcessingException {
 
 		Preconditions.checkArgument(file != null, "The given file is null");
-		Preconditions.checkArgument(document != null, "Can not save a docment that is null");
+		Preconditions.checkArgument(document != null, "Can not save a document that is null");
 
 		if (file.isDirectory()) {
 			throw new XmlProcessingException(this.bundle.getString("XmlUtils_EX2"));
@@ -123,8 +125,14 @@ public class XmlUtils {
 			final String basePath = file.getAbsoluteFile().getParent();
 
 			final URL inputUrl = XmlUtils.class.getResource("/vdi2770.xsd");
-			final File xsdFile = new File(basePath, "vdi2770.xsd");
+			if (inputUrl == null) {
+				if (log.isWarnEnabled()) {
+					log.warn("Can not read vdi2770.xsd file from resource. InputUrl is null.");
+				}
+				throw new XmlProcessingException(this.bundle.getString("XmlUtils_EX6"));
+			}
 
+			final File xsdFile = new File(basePath, "vdi2770.xsd");
 			try {
 				FileUtils.copyURLToFile(inputUrl, xsdFile);
 			} catch (final IOException e) {
@@ -133,7 +141,7 @@ public class XmlUtils {
 		}
 
 		try {
-			final Marshaller jaxbMarshaller = getMarshaler();
+			final Marshaller jaxbMarshaller = getMarshaller();
 
 			if (exportXsd) {
 				jaxbMarshaller.setProperty(Marshaller.JAXB_SCHEMA_LOCATION,
@@ -148,11 +156,11 @@ public class XmlUtils {
 	}
 
 	/**
-	 * Get a XML marshaler instance.
+	 * Get an XML marshaller instance.
 	 *
-	 * @return A marshaler
+	 * @return A marshaller
 	 */
-	private Marshaller getMarshaler() throws XmlProcessingException {
+	private Marshaller getMarshaller() throws XmlProcessingException {
 
 		final MarshalUtils utils = new MarshalUtils(this.locale);
 
@@ -160,11 +168,14 @@ public class XmlUtils {
 	}
 
 	/**
-	 * Get a XML reader instance
-	 * 
-	 * @return
-	 * @throws ParserConfigurationException
-	 * @throws SAXException
+	 * Get an XML reader instance
+	 *
+	 * <p>The reader instance is namespace aware.</p>
+	 *
+	 * @return A configured Java SAX {@link XMLReader} instance.
+	 * @throws ParserConfigurationException if a parser cannot be created which satisfies
+	 * the requested configuration.
+	 * @throws SAXException for SAX errors
 	 */
 	public XMLReader getXmlReader() throws ParserConfigurationException, SAXException {
 
@@ -177,7 +188,7 @@ public class XmlUtils {
 	/**
 	 * Get an instance of Dozer Mapper.
 	 *
-	 * @return A {@link Mapper} to convert between JAXB POJOs ans the entities of
+	 * @return A {@link Mapper} to convert between JAXB POJOs and the entities of
 	 *         the information model.
 	 * @throws XmlProcessingException The mapping could not be read.
 	 */
@@ -209,7 +220,7 @@ public class XmlUtils {
 		Preconditions.checkArgument(doc != null, "doc is null");
 
 		try {
-			final Marshaller jaxbMarshaller = getMarshaler();
+			final Marshaller jaxbMarshaller = getMarshaller();
 
 			final StringWriter writer = new StringWriter();
 			jaxbMarshaller.marshal(doc, writer);
@@ -221,7 +232,7 @@ public class XmlUtils {
 	}
 
 	/**
-	 * Read a XML metadata stream and return the {@link Document} POJO. While
+	 * Read an XML metadata stream and return the {@link Document} POJO. While
 	 * reading, the XML is validated according to the specification of the VDI 2770
 	 * DTD. There is no logical validation.
 	 *
@@ -275,7 +286,7 @@ public class XmlUtils {
 	}
 
 	/**
-	 * Read a XML document and convert the information according to the information
+	 * Read an XML document and convert the information according to the information
 	 * model.
 	 *
 	 * @param stream A file input stream of an XML file.
@@ -287,7 +298,7 @@ public class XmlUtils {
 	public de.vdi.vdi2770.metadata.model.Document readXml(final InputStream stream)
 			throws XmlProcessingException {
 
-		// unmarshal the stream as JAXB Document class intance
+		// unmarshal the stream as JAXB Document class instance
 		final Document document = readXmlRaw(stream);
 
 		// map to POJO representation using dozermapper

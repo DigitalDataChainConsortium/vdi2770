@@ -21,6 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.Arrays;
@@ -60,7 +62,7 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 
 	}
 
@@ -80,12 +82,12 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 		assertTrue(faults.get(0).getProperties().contains(DocumentDescription.Fields.language));
 
 	}
@@ -106,12 +108,12 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.IS_EMPTY);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.IS_EMPTY);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 		assertTrue(faults.get(0).getProperties().contains(DocumentDescription.Fields.title));
 
 	}
@@ -132,18 +134,18 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.IS_EMPTY);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.IS_EMPTY);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 		assertTrue(faults.get(0).getProperties().contains(DocumentDescription.Fields.summary));
 
 	}
 
 	/**
-	 * Invalid description key words test.
+	 * Invalid description keywords test.
 	 */
 	@Test
 	public void invalidKeywordsTest() {
@@ -157,18 +159,18 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.IS_EMPTY);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.IS_EMPTY);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 		assertTrue(faults.get(0).getProperties().contains(DocumentDescription.Fields.keyWords));
 
 	}
 
 	/**
-	 * Duplicate description key words test.
+	 * Duplicate description keywords test.
 	 */
 	@Test
 	public void duplicateKeywordsTest() {
@@ -183,12 +185,12 @@ public class DocumentDescriptionTest {
 
 		final List<ValidationFault> faults = description.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.HAS_DUPLICATE_VALUE);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.HAS_DUPLICATE_VALUE);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 		assertTrue(faults.get(0).getProperties().contains(DocumentDescription.Fields.keyWords));
 
 	}

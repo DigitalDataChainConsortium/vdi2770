@@ -36,7 +36,7 @@ import lombok.ToString;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(includeFieldNames = true, callSuper = true)
+@ToString(callSuper = true)
 public class XmlValidationFault extends Fault {
 
 	/**

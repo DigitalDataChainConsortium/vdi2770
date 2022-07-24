@@ -1,16 +1,16 @@
 /*******************************************************************************
  * Copyright (C) 2021 Johannes Schmidt
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
  * in the Software without restriction, including without limitation the rights
  * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
  * copies of the Software, and to permit persons to whom the Software is
  * furnished to do so, subject to the following conditions:
- * 
+ *
  * The above copyright notice and this permission notice shall be included in
  * all copies or substantial portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
@@ -51,13 +50,13 @@ import lombok.extern.log4j.Log4j2;
  * specifications of VDI 2770 guideline.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
- *         Informatics InfAI)
+ * Informatics InfAI)
  */
 @Log4j2
 public class XmlReader {
 
 	private final ResourceBundle bundle;
-	private Locale locale;
+	private final Locale locale;
 
 	/**
 	 * ctor
@@ -74,8 +73,8 @@ public class XmlReader {
 	 * Check, whether a file is a metadata file for a main document.
 	 *
 	 * @param file A file to be checked; must not be <code>null</code>
-	 * @return <code>true</code>, if the given file is a XML meta data file for a
-	 *         main document.
+	 * @return <code>true</code>, if the given file is an XML metadata file for a
+	 * main document.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public boolean isMetadataFileForMainDocument(final File file) {
@@ -84,12 +83,7 @@ public class XmlReader {
 		Preconditions.checkArgument(file.isFile(), "The given file is not a file");
 
 		// file must be named according to the VDI 2770 specification
-		if (!StringUtils.equals(file.getName(), FileNames.MAIN_DOCUMENT_XML_FILE_NAME)) {
-
-			return false;
-		}
-
-		return true;
+		return StringUtils.equals(file.getName(), FileNames.MAIN_DOCUMENT_XML_FILE_NAME);
 	}
 
 	/**
@@ -97,7 +91,7 @@ public class XmlReader {
 	 *
 	 * @param file A file to be checked; must not be <code>null</code>
 	 * @return <code>true</code>, if the given file is a XML meta data file for a
-	 *         document.
+	 * document.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public boolean isMetadataFileForDocument(final File file) {
@@ -106,18 +100,14 @@ public class XmlReader {
 		Preconditions.checkArgument(file.isFile(), "The given file is not a file");
 
 		// file must be named according to the VDI 2770 specification
-		if (!StringUtils.equals(file.getName(), FileNames.METADATA_XML_FILE_NAME)) {
-			return false;
-		}
-
-		return true;
+		return StringUtils.equals(file.getName(), FileNames.METADATA_XML_FILE_NAME);
 	}
 
 	/**
 	 * Check, whether a file is a metadata file.
 	 *
 	 * @param file A file to be checked; must not be <code>null</code>
-	 * @return <code>true</code>, if the given file is a XML meta data file.
+	 * @return <code>true</code>, if the given file is an XML metadata file.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public boolean isMetadataFile(final File file) {
@@ -148,7 +138,7 @@ public class XmlReader {
 	/**
 	 * Validate a given XML file that contains meta data according to VDI 2770.
 	 *
-	 * @param xmlFile A XML file to be checked; must not be <code>null</code>
+	 * @param xmlFile AN XML file to be checked; must not be <code>null</code>
 	 * @return List of {@link XmlValidationFault}s
 	 * @throws XmlProcessingException   There was an error reading the XML file.
 	 * @throws IllegalArgumentException The given file is not a file.
@@ -197,7 +187,7 @@ public class XmlReader {
 			XmlValidationFault fault = new XmlValidationFault(FaultLevel.ERROR, e.getLineNumber(),
 					e.getColumnNumber());
 			fault.setMessage(e.getLocalizedMessage());
-			return Arrays.asList(fault);
+			return List.of(fault);
 		} catch (final Exception e) {
 			throw new XmlProcessingException(
 					MessageFormat.format(this.bundle.getString("XmlReader_EX4"), xmlFile), e);
@@ -207,10 +197,10 @@ public class XmlReader {
 	/**
 	 * Try to read an XML file. In case of an Exception, return <code>null</code>.
 	 *
-	 * @see XmlReader#read(File)
 	 * @param file A file representing XML metadata; must not be <code>null</code>.
 	 * @return a {@link de.vdi.vdi2770.metadata.model.Document} or
-	 *         <code>null</code>.
+	 * <code>null</code>.
+	 * @see XmlReader#read(File)
 	 */
 	public de.vdi.vdi2770.metadata.model.Document tryRead(final File file) {
 
@@ -226,14 +216,14 @@ public class XmlReader {
 	}
 
 	/**
-	 * Read a XML metadata file and return the {@link Document} POJO. While reading,
-	 * the XML is validated according to the specification of the VDI 2770 DTD.
+	 * Read an XML metadata file and return the {@link de.vdi.vdi2770.metadata.model.Document} POJO.
+	 * While reading, the XML is validated according to the specification of the VDI 2770 DTD.
 	 * There is no logical validation.
 	 *
 	 * @param xmlFile A file representing XML metadata; must not be
 	 *                <code>null</code>.
-	 * @return A new instance of {@link Document} which is the POJO representation
-	 *         of the XML file.
+	 * @return A new instance of {@link de.vdi.vdi2770.metadata.model.Document} which is the POJO
+	 * representation of the XML file.
 	 * @throws XmlProcessingException   There was an error reading the XML stream.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */

@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.List;
 import java.util.Locale;
@@ -67,9 +68,9 @@ public class PartyTest {
 
 		final List<ValidationFault> faults = party.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -85,17 +86,17 @@ public class PartyTest {
 
 		final List<ValidationFault> faults = party.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "Party");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == Party.Fields.role);
-		assertTrue(fault.getType() == FaultType.IS_NULL);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("Party", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(Party.Fields.role, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_NULL);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -109,24 +110,24 @@ public class PartyTest {
 
 		final List<ValidationFault> faults = party.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "Party");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == Party.Fields.organization);
-		assertTrue(fault.getType() == FaultType.IS_NULL);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("Party", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(Party.Fields.organization, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_NULL);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
 	 * Empty organization official name in party test.
 	 */
 	@Test
-	public void missingOrganiziationOfficialName() {
+	public void missingOrganizationOfficialName() {
 
 		final Party party = new Party();
 		party.setRole(Role.Author);
@@ -139,17 +140,17 @@ public class PartyTest {
 
 		final List<ValidationFault> faults = party.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "Organization");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == Organization.Fields.organizationOfficialName);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("Organization", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(Organization.Fields.organizationOfficialName, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 }

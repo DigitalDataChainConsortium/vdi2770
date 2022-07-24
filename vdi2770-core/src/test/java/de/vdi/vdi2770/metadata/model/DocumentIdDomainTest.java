@@ -21,6 +21,7 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -57,9 +58,9 @@ public class DocumentIdDomainTest {
 
 		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -78,9 +79,9 @@ public class DocumentIdDomainTest {
 
 		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 	}
 
 	/**
@@ -94,9 +95,9 @@ public class DocumentIdDomainTest {
 
 		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 	}
 
 	/**
@@ -115,10 +116,10 @@ public class DocumentIdDomainTest {
 
 		final List<ValidationFault> faults = domain.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		log.info(faults.get(0).getMessage());
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 	}
 }

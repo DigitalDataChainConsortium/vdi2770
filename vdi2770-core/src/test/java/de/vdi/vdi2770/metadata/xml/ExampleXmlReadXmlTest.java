@@ -24,7 +24,6 @@ package de.vdi.vdi2770.metadata.xml;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
-import java.io.FilenameFilter;
 import java.util.List;
 import java.util.Locale;
 
@@ -47,19 +46,14 @@ public class ExampleXmlReadXmlTest {
 	/**
 	 * Read all example XML files.
 	 *
-	 * @throws XmlProcessingException
+	 * @throws XmlProcessingException Error while reading an VDI 2770 metadata file
 	 */
 	@Test
 	public void readXmlExamples() throws XmlProcessingException {
 
-		final File dir = new File(EXAMPLES_FOLDER);
-		final File[] xmlFiles = dir.listFiles(new FilenameFilter() {
-			@Override
-			public boolean accept(final File dir, final String name) {
-				return name.toLowerCase().endsWith(".xml")
-						&& !name.toLowerCase().contains("invalid");
-			}
-		});
+		final File folder = new File(EXAMPLES_FOLDER);
+		final File[] xmlFiles = folder.listFiles((dir, name) -> name.toLowerCase().endsWith(".xml")
+				&& !name.toLowerCase().contains("invalid"));
 
 		if (xmlFiles != null && xmlFiles.length > 0) {
 			for (final File xmlFile : xmlFiles) {
@@ -70,12 +64,12 @@ public class ExampleXmlReadXmlTest {
 				final List<ValidationFault> strictErrors = xmlDocument.validate(Locale.getDefault(),
 						true);
 				assertTrue(strictErrors.size() == 0 || strictErrors.stream()
-						.filter(f -> f.getLevel() == FaultLevel.ERROR).count() == 0);
+						.noneMatch(f -> f.getLevel() == FaultLevel.ERROR));
 
 				final List<ValidationFault> NonStrictErrors = xmlDocument
 						.validate(Locale.getDefault(), false);
 				assertTrue(NonStrictErrors.size() == 0 || NonStrictErrors.stream()
-						.filter(f -> f.getLevel() == FaultLevel.ERROR).count() == 0);
+						.noneMatch(f -> f.getLevel() == FaultLevel.ERROR));
 			}
 		}
 	}

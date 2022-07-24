@@ -78,7 +78,7 @@ public class DemoXml {
 	}
 
 	/**
-	 * Create a new XML file that is conform to the requirements of VDI 2770.
+	 * Create a new XML file that conforms to the requirements of VDI 2770.
 	 *
 	 * @param outputFile XML file to create.
 	 * @throws MetadataException There was an error creating the XML file.
@@ -88,7 +88,7 @@ public class DemoXml {
 	}
 
 	/**
-	 * Create a new XML file that is conform to the requirements of VDI 2770.
+	 * Create a new XML file that conforms to the requirements of VDI 2770.
 	 *
 	 * @param outputFile XML file to create
 	 * @param exportXsd  Create XSD file locally to ensure validation.
@@ -107,7 +107,7 @@ public class DemoXml {
 	}
 
 	/**
-	 * Get a demo document as POJO that is conform to VDI 2770 specification. The
+	 * Get a demo document as POJO that conforms to VDI 2770 specification. The
 	 * POJOs are annotated to create XML objects.
 	 *
 	 * @return An instance of {@link Document} that is filled with demo values.

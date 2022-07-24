@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.Arrays;
 import java.util.List;
@@ -45,7 +46,7 @@ public class DocumentRelationshipTest {
 	private final Locale locale = Locale.getDefault();
 
 	/**
-	 * Valid relaton test.
+	 * Valid relation test.
 	 */
 	@Test
 	public void validTest() {
@@ -68,9 +69,9 @@ public class DocumentRelationshipTest {
 
 		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -95,9 +96,9 @@ public class DocumentRelationshipTest {
 
 		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -119,9 +120,9 @@ public class DocumentRelationshipTest {
 
 		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -138,15 +139,15 @@ public class DocumentRelationshipTest {
 
 		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentRelationship");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentRelationship.Fields.documentId);
-		assertTrue(fault.getType() == FaultType.IS_NULL);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentRelationship", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentRelationship.Fields.documentId, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_NULL);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -166,15 +167,15 @@ public class DocumentRelationshipTest {
 
 		final List<ValidationFault> faults = relation.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentRelationship");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentRelationship.Fields.type);
-		assertTrue(fault.getType() == FaultType.IS_NULL);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentRelationship", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentRelationship.Fields.type, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_NULL);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 }

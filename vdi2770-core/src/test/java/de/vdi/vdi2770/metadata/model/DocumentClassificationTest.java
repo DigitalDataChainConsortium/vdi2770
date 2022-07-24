@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.List;
 import java.util.Locale;
@@ -53,9 +54,9 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -79,9 +80,9 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -94,17 +95,17 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentClassification");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "classId");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentClassification", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("classId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -117,17 +118,17 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentClassification");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "classificationSystem");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentClassification", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("classificationSystem", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -140,9 +141,9 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 2);
+		assertEquals(2, faults.size());
 	}
 
 	/**
@@ -156,17 +157,17 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentClassification");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "classId");
-		assertTrue(fault.getType() == FaultType.IS_INCONSISTENT);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentClassification", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("classId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_INCONSISTENT);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -183,9 +184,9 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -202,17 +203,17 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentClassification");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "className");
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentClassification", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("className", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -231,17 +232,17 @@ public class DocumentClassificationTest {
 
 		final List<ValidationFault> faults = system.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentClassification");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "className");
-		assertTrue(fault.getType() == FaultType.HAS_DUPLICATE_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentClassification", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("className", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_DUPLICATE_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	@Test
@@ -255,13 +256,13 @@ public class DocumentClassificationTest {
 
 		// strict mode enabled
 		List<ValidationFault> faults = system.validate(this.locale, true);
-		faults.stream().forEach(f -> log.debug(f.toString()));
-		assertTrue(faults.size() == 1);
+		faults.forEach(f -> log.debug(f.toString()));
+		assertEquals(1, faults.size());
 
 		// strict mode disabled
 		faults = system.validate(this.locale, false);
-		faults.stream().forEach(f -> log.debug(f.toString()));
-		assertTrue(faults.size() == 0);
+		faults.forEach(f -> log.debug(f.toString()));
+		assertEquals(0, faults.size());
 	}
 
 }

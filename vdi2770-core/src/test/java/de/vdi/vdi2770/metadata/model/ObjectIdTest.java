@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.List;
 import java.util.Locale;
@@ -57,9 +58,9 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -76,9 +77,9 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -94,9 +95,9 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -111,9 +112,9 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -128,17 +129,17 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ObjectId");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == ObjectId.Fields.id);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ObjectId", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(ObjectId.Fields.id, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -153,17 +154,17 @@ public class ObjectIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ObjectId");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == ObjectId.Fields.objectType);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ObjectId", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(ObjectId.Fields.objectType, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 }

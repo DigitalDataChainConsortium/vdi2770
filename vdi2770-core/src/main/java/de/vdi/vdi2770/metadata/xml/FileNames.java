@@ -52,11 +52,11 @@ public class FileNames {
 	public static final String MAIN_DOCUMENT_PDF_FILE_NAME = "VDI2770_Main.pdf";
 
 	/**
-	 * Check, whether the name of a given {@link File} is conform to the name of a
+	 * Check, whether the name of a given {@link File} conforms to the name of a
 	 * PDF main document.
 	 *
 	 * @param file A file to be checked.
-	 * @return <code>true</code>, if the file name is conform to the specification.
+	 * @return <code>true</code>, if the file name conforms to the specification.
 	 * @throws IllegalArgumentException The given file is <code>null</code>.
 	 */
 	public static boolean isPdfMainDocument(final File file) {
@@ -68,11 +68,11 @@ public class FileNames {
 	}
 
 	/**
-	 * Check, whether the name of a given {@link File} is conform to the name of a
+	 * Check, whether the name of a given {@link File} conforms to the name of a
 	 * VDI 2770 metadata file.
 	 *
 	 * @param file A file to be checked.
-	 * @return <code>true</code>, if the file name is conform to the specification.
+	 * @return <code>true</code>, if the file name conforms to the specification.
 	 * @throws IllegalArgumentException The given file is <code>null</code> or does
 	 *                                  not exist.
 	 */
@@ -90,7 +90,7 @@ public class FileNames {
 	 * document.
 	 *
 	 * @param file A file to be checked.
-	 * @return <code>true</code>, if the file name is conform to the specification.
+	 * @return <code>true</code>, if the file name conforms to the specification.
 	 * @throws IllegalArgumentException The given file is <code>null</code>.
 	 */
 	public static boolean isMainDocumentMetadataFile(final File file) {

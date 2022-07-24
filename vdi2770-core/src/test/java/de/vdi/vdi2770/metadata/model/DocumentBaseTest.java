@@ -79,7 +79,7 @@ class DocumentBaseTest {
 		version.addLanguage("de");
 		version.addLanguage("en");
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		version.addParty(getTestAuthor());
 		version.setDocumentDescription(getTestDescriptions());

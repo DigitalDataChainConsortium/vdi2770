@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import java.util.Arrays;
@@ -63,9 +64,9 @@ public class DocumentTest extends DocumentBaseTest {
 
 		final List<ValidationFault> faults = doc.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 
 	}
 
@@ -81,17 +82,17 @@ public class DocumentTest extends DocumentBaseTest {
 
 		final List<ValidationFault> faults = doc.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "Document");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "documentId");
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("Document", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("documentId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 

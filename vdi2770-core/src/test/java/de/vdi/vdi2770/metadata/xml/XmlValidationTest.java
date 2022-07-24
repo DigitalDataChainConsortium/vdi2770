@@ -21,13 +21,15 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.xml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
 import java.util.List;
 import java.util.Locale;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
@@ -70,7 +72,7 @@ public class XmlValidationTest {
 
 		final List<XmlValidationFault> faults = reader.validate(xmlFile);
 
-		assertTrue(!Fault.hasWarnings(faults));
+		assertFalse(Fault.hasWarnings(faults));
 	}
 
 	@Test
@@ -82,382 +84,393 @@ public class XmlValidationTest {
 
 		final List<XmlValidationFault> faults = reader.validate(xmlFile);
 
-		assertTrue(!Fault.hasErrors(faults));
+		assertFalse(Fault.hasErrors(faults));
 
 		final Document xmlDocument = reader.read(xmlFile);
 
 		final List<ValidationFault> errors = xmlDocument.validate(Locale.getDefault(), true);
 
-		errors.stream().forEach(f -> log.debug(f.toString()));
+		errors.forEach(f -> log.debug(f.toString()));
 
 		Optional<ValidationFault> error = errors.stream()
 				.filter(e -> e.getMessage().startsWith("DI_001")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentId");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentId.Fields.domainId);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentId", error.get().getEntity());
+		assertEquals(error.get().getParent(), "Document");
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentId.Fields.domainId, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DI_002")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentId");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentId.Fields.id);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentId", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentId.Fields.id, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DV_005")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentVersion");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentVersion.Fields.documentVersionId);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentVersion", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentVersion.Fields.documentVersionId, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getEntity() == "DocumentVersion" && e.getMessage().startsWith("S_001"))
+				e -> e.getEntity().equals("DocumentVersion") && e.getMessage().startsWith("S_001"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentVersion.Fields.language);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentVersion", error.get().getEntity());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentVersion.Fields.language, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DV_007")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentVersion");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentVersion.Fields.language);
-		assertTrue(error.get().getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentVersion", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentVersion.Fields.language, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && e.getParent() == "DocumentVersion")
+				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
+						"DocumentVersion"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Organization.Fields.organizationName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("DocumentVersion", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationName, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && e.getParent() == "DocumentVersion")
+				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
+						"DocumentVersion"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(
-				error.get().getProperties().get(0) == Organization.Fields.organizationOfficialName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("DocumentVersion", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationOfficialName,
+				error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DD_001")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentDescription");
-		assertTrue(error.get().getParent() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentDescription.Fields.language);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentDescription", error.get().getEntity());
+		assertEquals("DocumentVersion", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentDescription.Fields.language, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DD_003")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentDescription");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentDescription.Fields.title);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentDescription", error.get().getEntity());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentDescription.Fields.title, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DD_004")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentDescription");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentDescription.Fields.summary);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentDescription", error.get().getEntity());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentDescription.Fields.summary, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("S_001") && e.getEntity() == "DocumentDescription")
+				e -> e.getMessage().startsWith("S_001") && e.getEntity()
+						.equals("DocumentDescription"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentDescription");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentDescription.Fields.keyWords);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentDescription", error.get().getEntity());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentDescription.Fields.keyWords, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && e.getParent() == "LifeCycleStatus")
+				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
+						"LifeCycleStatus"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "LifeCycleStatus");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Organization.Fields.organizationName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("LifeCycleStatus", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationName, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && e.getParent() == "LifeCycleStatus")
+				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
+						"LifeCycleStatus"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "LifeCycleStatus");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(
-				error.get().getProperties().get(0) == Organization.Fields.organizationOfficialName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("LifeCycleStatus", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationOfficialName,
+				error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DF_004")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DigitalFile");
-		assertTrue(error.get().getParent() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DigitalFile.Fields.fileName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DigitalFile", error.get().getEntity());
+		assertEquals("DocumentVersion", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DigitalFile.Fields.fileName, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DF_005")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DigitalFile");
-		assertTrue(error.get().getParent() == "DocumentVersion");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DigitalFile.Fields.fileFormat);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DigitalFile", error.get().getEntity());
+		assertEquals("DocumentVersion", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DigitalFile.Fields.fileFormat, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DV_003")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentVersion");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentVersion.Fields.digitalFile);
-		assertTrue(error.get().getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentVersion", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentVersion.Fields.digitalFile, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DC_005")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentClassification");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentClassification.Fields.classId);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentClassification", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentClassification.Fields.classId, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("TS_001")
-				&& e.getParent() == "DocumentClassification").findFirst();
+				&& StringUtils.equals(e.getParent(), "DocumentClassification")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "TranslatableString");
-		assertTrue(error.get().getParent() == "DocumentClassification");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == TranslatableString.Fields.text);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("TranslatableString", error.get().getEntity());
+		assertEquals("DocumentClassification", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(TranslatableString.Fields.text, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("TS_002")
-				&& e.getParent() == "DocumentClassification").findFirst();
+				&& StringUtils.equals(e.getParent(), "DocumentClassification")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "TranslatableString");
-		assertTrue(error.get().getParent() == "DocumentClassification");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == TranslatableString.Fields.language);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("TranslatableString", error.get().getEntity());
+		assertEquals("DocumentClassification", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(TranslatableString.Fields.language, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DC_006")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentClassification");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties()
-				.get(0) == DocumentClassification.Fields.classificationSystem);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentClassification", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentClassification.Fields.classificationSystem,
+				error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("D_002")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Document");
+		assertEquals("Document", error.get().getEntity());
 		assertTrue(StringUtils.isEmpty(error.get().getParent()));
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Document.Fields.documentClassification);
-		assertTrue(error.get().getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Document.Fields.documentClassification, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("D_003")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Document");
+		assertEquals("Document", error.get().getEntity());
 		assertTrue(StringUtils.isEmpty(error.get().getParent()));
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Document.Fields.documentClassification);
-		assertTrue(error.get().getType() == FaultType.IS_INCONSISTENT);
-		assertTrue(error.get().getLevel() == FaultLevel.INFORMATION);
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Document.Fields.documentClassification, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_INCONSISTENT);
+		assertSame(error.get().getLevel(), FaultLevel.INFORMATION);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("DID_002")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "DocumentIdDomain");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == DocumentIdDomain.Fields.documentDomainId);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("DocumentIdDomain", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(DocumentIdDomain.Fields.documentDomainId, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream()
-				.filter(e -> e.getMessage().startsWith("O_001") && e.getParent() == "Document")
+				.filter(e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
+						"Document"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Organization.Fields.organizationName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationName, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream()
-				.filter(e -> e.getMessage().startsWith("O_002") && e.getParent() == "Document")
+				.filter(e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
+						"Document"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(
-				error.get().getProperties().get(0) == Organization.Fields.organizationOfficialName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationOfficialName,
+				error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("OI_002")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "ObjectId");
-		assertTrue(error.get().getParent() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == ObjectId.Fields.id);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("ObjectId", error.get().getEntity());
+		assertEquals("ReferencedObject", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(ObjectId.Fields.id, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_001") && e.getParent() == "ReferencedObject")
+				e -> e.getMessage().startsWith("O_001") && StringUtils.equals(e.getParent(),
+						"ReferencedObject"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == Organization.Fields.organizationName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("ReferencedObject", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationName, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("O_002") && e.getParent() == "ReferencedObject")
+				e -> e.getMessage().startsWith("O_002") && StringUtils.equals(e.getParent(),
+						"ReferencedObject"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "Organization");
-		assertTrue(error.get().getParent() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(
-				error.get().getProperties().get(0) == Organization.Fields.organizationOfficialName);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("Organization", error.get().getEntity());
+		assertEquals("ReferencedObject", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(Organization.Fields.organizationOfficialName,
+				error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(e -> e.getMessage().startsWith("RO_002")).findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "ReferencedObject");
-		assertTrue(error.get().getParent() == "Document");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == ReferencedObject.Fields.party);
-		assertTrue(error.get().getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("ReferencedObject", error.get().getEntity());
+		assertEquals("Document", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(ReferencedObject.Fields.party, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("TS_001") && e.getParent() == "ReferencedObject")
+				e -> e.getMessage().startsWith("TS_001") && StringUtils.equals(e.getParent(),
+						"ReferencedObject"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "TranslatableString");
-		assertTrue(error.get().getParent() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == TranslatableString.Fields.text);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("TranslatableString", error.get().getEntity());
+		assertEquals("ReferencedObject", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(TranslatableString.Fields.text, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getMessage().startsWith("TS_002") && e.getParent() == "ReferencedObject")
+				e -> e.getMessage().startsWith("TS_002") && StringUtils.equals(e.getParent(),
+						"ReferencedObject"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "TranslatableString");
-		assertTrue(error.get().getParent() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == TranslatableString.Fields.language);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("TranslatableString", error.get().getEntity());
+		assertEquals("ReferencedObject", error.get().getParent());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(TranslatableString.Fields.language, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
 		error = errors.stream().filter(
-				e -> e.getEntity() == "ReferencedObject" && e.getMessage().startsWith("S_001"))
+				e -> e.getEntity().equals("ReferencedObject") && e.getMessage().startsWith("S_001"))
 				.findFirst();
 		assertTrue(error.isPresent());
 
-		assertTrue(error.get().getEntity() == "ReferencedObject");
-		assertTrue(error.get().getProperties().size() == 1);
-		assertTrue(error.get().getProperties().get(0) == ReferencedObject.Fields.projectId);
-		assertTrue(error.get().getType() == FaultType.IS_EMPTY);
-		assertTrue(error.get().getLevel() == FaultLevel.ERROR);
+		assertEquals("ReferencedObject", error.get().getEntity());
+		assertEquals(1, error.get().getProperties().size());
+		assertEquals(ReferencedObject.Fields.projectId, error.get().getProperties().get(0));
+		assertSame(error.get().getType(), FaultType.IS_EMPTY);
+		assertSame(error.get().getLevel(), FaultLevel.ERROR);
 
-		ValidationFault empty = errors.stream().filter(
-				e -> e.getEntity() == "ReferencedObject" && e.getMessage().startsWith("S_001"))
-				.collect(Collectors.toList()).get(1);
+		ValidationFault empty = errors.stream()
+				.filter(e -> e.getEntity().equals("ReferencedObject") && e.getMessage()
+						.startsWith("S_001")).toList().get(1);
 
-		assertTrue(empty.getEntity() == "ReferencedObject");
-		assertTrue(empty.getProperties().size() == 1);
-		assertTrue(empty.getProperties().get(0) == ReferencedObject.Fields.referenceDesignation);
-		assertTrue(empty.getType() == FaultType.IS_EMPTY);
-		assertTrue(empty.getLevel() == FaultLevel.ERROR);
+		assertEquals("ReferencedObject", empty.getEntity());
+		assertEquals(1, empty.getProperties().size());
+		assertEquals(ReferencedObject.Fields.referenceDesignation, empty.getProperties().get(0));
+		assertSame(empty.getType(), FaultType.IS_EMPTY);
+		assertSame(empty.getLevel(), FaultLevel.ERROR);
 
-		empty = errors.stream().filter(
-				e -> e.getEntity() == "ReferencedObject" && e.getMessage().startsWith("S_001"))
-				.collect(Collectors.toList()).get(2);
+		empty = errors.stream().filter(e -> e.getEntity().equals("ReferencedObject")
+				&& e.getMessage()
+				.startsWith("S_001")).toList().get(2);
 
-		assertTrue(empty.getEntity() == "ReferencedObject");
-		assertTrue(empty.getProperties().size() == 1);
-		assertTrue(empty.getProperties().get(0) == ReferencedObject.Fields.equipmentId);
-		assertTrue(empty.getType() == FaultType.IS_EMPTY);
-		assertTrue(empty.getLevel() == FaultLevel.ERROR);
+		assertEquals("ReferencedObject", empty.getEntity());
+		assertEquals(1, empty.getProperties().size());
+		assertEquals(ReferencedObject.Fields.equipmentId, empty.getProperties().get(0));
+		assertSame(empty.getType(), FaultType.IS_EMPTY);
+		assertSame(empty.getLevel(), FaultLevel.ERROR);
 	}
 
 }

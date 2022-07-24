@@ -23,6 +23,9 @@ package de.vdi.vdi2770.metadata.xml;
 
 import de.vdi.vdi2770.metadata.MetadataException;
 
+import java.io.IOException;
+import java.io.Serial;
+
 /**
  * This {@link Exception} indicates any error while processing an XML file. This
  * {@link Exception} might wrap {@link IOException}s or XML parsing errors.
@@ -32,6 +35,7 @@ import de.vdi.vdi2770.metadata.MetadataException;
  */
 public class XmlProcessingException extends MetadataException {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	/**

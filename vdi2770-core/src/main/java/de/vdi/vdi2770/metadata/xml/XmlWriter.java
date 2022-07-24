@@ -35,7 +35,7 @@ import de.vdi.vdi2770.metadata.model.Document;
 import de.vdi.vdi2770.metadata.model.ValidationFault;
 
 /**
- * This class contains functions to write XML files accoring to VDI 2770
+ * This class contains functions to write XML files according to VDI 2770
  * guideline specification.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
@@ -94,7 +94,7 @@ public class XmlWriter {
 	 *                  empty and must not be a path to a folder.
 	 * @param document  The {@link Document} instance to serialize.
 	 * @param exportXsd If <code>true</code>, save the XSD file in the same folder
-	 *                  like the XML file.
+	 *                  as the XML file.
 	 * @throws XmlProcessingException   There was an error writing the XMl file. The
 	 *                                  given document might have errors.
 	 * @throws IllegalArgumentException The given parameter are not valid.
@@ -117,7 +117,7 @@ public class XmlWriter {
 	 *                  and valid.
 	 * @param exportXsd Export the XML schema file and set XSD schema Location in
 	 *                  XML file.
-	 * @throws XmlProcessingException
+	 * @throws XmlProcessingException The given {@link Document} is not valid.
 	 */
 	public void write(final File xmlFile, final Document document, final boolean exportXsd)
 			throws XmlProcessingException {
@@ -138,7 +138,7 @@ public class XmlWriter {
 		// get the mapper to map the information model to JAXB POJOs
 		final Mapper mapper = xmlUtils.getMapper();
 
-		// convert to JAVB POJOs
+		// convert to JAXB POJOs
 		final de.vdi.vdi2770.metadata.xsd.Document xmlDocument = mapper.map(document,
 				de.vdi.vdi2770.metadata.xsd.Document.class);
 

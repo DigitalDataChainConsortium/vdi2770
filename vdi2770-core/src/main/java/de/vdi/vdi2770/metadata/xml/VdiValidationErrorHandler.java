@@ -32,6 +32,8 @@ import org.xml.sax.SAXParseException;
 
 import de.vdi.vdi2770.metadata.common.FaultLevel;
 
+import javax.xml.validation.Validator;
+
 /**
  * This error handler collects warnings and errors while XML validation.
  * Validation messages are converted to {@link XmlValidationFault}s.
@@ -111,7 +113,7 @@ public class VdiValidationErrorHandler implements ErrorHandler {
 	}
 
 	/**
-	 * Receive notification of a error and save them in the {@link List} of errors.
+	 * Receive notification of an error and save them in the {@link List} of errors.
 	 */
 	@Override
 	public void error(SAXParseException exception) throws SAXException {

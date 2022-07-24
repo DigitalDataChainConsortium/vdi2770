@@ -28,7 +28,7 @@ import org.xml.sax.helpers.XMLFilterImpl;
 import de.vdi.vdi2770.metadata.common.Constants;
 
 /**
- * This is a specicalized {@link XMLFilterImpl} that applies the VDI 2770
+ * This is a specialized {@link XMLFilterImpl} that applies the VDI 2770
  * namespace to XML elements.
  * <p>
  * If the XML namespace is not defined, XML validation will fail. So, this
@@ -71,14 +71,14 @@ public class VdiNamespaceFilter extends XMLFilterImpl {
 	 * @param localName The element's local name, or the empty string.
 	 * @param qName     The element's qualified (prefixed) name, or the empty
 	 *                  string.
-	 * @param atts      The element's attributes.
+	 * @param attrs     The element's attributes.
 	 * @throws SAXException The client may throw an exception during processing.
 	 */
 	@Override
-	public void startElement(String uri, String localName, String qName, Attributes atts)
+	public void startElement(String uri, String localName, String qName, Attributes attrs)
 			throws SAXException {
 
-		super.startElement(Constants.VDI_XML_NS, localName, qName, atts);
+		super.startElement(Constants.VDI_XML_NS, localName, qName, attrs);
 	}
 
 	/**
@@ -118,7 +118,7 @@ public class VdiNamespaceFilter extends XMLFilterImpl {
 			// done.
 			super.startPrefixMapping("", Constants.VDI_XML_NS);
 
-			// Make sure we dont do it twice
+			// Make sure we do not do it twice
 			this.addedNamespace = true;
 		}
 	}

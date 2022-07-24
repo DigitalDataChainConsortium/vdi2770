@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -70,16 +71,16 @@ public class ReferencedObjectTest {
 	@Test
 	public void validSimple() {
 
-		final ReferencedObject reference = new ReferencedObject(Arrays.asList(
-				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
-				Arrays.asList(createParty()));
+		final ReferencedObject reference = new ReferencedObject(
+				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
+						RefType.SERIAL_NUMBER)), List.of(createParty()));
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		// expecting zero faults
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -97,10 +98,10 @@ public class ReferencedObjectTest {
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		// expecting zero faults
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -109,21 +110,22 @@ public class ReferencedObjectTest {
 	@Test
 	public void emptyParties() {
 
-		final ReferencedObject reference = new ReferencedObject(Arrays.asList(
-				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
+		final ReferencedObject reference = new ReferencedObject(
+				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
+						RefType.SERIAL_NUMBER)),
 				new ArrayList<>());
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "party");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("party", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 
@@ -133,21 +135,22 @@ public class ReferencedObjectTest {
 	@Test
 	public void nullParties() {
 
-		final ReferencedObject reference = new ReferencedObject(Arrays.asList(
-				new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE, RefType.SERIAL_NUMBER)),
+		final ReferencedObject reference = new ReferencedObject(
+				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
+						RefType.SERIAL_NUMBER)),
 				null);
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "party");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("party", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 
@@ -162,17 +165,17 @@ public class ReferencedObjectTest {
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "objectId");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("objectId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 
@@ -187,17 +190,17 @@ public class ReferencedObjectTest {
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "objectId");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("objectId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 
@@ -208,28 +211,28 @@ public class ReferencedObjectTest {
 	public void missingManufacturerRole() {
 
 		final ReferencedObject reference = new ReferencedObject(
-				Arrays.asList(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
+				List.of(new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
 						RefType.SERIAL_NUMBER)),
 				Arrays.asList(createParty(Role.Supplier), createParty(Role.Author)));
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "party");
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("party", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 
 	}
 
 	/**
-	 * Onyl accept one individual ID.
+	 * Only accept one individual ID.
 	 */
 	@Test
 	public void duplicateIndividualIds() {
@@ -239,22 +242,21 @@ public class ReferencedObjectTest {
 						new ObjectId(ObjectType.Individual, "4711", Boolean.FALSE,
 								RefType.SERIAL_NUMBER),
 						new ObjectId(ObjectType.Individual, "471211", Boolean.FALSE,
-								RefType.SERIAL_NUMBER)),
-				Arrays.asList(createParty(Role.Manufacturer)));
+								RefType.SERIAL_NUMBER)), List.of(createParty(Role.Manufacturer)));
 
 		final List<ValidationFault> faults = reference.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "ReferencedObject");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "objectId");
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.INFORMATION);
+		assertSame("ReferencedObject", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("objectId", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.INFORMATION);
 
 	}
 

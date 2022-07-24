@@ -21,9 +21,10 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
@@ -60,9 +61,9 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		final List<ValidationFault> faults = main.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 	}
 
@@ -72,7 +73,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 		pdfFile.setFileFormat(MediaType.PDF.toString());
 		pdfFile.setFileName(FileNames.MAIN_DOCUMENT_PDF_FILE_NAME);
 
-		return Arrays.asList(pdfFile);
+		return List.of(pdfFile);
 	}
 
 	/**
@@ -89,9 +90,9 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		final List<ValidationFault> faults = main.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -126,14 +127,14 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		List<?> errors = Fault.filter(faults, FaultLevel.ERROR);
 
-		assertTrue(errors.size() == 1);
+		assertEquals(1, errors.size());
 
 		final ValidationFault check = (ValidationFault) errors.get(0);
 
-		assertTrue(check.getEntity() == "MainDocument");
-		assertTrue(check.getProperties().get(0) == "referencedObject");
-		assertTrue(check.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(check.getLevel() == FaultLevel.ERROR);
+		assertSame("MainDocument", check.getEntity());
+		assertSame("referencedObject", check.getProperties().get(0));
+		assertSame(check.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(check.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -148,7 +149,7 @@ public class MainDocumentTest extends DocumentBaseTest {
 		ObjectId id = o.getObjectId().get(0);
 		id.setObjectType(ObjectType.Type);
 		o.addObjectId(id);
-		doc.setReferencedObject(Arrays.asList(o));
+		doc.setReferencedObject(List.of(o));
 
 		MainDocument mainDoc = new MainDocument(doc);
 		mainDoc.getDocumentVersion().get(0).setDigitalFile(getMainDocumentDigitalFiles());
@@ -157,14 +158,14 @@ public class MainDocumentTest extends DocumentBaseTest {
 
 		List<?> errors = Fault.filter(faults, FaultLevel.ERROR);
 
-		assertTrue(errors.size() == 1);
+		assertEquals(1, errors.size());
 
 		final ValidationFault check = (ValidationFault) errors.get(0);
 
-		assertTrue(check.getEntity() == "MainDocument");
-		assertTrue(check.getProperties().get(0) == "referencedObject");
-		assertTrue(check.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(check.getLevel() == FaultLevel.ERROR);
+		assertSame("MainDocument", check.getEntity());
+		assertSame("referencedObject", check.getProperties().get(0));
+		assertSame(check.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(check.getLevel(), FaultLevel.ERROR);
 	}
 
 	private ReferencedObject getTestReferencedObject2() {

@@ -44,7 +44,7 @@ class InvalidXmlTest {
 	/**
 	 * Party1 Element instead of Party
 	 *
-	 * @throws XmlProcessingException
+	 * @throws XmlProcessingException Error reading a VDI 2770 XML file
 	 */
 	@Test
 	public void invalidXmlFile1() throws XmlProcessingException {
@@ -57,10 +57,10 @@ class InvalidXmlTest {
 	}
 
 	/**
-	 * Same as invalidXmlFile1 but check, whether validation messages return in the
+	 * Same as invalidXmlFile1 but check, whether validation messages have the
 	 * desired language.
 	 * 
-	 * @throws XmlProcessingException
+	 * @throws XmlProcessingException Error reading a VDI 2770 XML file
 	 */
 	@Test
 	public void invalidXmlFileAndDifferentLocale() throws XmlProcessingException {
@@ -120,7 +120,7 @@ class InvalidXmlTest {
 	/**
 	 * Invalid XSD date
 	 *
-	 * @throws XmlProcessingException
+	 * @throws XmlProcessingException Error reading a VDI 2770 XML file
 	 */
 	@Test
 	public void invalidXmlFile2() throws XmlProcessingException {

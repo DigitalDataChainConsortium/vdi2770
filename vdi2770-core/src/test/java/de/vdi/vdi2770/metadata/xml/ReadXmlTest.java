@@ -21,6 +21,10 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.xml;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -31,7 +35,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.apache.commons.collections.CollectionUtils;
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import com.google.common.collect.Lists;
@@ -93,7 +96,7 @@ public class ReadXmlTest {
 
 		final List<ValidationFault> errors = this.xmlDocument.validate(Locale.getDefault(), true);
 
-		assertTrue(errors.size() == 0);
+		assertEquals(0, errors.size());
 	}
 
 	/**
@@ -104,19 +107,19 @@ public class ReadXmlTest {
 
 		final List<DocumentId> documentIds = this.xmlDocument.getDocumentId();
 
-		assertTrue(documentIds.size() == 2);
+		assertEquals(2, documentIds.size());
 
 		final DocumentId firstDocument = documentIds.get(0);
 
-		assertTrue(StringUtils.equals(firstDocument.getDomainId(), "DemoDomain"));
-		assertTrue(firstDocument.getIsPrimary().booleanValue() == true);
-		assertTrue(StringUtils.equals(firstDocument.getId(), "4711Demo"));
+		assertEquals(firstDocument.getDomainId(), "DemoDomain");
+		assertTrue(firstDocument.getIsPrimary());
+		assertEquals(firstDocument.getId(), "4711Demo");
 
 		final DocumentId secondDocument = documentIds.get(1);
 
-		assertTrue(StringUtils.equals(secondDocument.getDomainId(), "MyDomain"));
-		assertTrue(secondDocument.getIsPrimary().booleanValue() == false);
-		assertTrue(StringUtils.equals(secondDocument.getId(), "AB-8889-XY/40"));
+		assertEquals(secondDocument.getDomainId(), "MyDomain");
+		assertFalse(secondDocument.getIsPrimary());
+		assertEquals(secondDocument.getId(), "AB-8889-XY/40");
 	}
 
 	/**
@@ -127,37 +130,37 @@ public class ReadXmlTest {
 
 		final List<DocumentIdDomain> domains = this.xmlDocument.getDocumentIdDomain();
 
-		assertTrue(domains.size() == 2);
+		assertEquals(2, domains.size());
 
 		final DocumentIdDomain firstDomain = domains.get(0);
 
-		assertTrue(StringUtils.equals(firstDomain.getDocumentDomainId(), "DemoDomain"));
-		assertTrue(firstDomain.getParty() != null);
+		assertEquals(firstDomain.getDocumentDomainId(), "DemoDomain");
+		assertNotNull(firstDomain.getParty());
 
-		assertTrue(firstDomain.getParty().getRole() == Role.Responsible);
-		assertTrue(firstDomain.getParty().getOrganization() != null);
+		assertSame(firstDomain.getParty().getRole(), Role.Responsible);
+		assertNotNull(firstDomain.getParty().getOrganization());
 
 		final Organization firstOrganization = firstDomain.getParty().getOrganization();
 
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationId(), "ULE"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationName(), "Uni Leipzig"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig"));
+		assertEquals(firstOrganization.getOrganizationId(), "ULE");
+		assertEquals(firstOrganization.getOrganizationName(), "Uni Leipzig");
+		assertEquals(firstOrganization.getOrganizationOfficialName(),
+				"Universität Leipzig");
 
 		final DocumentIdDomain secondDomain = domains.get(1);
 
-		assertTrue(StringUtils.equals(secondDomain.getDocumentDomainId(), "MyDomain"));
-		assertTrue(secondDomain.getParty() != null);
+		assertEquals(secondDomain.getDocumentDomainId(), "MyDomain");
+		assertNotNull(secondDomain.getParty());
 
-		assertTrue(secondDomain.getParty().getRole() == Role.Responsible);
-		assertTrue(secondDomain.getParty().getOrganization() != null);
+		assertSame(secondDomain.getParty().getRole(), Role.Responsible);
+		assertNotNull(secondDomain.getParty().getOrganization());
 
 		final Organization secondOrganization = secondDomain.getParty().getOrganization();
 
-		assertTrue(StringUtils.equals(secondOrganization.getOrganizationId(), "CUS"));
-		assertTrue(StringUtils.equals(secondOrganization.getOrganizationName(), "Customer"));
-		assertTrue(StringUtils.equals(secondOrganization.getOrganizationOfficialName(),
-				"Customer GmbH"));
+		assertEquals(secondOrganization.getOrganizationId(), "CUS");
+		assertEquals(secondOrganization.getOrganizationName(), "Customer");
+		assertEquals(secondOrganization.getOrganizationOfficialName(),
+				"Customer GmbH");
 
 	}
 
@@ -170,31 +173,31 @@ public class ReadXmlTest {
 		final List<DocumentClassification> classifications = this.xmlDocument
 				.getDocumentClassification();
 
-		assertTrue(classifications.size() == 2);
+		assertEquals(2, classifications.size());
 
 		final DocumentClassification firstClassification = classifications.get(0);
 
-		assertTrue(StringUtils.equals(firstClassification.getClassificationSystem(),
-				Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME));
-		assertTrue(StringUtils.equals(firstClassification.getClassId(), "03-01"));
-		assertTrue(firstClassification.getClassName().size() == 2);
+		assertEquals(firstClassification.getClassificationSystem(),
+				Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME);
+		assertEquals(firstClassification.getClassId(), "03-01");
+		assertEquals(2, firstClassification.getClassName().size());
 
 		final TranslatableString firstName = firstClassification.getClassName().get(0);
 
-		assertTrue(StringUtils.equals(firstName.getLanguage(), "de"));
-		assertTrue(StringUtils.equals(firstName.getText(), "Montage, Demontage"));
+		assertEquals(firstName.getLanguage(), "de");
+		assertEquals(firstName.getText(), "Montage, Demontage");
 
 		final TranslatableString secondName = firstClassification.getClassName().get(1);
 
-		assertTrue(StringUtils.equals(secondName.getLanguage(), "en"));
-		assertTrue(StringUtils.equals(secondName.getText(), "Assembly, disassembly"));
+		assertEquals(secondName.getLanguage(), "en");
+		assertEquals(secondName.getText(), "Assembly, disassembly");
 
 		final DocumentClassification secondClassification = classifications.get(1);
 
-		assertTrue(StringUtils.equals(secondClassification.getClassificationSystem(),
-				Constants.IEC61355_CLASSIFICATION_NAME));
-		assertTrue(StringUtils.equals(secondClassification.getClassId(), "DD"));
-		assertTrue(secondClassification.getClassName().size() == 2);
+		assertEquals(secondClassification.getClassificationSystem(),
+				Constants.IEC61355_CLASSIFICATION_NAME);
+		assertEquals(secondClassification.getClassId(), "DD");
+		assertEquals(2, secondClassification.getClassName().size());
 
 	}
 
@@ -206,172 +209,168 @@ public class ReadXmlTest {
 
 		final List<ReferencedObject> objects = this.xmlDocument.getReferencedObject();
 
-		assertTrue(objects.size() == 1);
+		assertEquals(1, objects.size());
 
 		final ReferencedObject o = objects.get(0);
 
-		assertTrue(o.getReferenceDesignation().size() == 2);
-		assertTrue(StringUtils.equals(o.getReferenceDesignation().get(1), "#ABC 001 .99"));
+		assertEquals(2, o.getReferenceDesignation().size());
+		assertEquals(o.getReferenceDesignation().get(1), "#ABC 001 .99");
 
-		assertTrue(o.getEquipmentId().size() == 1);
-		assertTrue(StringUtils.equals(o.getEquipmentId().get(0), "900.330.30/100"));
+		assertEquals(1, o.getEquipmentId().size());
+		assertEquals(o.getEquipmentId().get(0), "900.330.30/100");
 
-		assertTrue(o.getProjectId().size() == 1);
-		assertTrue(StringUtils.equals(o.getProjectId().get(0), "P001"));
+		assertEquals(1, o.getProjectId().size());
+		assertEquals(o.getProjectId().get(0), "P001");
 
-		assertTrue(o.getParty().size() == 2);
+		assertEquals(2, o.getParty().size());
 
 		final Party firstParty = o.getParty().get(0);
 
-		assertTrue(firstParty.getRole() == Role.Manufacturer);
-		assertTrue(firstParty.getOrganization() != null);
+		assertSame(firstParty.getRole(), Role.Manufacturer);
+		assertNotNull(firstParty.getOrganization());
 
 		final Organization firstOrganization = firstParty.getOrganization();
 
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationId(), "ULE"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationName(), "Uni Leipzig"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig"));
+		assertEquals(firstOrganization.getOrganizationId(), "ULE");
+		assertEquals(firstOrganization.getOrganizationName(), "Uni Leipzig");
+		assertEquals(firstOrganization.getOrganizationOfficialName(), "Universität Leipzig");
 
 		final Party secondParty = o.getParty().get(1);
 
-		assertTrue(secondParty.getRole() == Role.Supplier);
-		assertTrue(secondParty.getOrganization() != null);
+		assertSame(secondParty.getRole(), Role.Supplier);
+		assertNotNull(secondParty.getOrganization());
 
 		final Organization secondOrganization = secondParty.getOrganization();
 
-		assertTrue(StringUtils.equals(secondOrganization.getOrganizationId(), "ACME"));
-		assertTrue(StringUtils.equals(secondOrganization.getOrganizationName(), "ACME"));
-		assertTrue(
-				StringUtils.equals(secondOrganization.getOrganizationOfficialName(), "ACME INC"));
+		assertEquals(secondOrganization.getOrganizationId(), "ACME");
+		assertEquals(secondOrganization.getOrganizationName(), "ACME");
+		assertEquals(secondOrganization.getOrganizationOfficialName(), "ACME INC");
 
-		assertTrue(o.getDescription().size() == 2);
+		assertEquals(2, o.getDescription().size());
 
 		final TranslatableString firstDescription = o.getDescription().get(0);
 
-		assertTrue(StringUtils.equals(firstDescription.getLanguage(), "en"));
-		assertTrue(StringUtils.equals(firstDescription.getText(), "Product A"));
+		assertEquals(firstDescription.getLanguage(), "en");
+		assertEquals(firstDescription.getText(), "Product A");
 
 		final TranslatableString secondDescription = o.getDescription().get(1);
 
-		assertTrue(StringUtils.equals(secondDescription.getLanguage(), "de"));
-		assertTrue(StringUtils.equals(secondDescription.getText(), "Produkt A"));
+		assertEquals(secondDescription.getLanguage(), "de");
+		assertEquals(secondDescription.getText(), "Produkt A");
 
-		assertTrue(o.getObjectId().size() == 2);
+		assertEquals(2, o.getObjectId().size());
 
 		final ObjectId firstId = o.getObjectId().get(0);
 
-		assertTrue(firstId.getObjectType() == ObjectType.Individual);
-		assertTrue(StringUtils.equals(firstId.getRefType(), RefType.SERIAL_NUMBER));
-		assertTrue(StringUtils.equals(firstId.getId(), "29389-2139292"));
+		assertSame(firstId.getObjectType(), ObjectType.Individual);
+		assertEquals(firstId.getRefType(), RefType.SERIAL_NUMBER);
+		assertEquals(firstId.getId(), "29389-2139292");
 
 		final ObjectId secondId = o.getObjectId().get(1);
 
-		assertTrue(secondId.getObjectType() == ObjectType.Type);
-		assertTrue(StringUtils.equals(secondId.getRefType(), RefType.PRODUCT_TYPE));
-		assertTrue(StringUtils.equals(secondId.getId(), "4023/A"));
+		assertSame(secondId.getObjectType(), ObjectType.Type);
+		assertEquals(secondId.getRefType(), RefType.PRODUCT_TYPE);
+		assertEquals(secondId.getId(), "4023/A");
 
 	}
 
 	/**
 	 * Validate document versions read from XML file.
-	 *
-	 * @throws ParseException
 	 */
 	@Test
 	public void documentVersionTest() {
 
 		final List<DocumentVersion> versions = this.xmlDocument.getDocumentVersion();
 
-		assertTrue(versions.size() == 1);
+		assertEquals(1, versions.size());
 
 		final DocumentVersion version = versions.get(0);
 
-		assertTrue(StringUtils.equals(version.getDocumentVersionId(), "1.0"));
-		assertTrue(version.getNumberOfPages().intValue() == 100);
-		assertTrue(version.getLanguage().size() == 2);
+		assertEquals(version.getDocumentVersionId(), "1.0");
+		assertEquals(100, version.getNumberOfPages().intValue());
+		assertEquals(2, version.getLanguage().size());
 		assertTrue(CollectionUtils.isEqualCollection(version.getLanguage(),
 				Lists.newArrayList("de", "en")));
 
-		assertTrue(version.getParty().size() == 1);
+		assertEquals(1, version.getParty().size());
 
 		final Party firstParty = version.getParty().get(0);
 
-		assertTrue(firstParty.getRole() == Role.Author);
-		assertTrue(firstParty.getOrganization() != null);
+		assertSame(firstParty.getRole(), Role.Author);
+		assertNotNull(firstParty.getOrganization());
 
 		final Organization firstOrganization = firstParty.getOrganization();
 
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationId(), "ULE"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationName(), "Uni Leipzig"));
-		assertTrue(StringUtils.equals(firstOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig"));
+		assertEquals(firstOrganization.getOrganizationId(), "ULE");
+		assertEquals(firstOrganization.getOrganizationName(), "Uni Leipzig");
+		assertEquals(firstOrganization.getOrganizationOfficialName(),
+				"Universität Leipzig");
 
-		assertTrue(version.getDigitalFile().size() == 2);
+		assertEquals(2, version.getDigitalFile().size());
 
 		final DigitalFile firstFile = version.getDigitalFile().get(0);
 
-		assertTrue(StringUtils.equals(firstFile.getFileName(), "test.pdf"));
-		assertTrue(StringUtils.equals(firstFile.getFileFormat(), "application/pdf"));
+		assertEquals(firstFile.getFileName(), "test.pdf");
+		assertEquals(firstFile.getFileFormat(), "application/pdf");
 
 		final DigitalFile secondFile = version.getDigitalFile().get(1);
 
-		assertTrue(StringUtils.equals(secondFile.getFileName(), "test.xls"));
-		assertTrue(StringUtils.equals(secondFile.getFileFormat(), "application/vnd.ms-excel"));
+		assertEquals(secondFile.getFileName(), "test.xls");
+		assertEquals(secondFile.getFileFormat(), "application/vnd.ms-excel");
 
-		assertTrue(version.getLifeCycleStatus() != null);
+		assertNotNull(version.getLifeCycleStatus());
 
 		final LifeCycleStatus status = version.getLifeCycleStatus();
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		LocalDate expectedDate = LocalDate.parse("2019-05-07", formatter);
 
-		assertTrue(status.getSetDate().equals(expectedDate));
-		assertTrue(status.getStatusValue() == LifeCycleStatusValue.Released);
-		assertTrue(status.getParty().size() == 1);
+		assertEquals(status.getSetDate(), expectedDate);
+		assertSame(status.getStatusValue(), LifeCycleStatusValue.Released);
+		assertEquals(1, status.getParty().size());
 
 		final Party statusParty = status.getParty().get(0);
 
-		assertTrue(statusParty.getRole() == Role.Responsible);
-		assertTrue(statusParty.getOrganization() != null);
+		assertSame(statusParty.getRole(), Role.Responsible);
+		assertNotNull(statusParty.getOrganization());
 
 		final Organization statusOrganization = statusParty.getOrganization();
 
-		assertTrue(StringUtils.equals(statusOrganization.getOrganizationId(), "ULE"));
-		assertTrue(StringUtils.equals(statusOrganization.getOrganizationName(), "Uni Leipzig"));
-		assertTrue(StringUtils.equals(statusOrganization.getOrganizationOfficialName(),
-				"Universität Leipzig"));
+		assertEquals(statusOrganization.getOrganizationId(), "ULE");
+		assertEquals(statusOrganization.getOrganizationName(), "Uni Leipzig");
+		assertEquals(statusOrganization.getOrganizationOfficialName(),
+				"Universität Leipzig");
 
-		assertTrue(status.getComments().size() == 2);
+		assertEquals(2, status.getComments().size());
 
 		final TranslatableString firstCommment = status.getComments().get(0);
 
-		assertTrue(StringUtils.equals(firstCommment.getLanguage(), "de"));
-		assertTrue(StringUtils.equals(firstCommment.getText(),
-				"Die Version ist frei erfunden, aber freigegeben."));
+		assertEquals(firstCommment.getLanguage(), "de");
+		assertEquals(firstCommment.getText(),
+				"Die Version ist frei erfunden, aber freigegeben.");
 
-		assertTrue(version.getDocumentDescription().size() == 2);
+		assertEquals(2, version.getDocumentDescription().size());
 
 		final DocumentDescription firstDesc = version.getDocumentDescription().get(0);
 
-		assertTrue(StringUtils.equals(firstDesc.getLanguage(), "de"));
-		assertTrue(StringUtils.equals(firstDesc.getTitle(), "Demo Bericht"));
-		assertTrue(StringUtils.equals(firstDesc.getSubTitle(),
-				"Ein kleines Beispiel für einen Untertitel"));
-		assertTrue(StringUtils.equals(firstDesc.getSummary(),
-				"Dies ist eine Zusammenfassung in deutsch für den beispielhaften Demo Bericht"));
-		assertTrue(firstDesc.getKeyWords().size() == 2);
+		assertEquals(firstDesc.getLanguage(), "de");
+		assertEquals(firstDesc.getTitle(), "Demo Bericht");
+		assertEquals(firstDesc.getSubTitle(),
+				"Ein kleines Beispiel für einen Untertitel");
+		assertEquals(firstDesc.getSummary(),
+				"Dies ist eine Zusammenfassung in deutsch für den beispielhaften Demo Bericht");
+		assertEquals(2, firstDesc.getKeyWords().size());
 		assertTrue(CollectionUtils.isEqualCollection(firstDesc.getKeyWords(),
 				Arrays.asList("Test", "Demo")));
 
 		final DocumentDescription secondDesc = version.getDocumentDescription().get(1);
 
-		assertTrue(StringUtils.equals(secondDesc.getLanguage(), "en"));
-		assertTrue(StringUtils.equals(secondDesc.getTitle(), "Demo Report"));
-		assertTrue(StringUtils.equals(secondDesc.getSubTitle(), "A short example for sub titles"));
-		assertTrue(StringUtils.equals(secondDesc.getSummary(),
-				"This is a summary in english for the Demo Report document"));
-		assertTrue(secondDesc.getKeyWords().size() == 2);
+		assertEquals(secondDesc.getLanguage(), "en");
+		assertEquals(secondDesc.getTitle(), "Demo Report");
+		assertEquals(secondDesc.getSubTitle(), "A short example for sub titles");
+		assertEquals(secondDesc.getSummary(),
+				"This is a summary in english for the Demo Report document");
+		assertEquals(2, secondDesc.getKeyWords().size());
 		assertTrue(CollectionUtils.isEqualCollection(secondDesc.getKeyWords(),
 				Arrays.asList("Test", "Demo")));
 
@@ -381,44 +380,44 @@ public class ReadXmlTest {
 
 		final DocumentRelationship firstRel = relations.get(0);
 
-		assertTrue(firstRel.getType() == DocumentRelationshipType.RefersTo);
+		assertSame(firstRel.getType(), DocumentRelationshipType.RefersTo);
 
-		assertTrue(firstRel.getDocumentId() != null);
+		assertNotNull(firstRel.getDocumentId());
 
-		assertTrue(firstRel.getDocumentVersionId() != null);
+		assertNotNull(firstRel.getDocumentVersionId());
 		assertTrue(firstRel.getDocumentVersionId().isEmpty());
 
 		final DocumentId firstDocumentId = firstRel.getDocumentId();
 
-		assertTrue(StringUtils.equals(firstDocumentId.getId(), "449890"));
-		assertTrue(StringUtils.equals(firstDocumentId.getDomainId(), "DemoDomain"));
+		assertEquals(firstDocumentId.getId(), "449890");
+		assertEquals(firstDocumentId.getDomainId(), "DemoDomain");
 
-		assertTrue(firstRel.getDescription().size() == 2);
+		assertEquals(2, firstRel.getDescription().size());
 
-		assertTrue(StringUtils.equals(firstRel.getDescription().get(0).getLanguage(), "de"));
-		assertTrue(StringUtils.equals(firstRel.getDescription().get(0).getText(),
-				"Dies ist eine Dokumentenbeziehung, die ausschließlich auf eine Dokument ID verweist."));
+		assertEquals(firstRel.getDescription().get(0).getLanguage(), "de");
+		assertEquals(firstRel.getDescription().get(0).getText(),
+				"Dies ist eine Dokumentenbeziehung, die ausschließlich auf eine Dokument ID verweist.");
 
 		final DocumentRelationship secondRel = relations.get(1);
 
-		assertTrue(secondRel.getType() == DocumentRelationshipType.Affecting);
+		assertSame(secondRel.getType(), DocumentRelationshipType.Affecting);
 
-		assertTrue(secondRel.getDocumentId() != null);
+		assertNotNull(secondRel.getDocumentId());
 
-		assertTrue(secondRel.getDocumentVersionId().size() == 2);
+		assertEquals(2, secondRel.getDocumentVersionId().size());
 		assertTrue(CollectionUtils.isEqualCollection(secondRel.getDocumentVersionId(),
 				Arrays.asList("1.0", "2.0")));
 
 		final DocumentId secondDocumentId = secondRel.getDocumentId();
 
-		assertTrue(StringUtils.equals(secondDocumentId.getId(), "9994/22029"));
-		assertTrue(StringUtils.equals(secondDocumentId.getDomainId(), "MyDomain"));
+		assertEquals(secondDocumentId.getId(), "9994/22029");
+		assertEquals(secondDocumentId.getDomainId(), "MyDomain");
 
-		assertTrue(secondRel.getDescription().size() == 1);
+		assertEquals(1, secondRel.getDescription().size());
 
-		assertTrue(StringUtils.equals(secondRel.getDescription().get(0).getLanguage(), "de"));
-		assertTrue(StringUtils.equals(secondRel.getDescription().get(0).getText(),
-				"Diese Beziehung gilt für genau zwei Dokumentversion eines Dokumentes."));
+		assertEquals(secondRel.getDescription().get(0).getLanguage(), "de");
+		assertEquals(secondRel.getDescription().get(0).getText(),
+				"Diese Beziehung gilt für genau zwei Dokumentversion eines Dokumentes.");
 
 	}
 

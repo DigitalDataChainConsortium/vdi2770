@@ -84,7 +84,7 @@ class MarshalUtils {
 	 * ctor.
 	 *
 	 * @param locale Desired {@link Locale} for validation messages.
-	 * @throws XmlProcessingException Could not initialized XML schema.
+	 * @throws XmlProcessingException Could not initialize XML schema.
 	 */
 	public MarshalUtils(final Locale locale) throws XmlProcessingException {
 
@@ -113,7 +113,7 @@ class MarshalUtils {
 	 *
 	 * @param enableSchemaLocation Enable / disable XML schema file location in the
 	 *                             generated XML file
-	 * @throws XmlProcessingException Could not initialized XML schema.
+	 * @throws XmlProcessingException Could not initialize XML schema.
 	 */
 	public MarshalUtils(final boolean enableSchemaLocation) throws XmlProcessingException {
 		this();

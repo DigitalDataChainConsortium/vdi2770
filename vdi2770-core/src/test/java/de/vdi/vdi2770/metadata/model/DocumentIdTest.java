@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.util.Arrays;
 import java.util.List;
@@ -54,9 +55,9 @@ public class DocumentIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -69,9 +70,9 @@ public class DocumentIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -86,9 +87,9 @@ public class DocumentIdTest {
 		final List<ValidationFault> faults = ValidationHelper.validateEntityList(
 				Arrays.asList(id1, id2), "Demo", "Test", Locale.getDefault(), true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -99,14 +100,13 @@ public class DocumentIdTest {
 
 		final DocumentId id1 = new DocumentId("DOMAIN", "IDVALUE", Boolean.TRUE);
 		final DocumentId id2 = new DocumentId();
-		final DocumentId id3 = null;
 
 		final List<ValidationFault> faults = ValidationHelper.validateEntityList(
-				Arrays.asList(id1, id2, id3), "Document", "documentId", Locale.getDefault(), true);
+				Arrays.asList(id1, id2, null), "Document", "documentId", Locale.getDefault(), true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 3);
+		assertEquals(3, faults.size());
 	}
 
 	/**
@@ -119,12 +119,12 @@ public class DocumentIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.IS_EMPTY);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.IS_EMPTY);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -137,11 +137,11 @@ public class DocumentIdTest {
 
 		final List<ValidationFault> faults = id.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
-		assertTrue(faults.get(0).getType() == FaultType.IS_EMPTY);
-		assertTrue(faults.get(0).getLevel() == FaultLevel.ERROR);
+		assertSame(faults.get(0).getType(), FaultType.IS_EMPTY);
+		assertSame(faults.get(0).getLevel(), FaultLevel.ERROR);
 	}
 }

@@ -21,6 +21,7 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.xml;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.io.File;
@@ -54,7 +55,7 @@ public class XmlWriteTest {
 			demo.createXmlFile(result);
 			result.deleteOnExit();
 
-			assertTrue(result != null);
+			assertNotNull(result);
 			assertTrue(result.exists());
 		} catch (final MetadataException e) {
 			e.printStackTrace();
@@ -79,7 +80,7 @@ public class XmlWriteTest {
 			demo.createXmlFile("demo2.xml");
 			result.deleteOnExit();
 
-			assertTrue(result != null);
+			assertNotNull(result);
 			assertTrue(result.exists());
 		} catch (final MetadataException e) {
 			e.printStackTrace();

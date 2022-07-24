@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -50,7 +51,7 @@ public class DocumentVersionTest {
 	/**
 	 * Create demo {@link Party}
 	 *
-	 * @return
+	 * @return A demo {@link Party}
 	 */
 	private static Party createParty(Role role) {
 
@@ -92,12 +93,12 @@ public class DocumentVersionTest {
 		TranslatableString comment = new TranslatableString();
 		comment.setLanguage("de");
 		comment.setText("Das ist ein kleiner Test");
-		status.setComments(Arrays.asList(comment));
+		status.setComments(List.of(comment));
 
 		return status;
 	}
 
-	private static DocumentRelationship createReleation() {
+	private static DocumentRelationship createRelation() {
 		final DocumentRelationship relation = new DocumentRelationship();
 
 		TranslatableString desc_de = new TranslatableString("Demo", "de");
@@ -125,27 +126,27 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
-		version.setDocumentRelationship(Arrays.asList(createReleation()));
+		version.setDocumentRelationship(List.of(createRelation()));
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -156,32 +157,32 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.documentVersionId);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.documentVersionId, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -192,33 +193,33 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Manufacturer)));
+		version.setParty(List.of(createParty(Role.Manufacturer)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.party);
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.party, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -229,33 +230,33 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.zip", MediaType.ZIP.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.digitalFile);
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.digitalFile, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -266,64 +267,64 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.digitalFile);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.digitalFile, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
-	 * missig language
+	 * missing language
 	 */
 	@Test
 	public void missingLanguage1() {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.language);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.language, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -334,32 +335,32 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
 		version.setLanguage(Arrays.asList("de", "en"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 2);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.language);
-		assertTrue(fault.getProperties().get(1) == DocumentVersion.Fields.documentDescription);
-		assertTrue(fault.getType() == FaultType.IS_INCONSISTENT);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(2, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.language, fault.getProperties().get(0));
+		assertSame(DocumentVersion.Fields.documentDescription, fault.getProperties().get(1));
+		assertSame(fault.getType(), FaultType.IS_INCONSISTENT);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -370,29 +371,29 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(100));
+		version.setNumberOfPages(100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.documentDescription);
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.documentDescription, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -403,31 +404,31 @@ public class DocumentVersionTest {
 
 		final DocumentVersion version = new DocumentVersion();
 
-		version.setParty(Arrays.asList(createParty(Role.Author)));
+		version.setParty(List.of(createParty(Role.Author)));
 
 		version.setDocumentVersionId("00.02");
-		version.setLanguage(Arrays.asList("de"));
+		version.setLanguage(List.of("de"));
 
 		final DigitalFile file = new DigitalFile("Demo.pdf", MediaType.PDF.toString());
-		version.setDigitalFile(Arrays.asList(file));
+		version.setDigitalFile(List.of(file));
 
-		version.setDocumentDescription(Arrays.asList(createDocumentDescription("de")));
+		version.setDocumentDescription(List.of(createDocumentDescription("de")));
 
 		version.setLifeCycleStatus(createLifecycleStatus());
 
-		version.setNumberOfPages(Integer.valueOf(-100));
+		version.setNumberOfPages(-100);
 
 		final List<ValidationFault> faults = version.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DocumentVersion");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == DocumentVersion.Fields.numberOfPages);
-		assertTrue(fault.getType() == FaultType.EXCEEDS_LOWER_BOUND);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DocumentVersion", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(DocumentVersion.Fields.numberOfPages, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.EXCEEDS_LOWER_BOUND);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 }

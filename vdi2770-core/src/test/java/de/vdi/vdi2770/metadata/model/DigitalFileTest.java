@@ -21,6 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.List;
@@ -55,10 +57,10 @@ public class DigitalFileTest {
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
 		// expecting zero faults
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -71,17 +73,17 @@ public class DigitalFileTest {
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DigitalFile");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "fileName");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DigitalFile", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("fileName", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -94,17 +96,17 @@ public class DigitalFileTest {
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DigitalFile");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == "fileFormat");
-		assertTrue(fault.getType() == FaultType.IS_EMPTY);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("DigitalFile", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame("fileFormat", fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_EMPTY);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -120,18 +122,18 @@ public class DigitalFileTest {
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DigitalFile");
-		assertTrue(fault.getProperties().size() == 2);
+		assertSame("DigitalFile", fault.getEntity());
+		assertEquals(2, fault.getProperties().size());
 		assertTrue(fault.getProperties().contains("fileFormat"));
 		assertTrue(fault.getProperties().contains("fileName"));
-		assertTrue(fault.getType() == FaultType.IS_INCONSISTENT);
-		assertTrue(fault.getLevel() == FaultLevel.WARNING);
+		assertSame(fault.getType(), FaultType.IS_INCONSISTENT);
+		assertSame(fault.getLevel(), FaultLevel.WARNING);
 	}
 
 	/**
@@ -147,18 +149,18 @@ public class DigitalFileTest {
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "DigitalFile");
-		assertTrue(fault.getProperties().size() == 2);
+		assertSame("DigitalFile", fault.getEntity());
+		assertEquals(2, fault.getProperties().size());
 		assertTrue(fault.getProperties().contains("fileFormat"));
 		assertTrue(fault.getProperties().contains("fileName"));
-		assertTrue(fault.getType() == FaultType.IS_INCONSISTENT);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame(fault.getType(), FaultType.IS_INCONSISTENT);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -170,6 +172,6 @@ public class DigitalFileTest {
 		final DigitalFile file = new DigitalFile("Issue16.zip", "image/vnd.dxf; format=ascii");
 
 		final List<ValidationFault> faults = file.validate(this.locale, true);
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 }

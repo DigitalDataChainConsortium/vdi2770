@@ -21,7 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.time.LocalDate;
 import java.util.Arrays;
@@ -48,7 +49,7 @@ public class LifeCycleStatusTest {
 	/**
 	 * Create demo {@link Party}
 	 * 
-	 * @return
+	 * @return A demo {@link Party}
 	 */
 	private static Party createParty() {
 
@@ -82,13 +83,13 @@ public class LifeCycleStatusTest {
 		TranslatableString comment = new TranslatableString();
 		comment.setLanguage("de");
 		comment.setText("Das ist ein kleiner Test");
-		status.setComments(Arrays.asList(comment));
+		status.setComments(List.of(comment));
 
 		final List<ValidationFault> faults = status.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 0);
+		assertEquals(0, faults.size());
 	}
 
 	/**
@@ -103,26 +104,26 @@ public class LifeCycleStatusTest {
 
 		Party party = createParty();
 		party.setRole(Role.Author);
-		status.setParty(Arrays.asList(party));
+		status.setParty(List.of(party));
 
 		TranslatableString comment = new TranslatableString();
 		comment.setLanguage("de");
 		comment.setText("Das ist ein kleiner Test");
-		status.setComments(Arrays.asList(comment));
+		status.setComments(List.of(comment));
 
 		final List<ValidationFault> faults = status.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "LifeCycleStatus");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == LifeCycleStatus.Fields.party);
-		assertTrue(fault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("LifeCycleStatus", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(LifeCycleStatus.Fields.party, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.HAS_INVALID_VALUE);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 	/**
@@ -135,21 +136,21 @@ public class LifeCycleStatusTest {
 		status.setSetDate(LocalDate.now());
 
 		Party party = createParty();
-		status.setParty(Arrays.asList(party));
+		status.setParty(List.of(party));
 
 		final List<ValidationFault> faults = status.validate(this.locale, true);
 
-		faults.stream().forEach(f -> log.debug(f.toString()));
+		faults.forEach(f -> log.debug(f.toString()));
 
-		assertTrue(faults.size() == 1);
+		assertEquals(1, faults.size());
 
 		final ValidationFault fault = faults.get(0);
 
-		assertTrue(fault.getEntity() == "LifeCycleStatus");
-		assertTrue(fault.getProperties().size() == 1);
-		assertTrue(fault.getProperties().get(0) == LifeCycleStatus.Fields.statusValue);
-		assertTrue(fault.getType() == FaultType.IS_NULL);
-		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+		assertSame("LifeCycleStatus", fault.getEntity());
+		assertEquals(1, fault.getProperties().size());
+		assertSame(LifeCycleStatus.Fields.statusValue, fault.getProperties().get(0));
+		assertSame(fault.getType(), FaultType.IS_NULL);
+		assertSame(fault.getLevel(), FaultLevel.ERROR);
 	}
 
 }
