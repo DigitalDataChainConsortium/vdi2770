@@ -163,5 +163,24 @@ public class ReportTest {
 		assertTrue(result.getMessages().stream().filter(m -> m.getText().contains("REP_018"))
 				.count() == 0);
 	}
+	
+	/**
+	 * Do not report an error, if there is a valid PDF/A file and another PDF file that is not
+	 * conform to the PDF/A specification
+	 * 
+	 * @throws ProcessorException
+	 * @throws MetadataException
+	 */
+	@Test
+	public void issue17ReportTest() throws ProcessorException, MetadataException {
+
+		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
+		final Report result = report.validate("../examples/container/morethanonepdfcontainer.zip");
+
+		printReport(result, 0);
+		
+		assertTrue(!Message.hasErrors(result.getMessages()));
+		assertTrue(!Message.hasErrors(result.getSubReports().get(0).getMessages()));
+	}
 
 }
