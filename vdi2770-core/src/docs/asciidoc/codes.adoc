@@ -327,6 +327,20 @@ See section C1.12 in link:{url-vdi2770}[VDI 2770].
 OI_001:: _ObjectType_ is required (see table C11 in link:{url-vdi2770}[VDI 2770]).
 OI_002:: The value of this element is required (see table C11 in link:{url-vdi2770}[VDI 2770]).
 
+An object ID my be encoded as URL. If RefType has the value "instance of object uri", the value
+of the ID must be an URL. 
+According to VDI 2770:2020, URLs according to DIN SPEC 91406:2019-12 shall be applied. 
+In 2022, these requirements are published as international standard prEN IEC 61406:2022 
+"Identification Link". 
+The following validation codes relate to URL validation.
+
+OI_003:: The value of this element is not a valid URL.
+OI_004:: Uppercase letters are only allowed in the Path, Query or Fragment components of the URL. See DIN SPEC 91406 or IEC 61406 for more information.
+OI_005:: The URL should not be extended beyond a length of 100 characters.
+OI_006:: The URL shall not be longer than 255 characters.
+OI_007:: The URL may contain punycode.This should be avoided..
+OI_008:: The URL contains invalid characters.
+
 ===== DigitalFile (DF)
 
 The `DigitalFile` entity contains metadata about files in a container.

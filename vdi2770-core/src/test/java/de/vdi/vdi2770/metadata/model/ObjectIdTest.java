@@ -23,6 +23,9 @@ package de.vdi.vdi2770.metadata.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -164,6 +167,72 @@ public class ObjectIdTest {
 		assertTrue(fault.getProperties().get(0) == ObjectId.Fields.objectType);
 		assertTrue(fault.getType() == FaultType.IS_EMPTY);
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
+	}
+
+	@Test
+	public void instanceOfObjectUriTest() {
+		
+		final ObjectId id = new ObjectId();
+		id.setId("https://www.domain-abc.com/free_text");
+		id.setObjectType(ObjectType.Individual);
+		id.setRefType(RefType.DIN_SPEC_91406_ID);
+
+		List<ValidationFault> faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("HTTPS://wWw.DOMAIN-ABC.com/free_text");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 1);
+		
+		final ValidationFault caseFault = faults.get(0);
+
+		assertTrue(caseFault.getEntity() == "ObjectId");
+		assertTrue(caseFault.getProperties().size() == 1);
+		assertTrue(caseFault.getProperties().get(0) == ObjectId.Fields.id);
+		assertTrue(caseFault.getType() == FaultType.HAS_INVALID_VALUE);
+		assertTrue(caseFault.getLevel() == FaultLevel.ERROR);
+		assertTrue(caseFault.getMessage().startsWith("OI_004"));
+		
+		id.setId("https://www.domain-abc.com/Model-Nr-1234/Serial-Nr-5678");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+
+		id.setId("http://www.domain-abc.com/sd09fqw4hrdfj0as89u7");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("http://www.domain-abc.com/Baureihe/Model/Seriennummer");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("www.domain-abc.com/23456tdhfe65ur67uztm");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 1);
+		
+		final ValidationFault missingProtocolFault = faults.get(0);
+		
+		assertTrue(missingProtocolFault.getEntity() == "ObjectId");
+		assertTrue(missingProtocolFault.getProperties().size() == 1);
+		assertTrue(missingProtocolFault.getProperties().get(0) == ObjectId.Fields.id);
+		assertTrue(missingProtocolFault.getType() == FaultType.HAS_INVALID_VALUE);
+		assertTrue(missingProtocolFault.getLevel() == FaultLevel.ERROR);
+		assertTrue(missingProtocolFault.getMessage().startsWith("OI_003"));
+		
+		id.setId("http://domain-abc.com/23456tdhfe65ur67uztm");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("https://www.domain-abc.com/sd09fqw4hrdfj0as89u7?counter=1");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("http://www.domain-abc.com/sd09fqw4hrdfj0as89u7?counter=2");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("https://www.domain-abc.com/sd09fqw4?37S=UN123456789111222333IIICCC+54321");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
 	}
 
 }
