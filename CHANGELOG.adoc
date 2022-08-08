@@ -1,5 +1,15 @@
 = Changelog
 
+== v0.9.9
+In Preparation
+
+* [fix] support more than one PDF file in a container
+* [fix] mimetype compare
+* [fix] renderFileHash property in /rest/report has no effect
+* [feature] validate object id as URL according to DIN SPEC 91406 / IEC 61406
+* [feature] new settings controller to read application settings as REST calls
+* [maintenance] framework version upgrades
+
 == v0.9.8
 2022-03-29
 
@@ -19,7 +29,6 @@
 * [bug] Incorrect validation message for ZU_MESSAGE_001 
 * [bug] PDF info messages contain warn messages 
 * [bug] Set properties file enconding to UTF-8
-
 
 == v0.9.6
 2022-01-23

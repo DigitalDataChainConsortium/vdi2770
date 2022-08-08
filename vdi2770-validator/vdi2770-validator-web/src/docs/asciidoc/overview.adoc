@@ -443,3 +443,10 @@ The following parameters are used to detect ZIP bombs.
 size.
 
 ``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.
+
+=== Application Utils
+
+The application provide two additional REST endpoint
+
+* ``/rest/version``: Return application version as String
+* ``/rest/settings``: Return an Object that holds application setting values. Actually, the maximum file upload size will return.
