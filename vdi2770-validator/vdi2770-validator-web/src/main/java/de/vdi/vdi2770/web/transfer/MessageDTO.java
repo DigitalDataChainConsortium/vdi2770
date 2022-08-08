@@ -57,6 +57,12 @@ public class MessageDTO {
 	private int indent;
 	
 	/**
+	 * Standard ctor
+	 */
+	public MessageDTO() {
+	}
+	
+	/**
 	 * Copy ctor
 	 * 
 	 * @param message The original {@link Message} instance to copy.

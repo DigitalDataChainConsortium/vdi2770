@@ -101,16 +101,16 @@ public class BaseControllerTest {
 	 * @param languages Range of languages to accept
 	 * @return The response as {@link ResponseEntity} instance.
 	 */
-	protected ResponseEntity<ReportDTO> requestReportRest(final List<Locale.LanguageRange> languages,
-			final File file, int port) {
+	protected ResponseEntity<ReportDTO> requestReportRest(
+			final List<Locale.LanguageRange> languages, final File file, int port) {
 
 		MultiValueMap<String, Object> formData = createFormData(file);
 		HttpEntity<MultiValueMap<String, Object>> requestEntity = new HttpEntity<>(formData,
 				getHeaders(languages));
 
 		final String serverUrl = "http://localhost:" + port + "/rest/report";
-		ResponseEntity<ReportDTO> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
-				ReportDTO.class);
+		ResponseEntity<ReportDTO> response = this.restTemplate.postForEntity(serverUrl,
+				requestEntity, ReportDTO.class);
 
 		return response;
 	}

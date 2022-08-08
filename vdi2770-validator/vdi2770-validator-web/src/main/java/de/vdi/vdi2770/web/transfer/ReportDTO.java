@@ -66,6 +66,12 @@ public class ReportDTO {
 	private final List<MessageDTO> messages = new ArrayList<>();
 
 	/**
+	 * standard ctor
+	 */
+	public ReportDTO() {
+	}
+	
+	/**
 	 * Copy ctor
 	 * 
 	 * @param report The original {@link Report} instance to copy.
