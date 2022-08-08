@@ -25,7 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.base.Preconditions;
+
 import de.vdi.vdi2770.processor.common.ContainerType;
+import de.vdi.vdi2770.processor.common.Message;
+import de.vdi.vdi2770.processor.report.Report;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
@@ -43,7 +48,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class Report {
+public class ReportDTO {
 
 	private Locale locale;
 
@@ -53,10 +58,35 @@ public class Report {
 
 	private String fileName;
 
+	@JsonInclude(JsonInclude.Include.NON_EMPTY)
 	private String fileHash;
 
-	private final List<Report> subReports = new ArrayList<>();
+	private final List<ReportDTO> subReports = new ArrayList<>();
 
-	private final List<Message> messages = new ArrayList<>();
+	private final List<MessageDTO> messages = new ArrayList<>();
+
+	/**
+	 * Copy ctor
+	 * 
+	 * @param report The original {@link Report} instance to copy.
+	 */
+	public ReportDTO(final Report report) {
+
+		Preconditions.checkArgument(report != null, "Report shall not be null");
+
+		this.locale = report.getLocale();
+		this.id = report.getId();
+		this.containerType = report.getContainerType();
+		this.fileName = report.getFileName();
+		this.fileHash = report.getFileHash();
+
+		for (Report sub : report.getSubReports()) {
+			this.subReports.add(new ReportDTO(sub));
+		}
+
+		for (Message message : report.getMessages()) {
+			this.messages.add(new MessageDTO(message));
+		}
+	}
 
 }

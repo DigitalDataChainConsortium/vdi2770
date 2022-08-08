@@ -38,7 +38,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 
 @Component
@@ -100,7 +100,7 @@ public class BaseControllerTest {
 	 * @param languages Range of languages to accept
 	 * @return The response as {@link ResponseEntity} instance.
 	 */
-	protected ResponseEntity<Report> requestReportRest(final List<Locale.LanguageRange> languages,
+	protected ResponseEntity<ReportDTO> requestReportRest(final List<Locale.LanguageRange> languages,
 			final File file, int port) {
 
 		MultiValueMap<String, Object> formData = createFormData(file);
@@ -108,8 +108,8 @@ public class BaseControllerTest {
 				getHeaders(languages));
 
 		final String serverUrl = "http://localhost:" + port + "/rest/report";
-		ResponseEntity<Report> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
-				Report.class);
+		ResponseEntity<ReportDTO> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
+				ReportDTO.class);
 
 		return response;
 	}

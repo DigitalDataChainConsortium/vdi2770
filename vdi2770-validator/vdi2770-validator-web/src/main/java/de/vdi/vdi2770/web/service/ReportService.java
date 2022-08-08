@@ -119,31 +119,34 @@ public class ReportService {
 				mimeType = Files.probeContentType(file.toPath());
 			} catch (final IOException e) {
 				log.error("can not get MIME type", e);
-				result = new Report(locale, file, logLevel);
+				result = new Report(locale, file, logLevel, props.isRenderFileHash());
 				result.addMessage(new Message(MessageLevel.ERROR,
 						MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
 			}
 
 			// validate PDF file
 			if (MediaType.PDF.toString().equals(mimeType)) {
-				result = validatePdfFile(file, locale, logLevel, config.isEnableStrictMode());
+				result = validatePdfFile(file, locale, logLevel, config.isEnableStrictMode(),
+						config.isRenderFileHash());
 			}
 			// validate container file
 			else if (ZipUtils.ZIP_CONTENT_TYPE.contains(mimeType)) {
-				result = validateContainerFile(file, locale, logLevel, config.isEnableStrictMode());
+				result = validateContainerFile(file, locale, logLevel, config.isEnableStrictMode(),
+						config.isRenderFileHash());
 			}
 			// validate XML meta data file
 			else if (MediaType.APPLICATION_XML_UTF_8.withoutParameters().toString().equals(mimeType)
 					|| "text/xml".equals(mimeType)) {
-				result = validateXmlFile(file, locale, logLevel, config.isEnableStrictMode());
+				result = validateXmlFile(file, locale, logLevel, config.isEnableStrictMode(),
+						config.isRenderFileHash());
 			} else {
-				result = new Report(locale, file, logLevel);
+				result = new Report(locale, file, logLevel, props.isRenderFileHash());
 				result.addMessage(new Message(MessageLevel.ERROR,
 						MessageFormat.format(bundle.getString("RS_MESSAGE_001"), mimeType)));
 			}
 		} else {
 			log.error("Given file is a directory: " + file.getAbsolutePath());
-			result = new Report(locale, file, logLevel);
+			result = new Report(locale, file, logLevel, props.isRenderFileHash());
 			result.addMessage(new Message(MessageLevel.ERROR, MessageFormat
 					.format(bundle.getString("RS_MESSAGE_001"), "application/x-directory")));
 		}
@@ -159,34 +162,34 @@ public class ReportService {
 	}
 
 	private static Report validateXmlFile(final File file, final Locale locale,
-			final MessageLevel logLevel, boolean strictModeEnabled) {
+			final MessageLevel logLevel, boolean strictModeEnabled, boolean renderFileHash) {
 
 		final ContainerValidator reporting = new ContainerValidator(locale, strictModeEnabled);
 
-		final Report result = new Report(locale, file, logLevel);
+		final Report result = new Report(locale, file, logLevel, renderFileHash);
 		reporting.validateAndReportVdiXmlFile(file, result, 0, false);
 
 		return result;
 	}
 
 	private static Report validateContainerFile(final File file, final Locale locale,
-			final MessageLevel logLevel, boolean strictModeEnabled) {
+			final MessageLevel logLevel, boolean strictModeEnabled, boolean renderFileHash) {
 
 		final ContainerValidator reporting = new ContainerValidator(locale, strictModeEnabled);
 		try {
-			return reporting.validate(file, logLevel);
+			return reporting.validate(file, logLevel, renderFileHash);
 		} catch (final MetadataException | ProcessorException ex) {
 			log.error("Error validating file", ex);
-			final Report result = new Report(locale, file, logLevel);
+			final Report result = new Report(locale, file, logLevel, renderFileHash);
 			result.addMessage(new Message(MessageLevel.ERROR, ex.getMessage()));
 			return result;
 		}
 	}
 
 	private static Report validatePdfFile(final File file, final Locale locale,
-			final MessageLevel logLevel, boolean strictModeEnabled) {
+			final MessageLevel logLevel, boolean strictModeEnabled, boolean renderFileHash) {
 
-		final Report result = new Report(locale, file, logLevel);
+		final Report result = new Report(locale, file, logLevel, renderFileHash);
 
 		final ContainerValidator validator = new ContainerValidator(locale, strictModeEnabled);
 		result.addMessages(validator.validatePdfFile(file, false, 0));

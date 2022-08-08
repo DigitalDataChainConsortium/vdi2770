@@ -21,13 +21,16 @@
  ******************************************************************************/
 package de.vdi.vdi2770.web.transfer;
 
+import com.google.common.base.Preconditions;
+
+import de.vdi.vdi2770.processor.common.Message;
 import de.vdi.vdi2770.processor.common.MessageLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
 /**
- * A {@link Message} is used for notifications and errors while validation.
+ * A {@link MessageDTO} is used for notifications and errors while validation.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
@@ -36,7 +39,7 @@ import lombok.ToString;
 @Data
 @ToString
 @EqualsAndHashCode
-public class Message {
+public class MessageDTO {
 
 	/**
 	 * Severity of the message.
@@ -49,7 +52,21 @@ public class Message {
 	private String text;
 
 	/**
-	 * An indent value that can be used for indention. See also {@link IndentUtils}.
+	 * An indent value that can be used for indent. See also {@link IndentUtils}.
 	 */
 	private int indent;
+	
+	/**
+	 * Copy ctor
+	 * 
+	 * @param message The original {@link Message} instance to copy.
+	 */
+	public MessageDTO (final Message message) {
+		
+		Preconditions.checkArgument(message != null);
+		
+		this.level = message.getLevel();
+		this.text = message.getText();
+		this.indent = message.getIndent();
+	}
 }

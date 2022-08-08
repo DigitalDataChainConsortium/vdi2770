@@ -43,7 +43,7 @@ import org.springframework.util.MultiValueMap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
@@ -85,8 +85,8 @@ public class ReportSettingsExceptionsTest extends BaseControllerTest {
 				getHeaders(Locale.LanguageRange.parse("de")));
 
 		final String serverUrl = "http://localhost:" + this.port + "/rest/report";
-		ResponseEntity<Report> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
-				Report.class);
+		ResponseEntity<ReportDTO> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
+				ReportDTO.class);
 		
 		assertTrue(response != null);
 		assertTrue(response.getStatusCode() == HttpStatus.BAD_REQUEST);

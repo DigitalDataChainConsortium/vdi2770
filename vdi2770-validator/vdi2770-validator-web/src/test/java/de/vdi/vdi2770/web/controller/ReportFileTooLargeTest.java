@@ -35,7 +35,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
 
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
 		"vdi2770.http.auth.tokenValue=vdi2770", "vdi2770.http.auth.tokenName=Api-Key",
@@ -55,7 +55,7 @@ public class ReportFileTooLargeTest extends BaseControllerTest {
 
 	@Test
 	public void PayloadTooLargeTest() {
-		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
+		ResponseEntity<ReportDTO> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP), this.port);
 
 		assertTrue(response != null);
