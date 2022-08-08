@@ -55,7 +55,7 @@ public class ReportTest {
 	public void validDocumentReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report.validate("../examples/container/documentcontainer.zip");
+		final Report result = report.validate("../examples/container/documentcontainer.zip", true);
 
 		printReport(result, 0);
 	}
@@ -70,7 +70,8 @@ public class ReportTest {
 	public void validDocumentationReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report.validate("../examples/container/documentationcontainer.zip");
+		final Report result = report.validate("../examples/container/documentationcontainer.zip",
+				true);
 
 		printReport(result, 0);
 	}
@@ -93,14 +94,15 @@ public class ReportTest {
 	public void invalidObjectIdsReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report.validate("../examples/container/objectreferences.zip");
+		final Report result = report.validate("../examples/container/objectreferences.zip", true);
 
 		printReport(result, 0);
 	}
 
 	/**
-	 * A PDF/A level B file has been provided for a document that is not classified as
-	 * 02-04 (certificates). Only 02-04 documents may have a PDF/A-{1,2,3}b conformance level.
+	 * A PDF/A level B file has been provided for a document that is not classified
+	 * as 02-04 (certificates). Only 02-04 documents may have a PDF/A-{1,2,3}b
+	 * conformance level.
 	 * 
 	 * @throws ProcessorException
 	 * @throws MetadataException
@@ -109,18 +111,18 @@ public class ReportTest {
 	public void invalidContainerTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report
-				.validate("../examples/container/document-invalid-pdfa-b.zip");
+		final Report result = report.validate("../examples/container/document-invalid-pdfa-b.zip",
+				true);
 
 		List<Message> errors = result.getErrorMessages(true);
 		assertTrue(errors.size() == 1);
-		assertTrue(errors.stream()
-				.filter(m -> StringUtils.startsWith(m.getText(), "REP_038")).count() == 1);
+		assertTrue(errors.stream().filter(m -> StringUtils.startsWith(m.getText(), "REP_038"))
+				.count() == 1);
 	}
 
 	/**
 	 * A PDF/A level A file has been provided for a document that is classified as
-	 * 02-04 (certificates). 
+	 * 02-04 (certificates).
 	 * 
 	 * @throws ProcessorException
 	 * @throws MetadataException
@@ -129,15 +131,14 @@ public class ReportTest {
 	public void pdfLevelACertificateContainerTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report
-				.validate("../examples/container/certificate-pdfa-a.zip");
+		final Report result = report.validate("../examples/container/certificate-pdfa-a.zip", true);
 
 		assertTrue(result.getErrorMessages(true).size() == 0);
 	}
 
 	/**
 	 * A PDF/A level B file has been provided for a document that is classified as
-	 * 02-04 (certificates). 
+	 * 02-04 (certificates).
 	 * 
 	 * @throws ProcessorException
 	 * @throws MetadataException
@@ -146,8 +147,7 @@ public class ReportTest {
 	public void pdfLevelBCertificateContainerTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report
-				.validate("../examples/container/certificate-pdfa-b.zip");
+		final Report result = report.validate("../examples/container/certificate-pdfa-b.zip", true);
 
 		assertTrue(result.getErrorMessages(true).size() == 0);
 	}
@@ -156,17 +156,17 @@ public class ReportTest {
 	public void issue16ReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report.validate("../examples/issues/issue16container.zip");
+		final Report result = report.validate("../examples/issues/issue16container.zip", true);
 
 		printReport(result, 0);
 
 		assertTrue(result.getMessages().stream().filter(m -> m.getText().contains("REP_018"))
 				.count() == 0);
 	}
-	
+
 	/**
-	 * Do not report an error, if there is a valid PDF/A file and another PDF file that is not
-	 * conform to the PDF/A specification
+	 * Do not report an error, if there is a valid PDF/A file and another PDF file
+	 * that is not conform to the PDF/A specification
 	 * 
 	 * @throws ProcessorException
 	 * @throws MetadataException
@@ -175,10 +175,11 @@ public class ReportTest {
 	public void issue17ReportTest() throws ProcessorException, MetadataException {
 
 		final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-		final Report result = report.validate("../examples/container/morethanonepdfcontainer.zip");
+		final Report result = report.validate("../examples/container/morethanonepdfcontainer.zip",
+				true);
 
 		printReport(result, 0);
-		
+
 		assertTrue(!Message.hasErrors(result.getMessages()));
 		assertTrue(!Message.hasErrors(result.getSubReports().get(0).getMessages()));
 	}

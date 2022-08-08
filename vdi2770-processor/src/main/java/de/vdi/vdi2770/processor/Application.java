@@ -57,7 +57,7 @@ public class Application {
 	/**
 	 * Main method to run the application
 	 * 
-	 * @param args Command line argument processed by apache commons cli
+	 * @param args Command line argument processed by Apache commons CLI
 	 */
 	public static void main(String[] args) {
 
@@ -90,7 +90,7 @@ public class Application {
 				}
 
 				final ContainerValidator report = new ContainerValidator(Locale.getDefault(), true);
-				final Report result = report.validate(containerFile, MessageLevel.INFO);
+				final Report result = report.validate(containerFile, MessageLevel.INFO, true);
 
 				printReport(result, 0);
 			} else if (cmd.hasOption(PROCESS_FOLDER)) {

@@ -24,6 +24,7 @@ package de.vdi.vdi2770.processor.report;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -62,7 +63,6 @@ import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.net.MediaType;
 
 import de.vdi.vdi2770.processor.ProcessorException;
 import de.vdi.vdi2770.processor.common.Check;
@@ -126,26 +126,33 @@ public class ContainerValidator {
 	/**
 	 * Validate ZIP container and report the content as well as validation errors.
 	 *
-	 * @param zipFileName A path to a ZIP container file.
+	 * @param zipFileName    A path to a ZIP container file.
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final String zipFileName) throws ProcessorException, MetadataException {
-		return validate(zipFileName, MessageLevel.INFO);
+	public Report validate(final String zipFileName, boolean enableFileHash)
+			throws ProcessorException, MetadataException {
+		return validate(zipFileName, MessageLevel.INFO, enableFileHash);
 	}
 
 	/**
 	 * Validate ZIP container and report the content as well as validation errors.
 	 *
-	 * @param zipFileName A path to a ZIP container file.
-	 * @param logLevel    A minimal logging threshold
+	 * @param zipFileName    A path to a ZIP container file.
+	 * @param logLevel       A minimal logging threshold
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final String zipFileName, final MessageLevel logLevel)
-			throws ProcessorException, MetadataException {
+	public Report validate(final String zipFileName, final MessageLevel logLevel,
+			boolean enableFileHash) throws ProcessorException, MetadataException {
 
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(zipFileName),
 				"Zip file name is null or empty.");
@@ -157,7 +164,7 @@ public class ContainerValidator {
 		check.fileExists(zipFile, "REP_EXCEPTION_001");
 		check.isZipFile(zipFile, "REP_EXCEPTION_002");
 
-		return validate(zipFile, logLevel);
+		return validate(zipFile, logLevel, enableFileHash);
 	}
 
 	/**
@@ -166,12 +173,16 @@ public class ContainerValidator {
 	 * @param zipFile        A ZIP {@link File}; must not be <code>null</code> and
 	 *                       must exist.
 	 * @param minReportLevel The logging threshold.
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
+	 * 
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final File zipFile, final MessageLevel minReportLevel)
-			throws MetadataException, ProcessorException {
+	public Report validate(final File zipFile, final MessageLevel minReportLevel,
+			final boolean enableFileHash) throws MetadataException, ProcessorException {
 
 		Preconditions.checkArgument(zipFile != null, "file is null");
 		Preconditions.checkArgument(minReportLevel != null, "minReportLevel is null");
@@ -182,7 +193,7 @@ public class ContainerValidator {
 
 		final ZipUtils zip = new ZipUtils(this.locale);
 
-		final Report report = new Report(this.locale, zipFile, minReportLevel);
+		final Report report = new Report(this.locale, zipFile, minReportLevel, enableFileHash);
 
 		List<ZipFault> zipFaults = zip.validateZipFile(zipFile);
 		zipFaults.forEach(f -> report.addMessage(zipFaultToMessage(f, 0)));
@@ -837,7 +848,7 @@ public class ContainerValidator {
 					}
 				}
 			} else {
-				// no valid PDF found 
+				// no valid PDF found
 				// report every error message
 				for (Map.Entry<File, List<Message>> status : pdfFileStatus.entrySet()) {
 					report.addMessages(status.getValue());
@@ -953,11 +964,11 @@ public class ContainerValidator {
 	 * Containers in PDF are not allowed.
 	 * </p>
 	 *
-	 * @param pdfFile          A PDF {@link File}; must not be <code>null</code> and
-	 *                         exist.
-	 * @param certificateClass Document is a certificate class (see class 02-04 in
-	 *                         VI 2770)
-	 * @param indentLevel      Level of indent.
+	 * @param pdfFile            A PDF {@link File}; must not be <code>null</code>
+	 *                           and exist.
+	 * @param isCertificateClass Document is a certificate class (see class 02-04 in
+	 *                           VI 2770)
+	 * @param indentLevel        Level of indent.
 	 * @return A {@link List} of {@link Message} including Information, warnings and
 	 *         errors.
 	 */
@@ -1025,11 +1036,9 @@ public class ContainerValidator {
 			try {
 				boolean hasText = pdfValidator.hasText(pdfFile);
 				if (hasText) {
-					messages.add(
-							new Message(MessageLevel.INFO,
-									MessageFormat.format(this.bundle.getString("REP_MESSAGE_043"),
-											pdfFile.getName()),
-									indentLevel));
+					messages.add(new Message(MessageLevel.INFO, MessageFormat
+							.format(this.bundle.getString("REP_MESSAGE_043"), pdfFile.getName()),
+							indentLevel));
 				} else {
 					messages.add(
 							new Message(isCertificateClass ? MessageLevel.INFO : MessageLevel.WARN,

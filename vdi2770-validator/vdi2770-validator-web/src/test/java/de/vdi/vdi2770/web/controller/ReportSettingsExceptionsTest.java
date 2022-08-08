@@ -43,11 +43,12 @@ import org.springframework.util.MultiValueMap;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 
+@SuppressWarnings("javadoc")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
-		"vdi2770.http.auth.tokenValue=vdi2770", "vdi2770.http.auth.tokenName=Api-Key"})
+		"vdi2770.http.auth.tokenValue=vdi2770", "vdi2770.http.auth.tokenName=Api-Key" })
 public class ReportSettingsExceptionsTest extends BaseControllerTest {
 
 	private static final String DEMO_VDI_ZIP = "demo_vdi.zip";
@@ -62,22 +63,23 @@ public class ReportSettingsExceptionsTest extends BaseControllerTest {
 	private TestRestTemplate restTemplate;
 
 	private static final String EXAMPLES_FOLDER = "../../examples/";
-	
-	private static MultiValueMap<String, Object> createInvalidFormData() throws JsonProcessingException {
+
+	private static MultiValueMap<String, Object> createInvalidFormData()
+			throws JsonProcessingException {
 		MultiValueMap<String, Object> formData = new LinkedMultiValueMap<>();
 		formData.add("file",
 				new FileSystemResource(new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP).toPath()));
 
 		final ReportProperties props = createReportProperties();
-		
+
 		ObjectMapper objectMapper = new ObjectMapper();
 		String json = objectMapper.writeValueAsString(props);
-		
+
 		formData.add("settings", json.replaceAll("true", "FOO"));
 
 		return formData;
 	}
-	
+
 	@Test
 	public void InvalidSettingsTest() throws JsonProcessingException {
 		MultiValueMap<String, Object> formData = createInvalidFormData();
@@ -85,9 +87,9 @@ public class ReportSettingsExceptionsTest extends BaseControllerTest {
 				getHeaders(Locale.LanguageRange.parse("de")));
 
 		final String serverUrl = "http://localhost:" + this.port + "/rest/report";
-		ResponseEntity<Report> response = this.restTemplate.postForEntity(serverUrl, requestEntity,
-				Report.class);
-		
+		ResponseEntity<ReportDTO> response = this.restTemplate.postForEntity(serverUrl,
+				requestEntity, ReportDTO.class);
+
 		assertTrue(response != null);
 		assertTrue(response.getStatusCode() == HttpStatus.BAD_REQUEST);
 	}

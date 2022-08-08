@@ -45,6 +45,7 @@ import com.google.common.base.Strings;
 
 import de.vdi.vdi2770.web.configuration.SmartLocaleResolver;
 import de.vdi.vdi2770.web.service.ReportService;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 
 /**
@@ -124,6 +125,14 @@ public class ReportController extends BaseController {
 		}
 	}
 
+	/**
+	 * Validate a file and return a {@link Report} rendered as PDF file.
+	 *
+	 * @param request The REST / web request.
+	 * @param file    A file to be validated.
+	 * @param props   Optional Configuration parameter to configure report rendering
+	 * @return A serialized {@link Report} instance or an error message
+	 */
 	@RequestMapping(path = "/reportpdf", method = {
 			RequestMethod.POST }, produces = MediaType.APPLICATION_PDF_VALUE)
 	public ResponseEntity<?> checkContainerAndReturnPdfFile(final HttpServletRequest request,
@@ -163,12 +172,12 @@ public class ReportController extends BaseController {
 		}
 	}
 
-	private static ResponseEntity<Report> toResponse(Report report) {
+	private static ResponseEntity<ReportDTO> toResponse(Report report) {
 
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		return new ResponseEntity<Report>(report, responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<ReportDTO>(new ReportDTO(report), responseHeaders, HttpStatus.OK);
 	}
 
 }
