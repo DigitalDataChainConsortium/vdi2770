@@ -153,6 +153,13 @@ public final class Constants {
 		return map;
 	}
 	
+	/**
+	 * Check, whether a given {@link String} is a VDI 2770 German category name.
+	 * 
+	 * @param category {@link String} to be checked.
+	 * @param strict If <code>true</code>, check is case sensitive. 
+	 * @return <code>true</code>, if the given {@link String} is a category name.
+	 */
 	public static boolean isVdi2770GermanCategoryName(final String category, boolean strict) {
 		return isCategoryName(getVdi2770GermanCategoryNames().values(), category, strict);
 	}
@@ -183,6 +190,13 @@ public final class Constants {
 		return map;
 	}
 
+	/**
+	 * Check, whether a given {@link String} is a VDI 2770 English category name.
+	 * 
+	 * @param category {@link String} to be checked.
+	 * @param strict If <code>true</code>, check is case sensitive. 
+	 * @return <code>true</code>, if the given {@link String} is a category name.
+	 */
 	public static boolean isVdi2770EnglishCategoryName(final String category, boolean strict) {
 
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(category), "category is empty");

@@ -45,7 +45,7 @@ public class XMPSaxHandler extends DefaultHandler {
 	/**
 	 * Return parsed PDF/A level, otherwise an empty {@link String}.
 	 * 
-	 * @return
+	 * @return The PDF/A conformance level
 	 */
 	public String getPdfALevel() {
 		return this.pdfaidElementValue + this.conformanceElementValue;

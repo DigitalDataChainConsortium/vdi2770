@@ -73,11 +73,12 @@ public class VersionController {
 	/**
 	 * Return version as String
 	 * 
-	 * @return
+	 * @return The application version as {@link String}
+	 * @throws ResponseStatusException If controller is not enabled, return HTTP 404
 	 */
 	@RequestMapping(path = "/version", method = { RequestMethod.GET }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> getVersion() {
+	public ResponseEntity<String> getVersion() throws ResponseStatusException {
 
 		// version information must be enabled
 		if (!this.versionControllerEnabled) {

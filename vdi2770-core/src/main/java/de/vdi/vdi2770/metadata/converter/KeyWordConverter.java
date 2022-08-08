@@ -22,6 +22,7 @@
 package de.vdi.vdi2770.metadata.converter;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.vdi.vdi2770.metadata.xsd.DocumentDescription;
 import de.vdi.vdi2770.metadata.xsd.DocumentDescription.KeyWords;

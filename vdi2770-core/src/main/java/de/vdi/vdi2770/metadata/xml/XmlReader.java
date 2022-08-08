@@ -226,14 +226,15 @@ public class XmlReader {
 	}
 
 	/**
-	 * Read a XML metadata file and return the {@link Document} POJO. While reading,
-	 * the XML is validated according to the specification of the VDI 2770 DTD.
-	 * There is no logical validation.
+	 * Read a XML metadata file and return the
+	 * {@link de.vdi.vdi2770.metadata.model.Document} POJO. While reading, the XML
+	 * is validated according to the specification of the VDI 2770 DTD. There is no
+	 * logical validation.
 	 *
 	 * @param xmlFile A file representing XML metadata; must not be
 	 *                <code>null</code>.
-	 * @return A new instance of {@link Document} which is the POJO representation
-	 *         of the XML file.
+	 * @return A new instance of {@link de.vdi.vdi2770.metadata.model.Document}
+	 *         which is the POJO representation of the XML file.
 	 * @throws XmlProcessingException   There was an error reading the XML stream.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */

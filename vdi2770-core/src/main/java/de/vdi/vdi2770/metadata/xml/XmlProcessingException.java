@@ -21,6 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.xml;
 
+import java.io.IOException;
+
 import de.vdi.vdi2770.metadata.MetadataException;
 
 /**

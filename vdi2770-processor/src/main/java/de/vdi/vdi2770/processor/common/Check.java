@@ -215,6 +215,14 @@ public class Check {
 		}
 	}
 
+	/**
+	 * Check, whether a {@link File} is a PDF file.
+	 * 
+	 * @param file A {@link File} instance; must not be <code>null</code>
+	 * @param messageCode Message definition must contain a place holder for the
+	 *                    file name; must not be <code>null</code> or empty.
+	 * @throws ProcessorException There was an error while checking the {@link File}.
+	 */
 	public void isPdfFile(final File file, final String messageCode) throws ProcessorException {
 
 		Preconditions.checkArgument(file != null, "file is null");

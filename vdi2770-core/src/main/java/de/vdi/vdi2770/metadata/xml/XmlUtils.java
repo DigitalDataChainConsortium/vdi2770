@@ -162,7 +162,7 @@ public class XmlUtils {
 	/**
 	 * Get a XML reader instance
 	 * 
-	 * @return
+	 * @return A configured {@link XMLReader} instance
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */

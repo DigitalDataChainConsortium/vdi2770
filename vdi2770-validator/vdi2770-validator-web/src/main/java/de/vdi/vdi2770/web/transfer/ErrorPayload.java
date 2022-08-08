@@ -54,6 +54,12 @@ public class ErrorPayload {
 	 */
 	private String message;
 
+	/**
+	 * ctor
+	 * 
+	 * @param message Error message
+	 * @param status HTTP (error) status
+	 */
 	public ErrorPayload(final String message, final HttpStatus status) {
 
 		Preconditions.checkArgument(status != null, "status is null");
