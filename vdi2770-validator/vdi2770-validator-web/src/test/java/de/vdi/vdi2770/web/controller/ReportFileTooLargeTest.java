@@ -34,9 +34,9 @@ import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-
 import de.vdi.vdi2770.web.transfer.ReportDTO;
 
+@SuppressWarnings("javadoc")
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT, properties = {
 		"vdi2770.http.auth.tokenValue=vdi2770", "vdi2770.http.auth.tokenName=Api-Key",
 		"spring.servlet.multipart.max-file-size=100KB",
@@ -53,6 +53,10 @@ public class ReportFileTooLargeTest extends BaseControllerTest {
 
 	private static final String EXAMPLES_FOLDER = "../../examples/";
 
+	/**
+	 * Upload a file, that exceeds the maximum file upload size and check for HTTP
+	 * 413 error
+	 */
 	@Test
 	public void PayloadTooLargeTest() {
 		ResponseEntity<ReportDTO> response = requestReportRest(Locale.LanguageRange.parse("de"),

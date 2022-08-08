@@ -41,6 +41,7 @@ import org.springframework.util.MultiValueMap;
 import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 
+@SuppressWarnings("javadoc")
 @Component
 public class BaseControllerTest {
 
