@@ -369,6 +369,15 @@ spring.main.banner-mode=off
 spring.servlet.multipart.max-file-size=2MB
 spring.servlet.multipart.max-request-size=2MB
 
+# see https://tomcat.apache.org/tomcat-9.0-doc/config/http.html 
+# for more information
+server.tomcat.max-swallow-size=-1
+
+# application settings
+vdi2770.version.value=@project.version@
+vdi2770.version.expose=false
+vdi2770.settings.expose=true
+
 # HTTP header settings
 vdi2770.http.auth.tokenValue=demotoken
 vdi2770.http.auth.tokenName=Api-Key
@@ -408,6 +417,11 @@ In the following, important application settings are explained.
 
 ``spring.servlet.multipart.max-file-size``:: Set maximum file upload size.
 ``spring.servlet.multipart.max-request-size`` :: Set maximum HTTP request size.
+``server.tomcat.max-swallow-siz``:: Disable limit for swallowing  request body bytes.
+	
+``vdi2770.version.value``:: Application version as property
+``vdi2770.version.expose``:: Enable version REST controller and expose application version
+``vdi2770.settings.expose``:: Enable settings REST controller and expose application settings
 
 ``vdi2770.http.auth.tokenName``:: Specify the name of the security header. Default value 
 is ``Api-Key``.
