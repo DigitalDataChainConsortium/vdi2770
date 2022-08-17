@@ -64,6 +64,7 @@ import java.util.Locale;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
+@SuppressWarnings("javadoc")
 @ExtendWith({ RestDocumentationExtension.class, SpringExtension.class })
 @AutoConfigureRestDocs
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)

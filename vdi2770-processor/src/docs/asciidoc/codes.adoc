@@ -65,26 +65,27 @@ If the XML file does not contain any errors, essential metadata information are 
 * every object ID;
 * every document classification code;
 * every document relationship;
-* every in a container;
-
-In addition to the these information, the following is validated.
+* every file in a container.
 
 REP_006:: A file was found in the container that is not referenced in the XML metadata.
 REP_007:: A file referenced in the XML metadata could not be found in the container.
 REP_008:: A file referenced in the XML metadata was found in the container.
+REP_014:: The file type of a file in a container could not be determined.
+REP_018:: A file has a different MIME type than specified in the XML metadata.
 REP_009:: Output of a document ID. The output pattern is <id, domainId, isPrimary>.
 REP_010:: Output of an object ID. The output pattern is <id, objectType, isGloballyBiunique>.
 REP_011::  Output of an classId. The output pattern is <classificationSystem --> 
 classId [classNames]>.
 REP_012:: Output of a document relationship. The output pattern is <id, domainId, isPrimary>.
 REP_013:: Output of the file type of a file.
-REP_014:: The file type of a file in a container could not be determined.
-REP_018:: A file has a different MIME type than specified in the XML metadata.
 REP_031:: Object information in a document shall match the object of the main document.
 REP_032:: All document relationships are valid.
 
 The PDF files in a container are examined more closely with regard to their conformity 
-to link:{url-vdi2770}[VDI 2770]. 
+to link:{url-vdi2770}[VDI 2770]. If more than one PDF file is provided in the container, at 
+least one PDF file shall conform to PDF/A (depends on the VDI 2770 class). 
+The other PDF file may be e.g. a regular PDF 1.4 file. In this case, validation information 
+will be reported as information; otherwise, validation will be reported as error.
 
 REP_017:: The PDF/A level of a PDF file could not be read.
 REP_015:: Output the PDF/A level of the PDF file.

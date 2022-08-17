@@ -24,6 +24,7 @@ package de.vdi.vdi2770.processor.report;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -39,6 +40,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
+
 import de.vdi.vdi2770.metadata.MetadataException;
 import de.vdi.vdi2770.metadata.model.Constants;
 import de.vdi.vdi2770.metadata.model.DigitalFile;
@@ -57,10 +59,10 @@ import de.vdi.vdi2770.metadata.xml.XmlProcessingException;
 import de.vdi.vdi2770.metadata.xml.XmlReader;
 import de.vdi.vdi2770.metadata.xml.XmlValidationFault;
 
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.base.Preconditions;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.common.net.MediaType;
 
 import de.vdi.vdi2770.processor.ProcessorException;
 import de.vdi.vdi2770.processor.common.Check;
@@ -124,26 +126,33 @@ public class ContainerValidator {
 	/**
 	 * Validate ZIP container and report the content as well as validation errors.
 	 *
-	 * @param zipFileName A path to a ZIP container file.
+	 * @param zipFileName    A path to a ZIP container file.
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final String zipFileName) throws ProcessorException, MetadataException {
-		return validate(zipFileName, MessageLevel.INFO);
+	public Report validate(final String zipFileName, boolean enableFileHash)
+			throws ProcessorException, MetadataException {
+		return validate(zipFileName, MessageLevel.INFO, enableFileHash);
 	}
 
 	/**
 	 * Validate ZIP container and report the content as well as validation errors.
 	 *
-	 * @param zipFileName A path to a ZIP container file.
-	 * @param logLevel    A minimal logging threshold
+	 * @param zipFileName    A path to a ZIP container file.
+	 * @param logLevel       A minimal logging threshold
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final String zipFileName, final MessageLevel logLevel)
-			throws ProcessorException, MetadataException {
+	public Report validate(final String zipFileName, final MessageLevel logLevel,
+			boolean enableFileHash) throws ProcessorException, MetadataException {
 
 		Preconditions.checkArgument(!Strings.isNullOrEmpty(zipFileName),
 				"Zip file name is null or empty.");
@@ -155,7 +164,7 @@ public class ContainerValidator {
 		check.fileExists(zipFile, "REP_EXCEPTION_001");
 		check.isZipFile(zipFile, "REP_EXCEPTION_002");
 
-		return validate(zipFile, logLevel);
+		return validate(zipFile, logLevel, enableFileHash);
 	}
 
 	/**
@@ -164,12 +173,16 @@ public class ContainerValidator {
 	 * @param zipFile        A ZIP {@link File}; must not be <code>null</code> and
 	 *                       must exist.
 	 * @param minReportLevel The logging threshold.
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
+	 * 
 	 * @return A {@link Report} containing information and error {@link Message}s.
 	 * @throws ProcessorException Error while processing the container.
 	 * @throws MetadataException  Error reading XML metadata in the container.
 	 */
-	public Report validate(final File zipFile, final MessageLevel minReportLevel)
-			throws MetadataException, ProcessorException {
+	public Report validate(final File zipFile, final MessageLevel minReportLevel,
+			final boolean enableFileHash) throws MetadataException, ProcessorException {
 
 		Preconditions.checkArgument(zipFile != null, "file is null");
 		Preconditions.checkArgument(minReportLevel != null, "minReportLevel is null");
@@ -180,7 +193,7 @@ public class ContainerValidator {
 
 		final ZipUtils zip = new ZipUtils(this.locale);
 
-		final Report report = new Report(this.locale, zipFile, minReportLevel);
+		final Report report = new Report(this.locale, zipFile, minReportLevel, enableFileHash);
 
 		List<ZipFault> zipFaults = zip.validateZipFile(zipFile);
 		zipFaults.forEach(f -> report.addMessage(zipFaultToMessage(f, 0)));
@@ -723,18 +736,10 @@ public class ContainerValidator {
 		}
 	}
 
-	private void reportStoredDocumentRepresentations(final Document document, final String basePath,
+	private void reportUnnecessaryFiles(final String basePath, final List<DigitalFile> storedFiles,
 			final Report report, final int indentLevel) throws ProcessorException {
 
-		Preconditions.checkArgument(document != null, "document is null");
-		Preconditions.checkArgument(!Strings.isNullOrEmpty(basePath), "basepath is null or empty");
-		Preconditions.checkArgument(report != null, "report is null");
-
-		// files defined in the XML metadata
-		final List<DigitalFile> storedFiles = document.getDocumentVersion().stream()
-				.map(v -> v.getDigitalFile()).flatMap(d -> d.stream()).collect(Collectors.toList());
-
-		// check for additional files
+		// check for additional files that are not specified in the XML
 		final File[] localFiles = new File(basePath).listFiles();
 		if (localFiles != null) {
 			final ZipUtils zip = new ZipUtils(this.locale);
@@ -753,16 +758,10 @@ public class ContainerValidator {
 				}
 			}
 		}
+	}
 
-		// query: is the document classified as VDI 2770 02-04?
-		// if true, PDF/A-{1,2,3}b files are allowed
-		// see VDI 2770:2020 page 30
-		boolean allowPdfAOnly = document.getDocumentClassification().stream()
-				.filter(s -> StringUtils.equals(s.getClassificationSystem(),
-						Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))
-				.map(s -> s.getClassId())
-				.filter(i -> StringUtils.equals(i, Constants.VDI2770_CERTIFICATE_CATEGORY))
-				.count() == 0;
+	private void reportMissingFiles(final String basePath, final List<DigitalFile> storedFiles,
+			final Report report, final int indentLevel) {
 
 		// look for files that are defined in the metadata but do not exist
 		for (final DigitalFile storedFile : storedFiles) {
@@ -778,37 +777,168 @@ public class ContainerValidator {
 				report.addMessage(new Message(
 						MessageFormat.format(this.bundle.getString("REP_MESSAGE_008"), fileName),
 						indentLevel));
-
-				reportContentType(storedFile, localFile, allowPdfAOnly, report, indentLevel);
 			}
 		}
 	}
 
-	private void reportContentType(final DigitalFile storedFile, final File localFile,
-			boolean allowPdfAOnly, final Report report, final int indentLevel) {
+	private void reportPdf(final Document document, final String basePath,
+			final List<DigitalFile> storedFiles, final Report report, final int indentLevel) {
 
-		Preconditions.checkArgument(storedFile != null);
-		Preconditions.checkArgument(localFile != null);
-		Preconditions.checkArgument(localFile.exists());
-		Preconditions.checkArgument(report != null);
+		// list of PDF files
+		// There may be more than one PDF file as digital file (attachment)
+		List<File> pdfFiles = new ArrayList<>();
+
+		// look for files that are defined in the metadata but do not exist
+		for (final DigitalFile storedFile : storedFiles) {
+
+			final String fileName = storedFile.getFileName();
+			final File localFile = new File(basePath, fileName);
+
+			if (localFile.exists()) {
+
+				// check and report mime type compared to declared mime type in the XML
+				reportContentType(storedFile, localFile, report, indentLevel);
+
+				try {
+					if (PdfValidator.isPdfFile(localFile)) {
+						pdfFiles.add(localFile);
+					}
+				} catch (final IOException e) {
+					if (log.isWarnEnabled()) {
+						log.warn("Can not read file " + localFile.getAbsolutePath(), e);
+					}
+				}
+			}
+		}
+
+		// query: is the document classified as VDI 2770 02-04?
+		// if true, PDF/A-{1,2,3}b files are allowed
+		// see VDI 2770:2020 page 30
+		boolean allowPdfAOnly = document.getDocumentClassification().stream()
+				.filter(s -> StringUtils.equals(s.getClassificationSystem(),
+						Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))
+				.map(s -> s.getClassId())
+				.filter(i -> StringUtils.equals(i, Constants.VDI2770_CERTIFICATE_CATEGORY))
+				.count() == 0;
+
+		if (pdfFiles.size() == 1) {
+			report.addMessages(validatePdfFile(pdfFiles.get(0), allowPdfAOnly, indentLevel));
+		}
+
+		if (pdfFiles.size() > 1) {
+
+			Map<File, List<Message>> pdfFileStatus = new HashMap<>();
+			boolean validPdfFound = false;
+			for (File pdfFile : pdfFiles) {
+				List<Message> pdfFaults = validatePdfFile(pdfFile, allowPdfAOnly, indentLevel);
+				pdfFileStatus.put(pdfFile, pdfFaults);
+				if (!Message.hasErrors(pdfFaults)) {
+					validPdfFound = true;
+				}
+			}
+
+			if (validPdfFound) {
+				for (Map.Entry<File, List<Message>> status : pdfFileStatus.entrySet()) {
+					if (!Message.hasErrors(status.getValue())) {
+						report.addMessages(status.getValue());
+					} else {
+						// report errors as information
+						report.addMessages(
+								validatePdfFile(status.getKey(), allowPdfAOnly, true, indentLevel));
+					}
+				}
+			} else {
+				// no valid PDF found
+				// report every error message
+				for (Map.Entry<File, List<Message>> status : pdfFileStatus.entrySet()) {
+					report.addMessages(status.getValue());
+				}
+			}
+		}
+	}
+
+	private void reportStoredDocumentRepresentations(final Document document, final String basePath,
+			final Report report, final int indentLevel) throws ProcessorException {
+
+		Preconditions.checkArgument(document != null, "document is null");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(basePath), "basepath is null or empty");
+		Preconditions.checkArgument(report != null, "report is null");
+
+		// files defined in the XML metadata
+		final List<DigitalFile> storedFiles = document.getDocumentVersion().stream()
+				.map(v -> v.getDigitalFile()).flatMap(d -> d.stream()).collect(Collectors.toList());
+
+		// report files that are located in the ZIP but not declared in the XML file
+		reportUnnecessaryFiles(basePath, storedFiles, report, indentLevel);
+
+		// report files that are declared in the XML file but are not contained in the
+		// ZIP file
+		reportMissingFiles(basePath, storedFiles, report, indentLevel);
+
+		// additional report for PDF(/A) files
+		// More than one PDF file may exist
+		reportPdf(document, basePath, storedFiles, report, indentLevel);
+	}
+
+	private static boolean mimeTypeContainsParameter(final String mimeType) {
+
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(mimeType), "empty string");
+		return mimeType.contains(";");
+	}
+
+	@VisibleForTesting
+	static boolean mimeTypeEquals(final String sourceType, final String targetType) {
+
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(sourceType), "empty source mime type");
+		Preconditions.checkArgument(!Strings.isNullOrEmpty(targetType), "empty target mime type");
+
+		boolean sourceContainsParameter = mimeTypeContainsParameter(sourceType);
+		boolean targetContainsParameter = mimeTypeContainsParameter(targetType);
+
+		if ((sourceContainsParameter && targetContainsParameter)
+				|| (!sourceContainsParameter && !targetContainsParameter)) {
+
+			// issue 16: parameter in mime type
+			// image/vnd.dxf == image/vnd.dxf
+			// image/vnd.dxf; format=ascii == image/vnd.dxf; format=ascii
+			// image/vnd.dxf; format=ascii == image/vnd.dxf;format=ascii
+			// image/vnd.dxf; format=ascii == image/vnd.dxf;"format=ascii"
+			String s = sourceType.replaceAll(" ", "").replaceAll("\"", "");
+			String t = targetType.replaceAll(" ", "").replaceAll("\"", "");
+			return StringUtils.equalsIgnoreCase(s, t);
+		} else if (!sourceContainsParameter && targetContainsParameter) {
+			// issue 16: parameter in mime type
+			// image/vnd.dxf;format=ascii == image/vnd.dxf
+			return StringUtils.startsWithIgnoreCase(targetType, sourceType.trim());
+		} else if (sourceContainsParameter && !targetContainsParameter) {
+			// issue 16: parameter in mime type
+			// image/vnd.dxf;format=ascii == image/vnd.dxf
+			return StringUtils.startsWithIgnoreCase(sourceType, targetType.trim());
+		}
+
+		return false;
+	}
+
+	private void reportContentType(final DigitalFile storedFile, final File localFile,
+			final Report report, final int indentLevel) {
+
+		Preconditions.checkArgument(storedFile != null, "stored file is null");
+		Preconditions.checkArgument(localFile != null, "local file is null");
+		Preconditions.checkArgument(localFile.exists(), "local file does not exist");
+		Preconditions.checkArgument(report != null, "report is null");
 
 		try {
 			final String contentType = storedFile.getFileFormat();
 			if (contentType != null) {
 
 				final Tika tika = new Tika();
-				final String fileMimeType = tika.detect(localFile);
+				final String detectedMimeType = tika.detect(localFile);
 
-				if (!StringUtils.equalsIgnoreCase(fileMimeType, contentType)) {
-					report.addMessage(
-							new Message(MessageLevel.WARN,
-									MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
-											localFile.getName(), contentType, fileMimeType),
-									indentLevel));
-				}
-
-				if (contentType.equals(MediaType.PDF.toString())) {
-					report.addMessages(validatePdfFile(localFile, allowPdfAOnly, indentLevel));
+				if (!mimeTypeEquals(contentType, detectedMimeType)) {
+					report.addMessage(new Message(MessageLevel.WARN,
+							MessageFormat.format(this.bundle.getString("REP_MESSAGE_018"),
+									localFile.getName(), contentType, detectedMimeType),
+							indentLevel));
 				}
 			} else {
 				report.addMessage(new Message(MessageLevel.ERROR, MessageFormat
@@ -818,7 +948,7 @@ public class ContainerValidator {
 		} catch (final IOException e) {
 			report.addMessage(new Message(
 					MessageLevel.ERROR, MessageFormat
-							.format(this.bundle.getString("REP_MESSAGE_017"), localFile.getName()),
+							.format(this.bundle.getString("REP_MESSAGE_014"), localFile.getName()),
 					indentLevel));
 			if (log.isWarnEnabled()) {
 				log.warn("Error reading file mime type", e);
@@ -834,16 +964,21 @@ public class ContainerValidator {
 	 * Containers in PDF are not allowed.
 	 * </p>
 	 *
-	 * @param pdfFile          A PDF {@link File}; must not be <code>null</code> and
-	 *                         exist.
-	 * @param certificateClass Document is a certificate class (see class 02-04 in
-	 *                         VI 2770)
-	 * @param indentLevel      Level of indent.
+	 * @param pdfFile            A PDF {@link File}; must not be <code>null</code>
+	 *                           and exist.
+	 * @param isCertificateClass Document is a certificate class (see class 02-04 in
+	 *                           VI 2770)
+	 * @param indentLevel        Level of indent.
 	 * @return A {@link List} of {@link Message} including Information, warnings and
 	 *         errors.
 	 */
 	public List<Message> validatePdfFile(final File pdfFile, boolean isCertificateClass,
 			final int indentLevel) {
+		return validatePdfFile(pdfFile, isCertificateClass, false, indentLevel);
+	}
+
+	private List<Message> validatePdfFile(final File pdfFile, boolean isCertificateClass,
+			boolean treatErrosAsInfo, final int indentLevel) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
 		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
@@ -852,21 +987,23 @@ public class ContainerValidator {
 
 		final PdfValidator pdfValidator = new PdfValidator(this.locale);
 
+		String pdfVersion = "";
+
 		// read and check PDF/A conformance level
 		try {
 
-			String pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
+			pdfVersion = pdfValidator.getPdfAVersion(pdfFile);
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
 			if (isCertificateClass && !pdfVersion.toLowerCase().endsWith("a")) {
-				messages.add(new Message(MessageLevel.ERROR,
+				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
 						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
 
 		} catch (final PdfValidationException e) {
 			messages.add(new Message(
-					MessageLevel.ERROR, MessageFormat
+					!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO, MessageFormat
 							.format(this.bundle.getString("REP_MESSAGE_017"), pdfFile.getName()),
 					indentLevel));
 			if (log.isWarnEnabled()) {
@@ -879,8 +1016,10 @@ public class ContainerValidator {
 		try {
 			isEncrypted = pdfValidator.isEncrypted(pdfFile);
 			if (isEncrypted) {
-				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
-						this.bundle.getString("REP_MESSAGE_040"), pdfFile.getName()), indentLevel));
+				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
+						MessageFormat.format(this.bundle.getString("REP_MESSAGE_040"),
+								pdfFile.getName()),
+						indentLevel));
 			} else {
 				messages.add(new Message(MessageLevel.INFO, MessageFormat.format(
 						this.bundle.getString("REP_MESSAGE_041"), pdfFile.getName()), indentLevel));
@@ -913,39 +1052,44 @@ public class ContainerValidator {
 					log.warn("Can not extract text from file " + pdfFile.getAbsolutePath(), e);
 				}
 
-				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
-						this.bundle.getString("REP_MESSAGE_045"), pdfFile.getName()), indentLevel));
+				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
+						MessageFormat.format(this.bundle.getString("REP_MESSAGE_045"),
+								pdfFile.getName()),
+						indentLevel));
 			}
 
-			// try to execute preflight
-			// only PDF/A1a and PDF/A-1b are supported at the moment
-			try {
-				final List<Message> validationMessages = pdfValidator.preflight(pdfFile);
+			if (pdfVersion.contains("A")) {
 
-				if (Message.filter(validationMessages, MessageLevel.WARN).size() > 0) {
-					messages.add(
-							new Message(MessageLevel.WARN,
-									MessageFormat.format(this.bundle.getString("REP_MESSAGE_021"),
-											Integer.valueOf(validationMessages.size())),
-									indentLevel));
-				}
+				// try to execute preflight in case the PDF file is a PDF/A file
+				// only PDF/A1a and PDF/A-1b are supported at the moment
+				try {
+					final List<Message> validationMessages = pdfValidator.preflight(pdfFile);
 
-				for (final Message m : validationMessages) {
-					if (m.getLevel() == MessageLevel.INFO) {
-						messages.add(m);
-					} else {
-						messages.add(new Message(m.getLevel(),
-								MessageFormat.format(this.bundle.getString("REP_MESSAGE_047"),
-										m.getLevel() + ": " + m.getText()),
+					if (Message.filter(validationMessages, MessageLevel.WARN).size() > 0) {
+						messages.add(new Message(MessageLevel.WARN,
+								MessageFormat.format(this.bundle.getString("REP_MESSAGE_021"),
+										Integer.valueOf(validationMessages.size())),
 								indentLevel));
 					}
+
+					for (final Message m : validationMessages) {
+						if (m.getLevel() == MessageLevel.INFO) {
+							messages.add(m);
+						} else {
+							messages.add(new Message(m.getLevel(),
+									MessageFormat.format(this.bundle.getString("REP_MESSAGE_047"),
+											m.getLevel() + ": " + m.getText()),
+									indentLevel));
+						}
+					}
+				} catch (IOException e) {
+					if (log.isWarnEnabled()) {
+						log.warn("Error while PDF preflight", e);
+					}
+					messages.add(new Message(MessageLevel.ERROR, MessageFormat
+							.format(this.bundle.getString("REP_MESSAGE_046"), pdfFile.getName()),
+							indentLevel));
 				}
-			} catch (IOException e) {
-				if (log.isWarnEnabled()) {
-					log.warn("Error while PDF preflight", e);
-				}
-				messages.add(new Message(MessageLevel.ERROR, MessageFormat.format(
-						this.bundle.getString("REP_MESSAGE_046"), pdfFile.getName()), indentLevel));
 			}
 		}
 

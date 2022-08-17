@@ -31,7 +31,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,7 +40,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 import de.vdi.vdi2770.web.transfer.ReportProperties;
 import de.vdi.vdi2770.web.transfer.ReportStatistics;
 
@@ -98,7 +98,7 @@ public class StatsControllerTest extends BaseControllerTest {
 
 		// validate a container file
 		final String validateUrl = "http://localhost:" + this.port + "/rest/report";
-		this.restTemplate.postForEntity(validateUrl, requestEntity, Report.class);
+		this.restTemplate.postForEntity(validateUrl, requestEntity, ReportDTO.class);
 
 		// read validation statistics
 		final String serverUrl = "http://localhost:" + this.port + "/rest/stats";

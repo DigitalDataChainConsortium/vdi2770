@@ -108,6 +108,10 @@ public class Report {
 	@Setter(value = AccessLevel.NONE)
 	private final List<Report> subReports = new ArrayList<>();
 
+	@Getter(value = AccessLevel.NONE)
+	@Setter(value = AccessLevel.NONE)
+	private final boolean enableFileHash;
+
 	/**
 	 * Create a new {@link Report} instance that as sub report.
 	 * 
@@ -118,7 +122,7 @@ public class Report {
 
 		Preconditions.checkArgument(file != null, "file is null");
 
-		Report sub = new Report(this.locale, file, this.logThreshold);
+		Report sub = new Report(this.locale, file, this.logThreshold, this.enableFileHash);
 		addSubReport(sub);
 
 		return sub;
@@ -235,14 +239,13 @@ public class Report {
 	/**
 	 * Get an unmodifiable {@link List} of information messages.
 	 * 
-	 * If the {@link Report#getLogThreshold()} is set to {@link MessageLevel#WARN}
-	 * or {@link MessageLevel#ERROR}, the result will always be an empty
-	 * {@link List}.
+	 * If the log threshold is set to {@link MessageLevel#WARN} or
+	 * {@link MessageLevel#ERROR}, the result will always be an empty {@link List}.
 	 * 
 	 * @param deep               If set to <code>true</code>, nested information
 	 *                           messages from sub reports will return.
-	 * @param ignoreLogThreshold If set to <code>true</code>, the internal
-	 *                           {@link Report#getLogThreshold()} value is ignored.
+	 * @param ignoreLogThreshold If set to <code>true</code>, the internal log
+	 *                           threshold value is ignored.
 	 * @return A {@link List} of information messages (may be empty).
 	 */
 	public List<Message> getInfoMessages(boolean deep, boolean ignoreLogThreshold) {
@@ -257,13 +260,13 @@ public class Report {
 	/**
 	 * Get an unmodifiable {@link List} of warning messages.
 	 * 
-	 * If the {@link Report#getLogThreshold()} is set to {@link MessageLevel#ERROR},
-	 * the result will always be an empty {@link List}.
+	 * If the log threshold is set to {@link MessageLevel#ERROR}, the result will
+	 * always be an empty {@link List}.
 	 * 
 	 * @param deep               If set to <code>true</code>, nested warning
 	 *                           messages from sub reports will return.
-	 * @param ignoreLogThreshold If set to <code>true</code>, the internal
-	 *                           {@link Report#getLogThreshold()} value is ignored.
+	 * @param ignoreLogThreshold If set to <code>true</code>, the internal log
+	 *                           threshold value is ignored.
 	 * @return A {@link List} of warning messages (may be empty).
 	 */
 	public List<Message> getWarnMessages(boolean deep, boolean ignoreLogThreshold) {
@@ -295,8 +298,12 @@ public class Report {
 	 * @param file           The file this the sub report refers to. Must not be
 	 *                       <code>null</code>.
 	 * @param minReportLevel A minimal logging level (as threshold)
+	 * @param enableFileHash If <code>true</code>, the property
+	 *                       {@link Report#getFileHash()} will be set; otherwise
+	 *                       not.
 	 */
-	public Report(final Locale locale, final File file, final MessageLevel minReportLevel) {
+	public Report(final Locale locale, final File file, final MessageLevel minReportLevel,
+			final boolean enableFileHash) {
 
 		Preconditions.checkArgument(locale != null);
 		Preconditions.checkArgument(file != null);
@@ -306,12 +313,17 @@ public class Report {
 		this.locale = (Locale) locale.clone();
 		this.fileName = fixFileName(file);
 		this.logThreshold = minReportLevel;
-		try {
-			this.fileHash = Hashing.sha256().hashBytes(Files.readAllBytes(file.toPath()))
-					.toString();
-		} catch (IOException e) {
-			log.warn("Can not generate SHA 256 hash", e);
-			this.fileHash = UUID.randomUUID().toString();
+		this.enableFileHash = enableFileHash;
+
+		// set fileHash property if needed
+		if (enableFileHash) {
+			try {
+				this.fileHash = Hashing.sha256().hashBytes(Files.readAllBytes(file.toPath()))
+						.toString();
+			} catch (IOException e) {
+				log.warn("Can not generate SHA 256 hash", e);
+				this.fileHash = UUID.randomUUID().toString();
+			}
 		}
 	}
 
@@ -448,7 +460,17 @@ public class Report {
 
 		return result;
 	}
-	
+
+	/**
+	 * Filter the messages of this {@link Report} instance by a given
+	 * {@link MessageLevel}.
+	 * 
+	 * @param level A message level filter. Resulting messages have this level.
+	 * @param deep  Include messages of sub-reports.
+	 * @return {@link List} of {@link Message}, that apply to the given
+	 *         {@link MessageLevel} or above. If deep is set to true,
+	 *         {@link Message}s of sub-reports are included in the result, too.
+	 */
 	public List<Message> filterExact(final MessageLevel level, boolean deep) {
 
 		final List<Message> result = new ArrayList<>();

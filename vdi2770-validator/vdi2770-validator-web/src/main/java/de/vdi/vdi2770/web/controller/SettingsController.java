@@ -34,36 +34,37 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.google.common.base.Preconditions;
 
-import de.vdi.vdi2770.web.service.VersionService;
+import de.vdi.vdi2770.web.service.SettingsService;
+import de.vdi.vdi2770.web.transfer.ApplicationSettingsDTO;
 
 /**
- * Provide version information.
+ * Provide information about application settings.
  * 
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
- *
+ * @since 0.9.9
  */
 @RestController
 @RequestMapping(path = "/rest")
-public class VersionController {
+public class SettingsController {
 
 	/**
 	 * The service implementation
 	 */
-	private final VersionService service;
+	private final SettingsService service;
 
 	/**
 	 * Boolean flag indicating that the version endpoint is exposed
 	 */
-	@Value("${vdi2770.version.expose:false}")
-	private boolean versionControllerEnabled;
+	@Value("${vdi2770.settings.expose:true}")
+	private boolean settingsControllerEnabled;
 
 	/**
 	 * ctor
 	 *
-	 * @param service  The service implementation
+	 * @param service The service implementation
 	 */
-	public VersionController(final VersionService service) {
+	public SettingsController(final SettingsService service) {
 
 		Preconditions.checkArgument(service != null, "service is null");
 
@@ -71,17 +72,18 @@ public class VersionController {
 	}
 
 	/**
-	 * Return version as String
+	 * Return application settings
 	 * 
-	 * @return The application version as {@link String}
+	 * @return Application settings wrapped as data transfer object (DTO)
+	 * 
 	 * @throws ResponseStatusException If controller is not enabled, return HTTP 404
 	 */
-	@RequestMapping(path = "/version", method = { RequestMethod.GET }, produces = {
+	@RequestMapping(path = "/settings", method = { RequestMethod.GET }, produces = {
 			MediaType.APPLICATION_JSON_VALUE })
-	public ResponseEntity<String> getVersion() throws ResponseStatusException {
+	public ResponseEntity<ApplicationSettingsDTO> getSettings() throws ResponseStatusException {
 
 		// version information must be enabled
-		if (!this.versionControllerEnabled) {
+		if (!this.settingsControllerEnabled) {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "entity not found");
 		}
 
@@ -89,6 +91,7 @@ public class VersionController {
 		HttpHeaders responseHeaders = new HttpHeaders();
 		responseHeaders.add("Content-Type", MediaType.APPLICATION_JSON_VALUE);
 
-		return new ResponseEntity<String>(this.service.getVersion(), responseHeaders, HttpStatus.OK);
+		return new ResponseEntity<ApplicationSettingsDTO>(this.service.getApplicationSettings(),
+				responseHeaders, HttpStatus.OK);
 	}
 }

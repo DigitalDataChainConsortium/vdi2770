@@ -19,40 +19,60 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package de.vdi.vdi2770.metadata.xml;
+package de.vdi.vdi2770.web.transfer;
 
-import java.io.IOException;
+import com.google.common.base.Preconditions;
 
-import de.vdi.vdi2770.metadata.MetadataException;
+import de.vdi.vdi2770.processor.common.Message;
+import de.vdi.vdi2770.processor.common.MessageLevel;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * This {@link Exception} indicates any error while processing an XML file. This
- * {@link Exception} might wrap {@link IOException}s or XML parsing errors.
+ * A {@link MessageDTO} is used for notifications and errors while validation.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
+ *
  */
-public class XmlProcessingException extends MetadataException {
-
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Error while XML processing.
-	 *
-	 * @param message A message for the exception.
-	 */
-	public XmlProcessingException(final String message) {
-		super(message);
-	}
+@Data
+@ToString
+@EqualsAndHashCode
+public class MessageDTO {
 
 	/**
-	 * Error while XML processing.
-	 *
-	 * @param message A message for the exception.
-	 * @param cause   The origin exception.
+	 * Severity of the message.
 	 */
-	public XmlProcessingException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
+	private MessageLevel level;
 
+	/**
+	 * The text of the message.
+	 */
+	private String text;
+
+	/**
+	 * An indent value that can be used for indent. See also {@link IndentUtils}.
+	 */
+	private int indent;
+	
+	/**
+	 * Standard ctor
+	 */
+	public MessageDTO() {
+	}
+	
+	/**
+	 * Copy ctor
+	 * 
+	 * @param message The original {@link Message} instance to copy.
+	 */
+	public MessageDTO (final Message message) {
+		
+		Preconditions.checkArgument(message != null);
+		
+		this.level = message.getLevel();
+		this.text = message.getText();
+		this.indent = message.getIndent();
+	}
 }

@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2022 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -19,37 +19,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package de.vdi.vdi2770.web.transfer;
 
-import de.vdi.vdi2770.processor.common.MessageLevel;
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.ToString;
+package de.vdi.vdi2770.web.service;
+
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
+
+import de.vdi.vdi2770.web.transfer.ApplicationSettingsDTO;
 
 /**
- * A {@link Message} is used for notifications and errors while validation.
+ * This is a service implementation for application settings.
  *
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
- *
+ * @since 0.9.9
  */
-@Data
-@ToString
-@EqualsAndHashCode
-public class Message {
+@Service
+public class SettingsService {
 
 	/**
-	 * Severity of the message.
+	 * Version string as property 
 	 */
-	private MessageLevel level;
-
+	@Value("${spring.servlet.multipart.max-request-size:UNKNOWN-VERSION}")
+	private String maxUploadSize;
+	
 	/**
-	 * The text of the message.
+	 * Get application settings as data transfer object (DTO)
+	 * @return Application settings
 	 */
-	private String text;
-
-	/**
-	 * An indent value that can be used for indention. See also {@link IndentUtils}.
-	 */
-	private int indent;
+	public ApplicationSettingsDTO getApplicationSettings() {
+		
+		ApplicationSettingsDTO result = new ApplicationSettingsDTO();
+		result.setMaxUploadSize(this.maxUploadSize);
+		
+		return result;
+	}
+	
 }

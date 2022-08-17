@@ -34,7 +34,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.tika.Tika;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.web.server.LocalServerPort;
+import org.springframework.boot.test.web.server.LocalServerPort;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -46,7 +46,7 @@ import org.springframework.util.MultiValueMap;
 import com.google.common.io.Files;
 
 import de.vdi.vdi2770.processor.common.ContainerType;
-import de.vdi.vdi2770.web.transfer.Report;
+import de.vdi.vdi2770.web.transfer.ReportDTO;
 
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 
@@ -103,13 +103,13 @@ public class ReportControllerTest extends BaseControllerTest {
 	public void validateContainerRest() {
 
 		// REST call
-		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
+		ResponseEntity<ReportDTO> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP), this.port);
 
 		assertTrue(response.getStatusCode() == HttpStatus.OK);
 		assertTrue(response.getBody() != null);
 
-		final Report result = response.getBody();
+		final ReportDTO result = response.getBody();
 
 		// Report validation
 		assertTrue(result.getContainerType() == ContainerType.DOCUMENTATION_CONTAINER);
@@ -133,11 +133,11 @@ public class ReportControllerTest extends BaseControllerTest {
 		final File upload = new File(EXAMPLES_FOLDER, DEMO_VDI_ZIP);
 
 		// use language and country language tag
-		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("en-US"),
+		ResponseEntity<ReportDTO> response = requestReportRest(Locale.LanguageRange.parse("en-US"),
 				upload, this.port);
 		assertTrue(response.getStatusCode() == HttpStatus.OK);
 		assertTrue(response.getBody() != null);
-		Report result = response.getBody();
+		ReportDTO result = response.getBody();
 		assertTrue(result.getLocale().equals(Locale.forLanguageTag("en")));
 
 		// request Spanish language and return English
@@ -223,20 +223,20 @@ public class ReportControllerTest extends BaseControllerTest {
 	public void invalidDocumentTypeTest() {
 
 		// REST call
-		ResponseEntity<Report> response = requestReportRest(Locale.LanguageRange.parse("de"),
+		ResponseEntity<ReportDTO> response = requestReportRest(Locale.LanguageRange.parse("de"),
 				new File(EXAMPLES_FOLDER, INVALID_DOC_TYPE_ZIP), this.port);
 
 		assertTrue(response.getStatusCode() == HttpStatus.OK);
 		assertTrue(response.getBody() != null);
 
-		final Report result = response.getBody();
+		final ReportDTO result = response.getBody();
 
 		// Report validation
 		assertTrue(result != null);
 		assertTrue(result.getMessages().stream()
 				.filter(m -> StringUtils.startsWith(m.getText(), "DC_004")).count() > 0);
 		
-		for(Report sub : result.getSubReports()) {
+		for(ReportDTO sub : result.getSubReports()) {
 			if("AB393.zip".equals(sub.getFileName())) {
 				assertTrue(sub.getMessages().stream()
 						.filter(m -> StringUtils.startsWith(m.getText(), "DC_003")).count() > 0);	

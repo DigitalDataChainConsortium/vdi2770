@@ -310,7 +310,7 @@ public class ZipUtils {
 	 * </p>
 	 * 
 	 * @param file
-	 * @return
+	 * @return <code>true</code>, if the given ZIP file might be a ZIP Bomb
 	 */
 	public static boolean isBomb(final File file) {
 
@@ -538,6 +538,23 @@ public class ZipUtils {
 		}
 	}
 
+	/**
+	 * Unzip a ZIP file to a folder.
+	 *
+	 * <p>
+	 * Included ZIP files that are documentation container or document container can
+	 * be unzipped, too (see parameter extractZipsAndDelete).
+	 * </p>
+	 *
+	 * @param zipFile              A ZIP file; must not be <code>null</code> and
+	 *                             must exist.
+	 * @param targetDir            The target directory; must not be
+	 *                             <code>null</code>.
+	 * @param extractZipsAndDelete If <code>true</code>, all including container
+	 *                             files according to VDI 2770 will be extracted and
+	 *                             the origin ZIP container files will be deleted.
+	 * @throws ProcessorException There was an error while unzipping the ZIP file.
+	 */
 	public void unzip(final File zipFile, final File targetDir, final boolean extractZipsAndDelete)
 			throws ProcessorException {
 		unzip(zipFile, targetDir, extractZipsAndDelete, null);

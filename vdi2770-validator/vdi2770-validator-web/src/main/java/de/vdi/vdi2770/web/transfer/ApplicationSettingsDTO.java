@@ -19,40 +19,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  ******************************************************************************/
-package de.vdi.vdi2770.metadata.xml;
+package de.vdi.vdi2770.web.transfer;
 
-import java.io.IOException;
-
-import de.vdi.vdi2770.metadata.MetadataException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 /**
- * This {@link Exception} indicates any error while processing an XML file. This
- * {@link Exception} might wrap {@link IOException}s or XML parsing errors.
- *
+ * Simple data transfer object (DTO) to return application settings (e.g. via a
+ * web service controller).
+ * 
  * @author Johannes Schmidt (Leipzig University, Institute for Applied
  *         Informatics InfAI)
+ * @since 0.9.9
  */
-public class XmlProcessingException extends MetadataException {
+@Data
+@ToString
+@EqualsAndHashCode
+public class ApplicationSettingsDTO {
 
-	private static final long serialVersionUID = 1L;
-
-	/**
-	 * Error while XML processing.
-	 *
-	 * @param message A message for the exception.
-	 */
-	public XmlProcessingException(final String message) {
-		super(message);
-	}
-
-	/**
-	 * Error while XML processing.
-	 *
-	 * @param message A message for the exception.
-	 * @param cause   The origin exception.
-	 */
-	public XmlProcessingException(final String message, final Throwable cause) {
-		super(message, cause);
-	}
-
+	private String maxUploadSize;
 }

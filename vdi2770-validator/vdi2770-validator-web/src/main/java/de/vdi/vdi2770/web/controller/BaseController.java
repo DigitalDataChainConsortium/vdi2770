@@ -55,6 +55,11 @@ public class BaseController {
 
 	private final SmartLocaleResolver localeResolver;
 
+	/**
+	 * ctor
+	 * 
+	 * @param resolver The {@link Locale} resolver
+	 */
 	public BaseController(final SmartLocaleResolver resolver) {
 
 		Preconditions.checkArgument(resolver != null, "resolver is null");
