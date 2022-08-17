@@ -1,7 +1,7 @@
 = Changelog
 
 == v0.9.9
-In Preparation
+2022-08-17
 
 * [fix] support more than one PDF file in a container
 * [fix] mimetype compare
