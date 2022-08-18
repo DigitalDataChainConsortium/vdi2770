@@ -3,5 +3,5 @@
 :icons: font
 :sectnums:
 :source-highlighter: rouge
-:revnumber: v0.9.4 (draft)
-:revdate: 2022-01-07
+:revnumber: v0.9.9 
+:revdate: 2022-08-17

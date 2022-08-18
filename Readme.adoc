@@ -102,6 +102,6 @@ funding code 01IS14016) and link:https://www.sab.sachsen.de/index_en.jsp[Sächsi
 
 == Document License
 
-This work is licensed under a link:http://creativecommons.org/licenses/by-sa/4.0/[Creative Commons Attribution-ShareAlike 4.0 International License].
+This documentation is licensed under a link:http://creativecommons.org/licenses/by-sa/4.0/[Creative Commons Attribution-ShareAlike 4.0 International License].
 
 // end::doc-license[]

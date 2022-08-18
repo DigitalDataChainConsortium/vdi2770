@@ -2,7 +2,7 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.vdi.vdi2770</groupId>
-	<version>0.9.9-SNAPSHOT</version>
+	<version>0.9.10-SNAPSHOT</version>
 	<artifactId>vdi2770</artifactId>
 	<name>vdi2770</name>
 	<packaging>pom</packaging>
