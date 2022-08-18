@@ -324,7 +324,7 @@
 								<sourceDirectory>${project.build.directory}/asciidoc</sourceDirectory>
 								<backend>html5</backend>
 								<baseDir>src/docs/asciidoc</baseDir>
-								<outputDirectory>${project.basedir}/vdi2770-validator/vdi2770-validator-web/target/classes/public</outputDirectory>
+								<outputDirectory>${project.build.directory}/doc</outputDirectory>																
 								<attributes>
 									<author>Leipzig University; Digital Data Chain Consortium</author>
 									<revnumber>${project.version}</revnumber>
