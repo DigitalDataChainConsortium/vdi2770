@@ -158,6 +158,12 @@
 							<skip>true</skip>
 						</configuration>
 					</execution>
+					<execution>
+						<id>generate-asciidoc-codes</id>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</execution>
 				</executions>
 			</plugin>
 		</plugins>

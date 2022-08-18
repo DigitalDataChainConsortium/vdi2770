@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<artifactId>vdi2770-docker-web</artifactId>
@@ -42,10 +40,16 @@
 							<outputDirectory>${project.basedir}</outputDirectory>
 							<attributes>
 								<toc />
-								<compact>true</compact>
+								<author>Leipzig University; Digital Data Chain Consortium</author>
 								<revnumber>${project.version}</revnumber>
 								<revdate>${maven.build.timestamp}</revdate>
 							</attributes>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-asciidoc-codes</id>
+						<configuration>
+							<skip>true</skip>
 						</configuration>
 					</execution>
 				</executions>
