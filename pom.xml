@@ -264,7 +264,7 @@
 						</dependency>
 					</dependencies>
 					<configuration>
-						<skip>${skipAdoc}</skip>
+						<skip>${skipAsciidoctor}</skip>
 					</configuration>
 					<executions>
 						<execution>
