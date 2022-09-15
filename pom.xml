@@ -1,6 +1,4 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.vdi.vdi2770</groupId>
@@ -41,6 +39,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<maven.compiler.source>17</maven.compiler.source>
 		<maven.compiler.target>17</maven.compiler.target>
+		<skipAsciidoctor>false</skipAsciidoctor>
 	</properties>
 
 	<licenses>
@@ -175,8 +174,6 @@
 					<artifactId>license-maven-plugin</artifactId>
 					<version>2.0.0</version>
 					<executions>
-						<!--<execution> <id>first</id> <goals> <goal>update-file-header</goal> 
-							</goals> <phase>process-sources</phase> </execution> -->
 						<execution>
 							<id>download-licenses</id>
 							<phase>process-resources</phase>
@@ -199,7 +196,6 @@
 						<missingFile>src/license/THIRD-PARTY.properties</missingFile>
 						<failOnMissing>false</failOnMissing>
 						<encoding>utf-8</encoding>
-						<verbose>true</verbose>
 						<outputDirectory>${project.build.directory}/classes/META-INF/licenses</outputDirectory>
 						<thirdPartyFilename>THIRD-PARTY-included-modules.txt</thirdPartyFilename>
 						<licensesOutputFile>${project.build.directory}/classes/META-INF/licenses/licenses-generated.xml</licensesOutputFile>
@@ -267,6 +263,9 @@
 							<version>2.1.4</version>
 						</dependency>
 					</dependencies>
+					<configuration>
+						<skip>${skipAsciidoctor}</skip>
+					</configuration>
 					<executions>
 						<execution>
 							<id>generate-asciidoc-documentation</id>
@@ -281,10 +280,16 @@
 								<baseDir>src/docs/asciidoc</baseDir>
 								<outputDirectory>${project.build.directory}/doc</outputDirectory>
 								<attributes>
+									<author>Leipzig University; Digital Data Chain Consortium</author>
+									<doctype>book</doctype>
+									<chapter-signifier></chapter-signifier>
 									<toc />
-									<compact>true</compact>
 									<revnumber>${project.version}</revnumber>
 									<revdate>${maven.build.timestamp}</revdate>
+									<pagenums />
+									<copyright>Creative Commons Attribution-ShareAlike 4.0 International License.</copyright>
+									<description>VDI 2770 validator project documentation</description>
+									<keywords>VDI 2770, Container, PDF/A, Validator</keywords>
 								</attributes>
 							</configuration>
 						</execution>
@@ -301,8 +306,27 @@
 								<baseDir>${project.basedir}</baseDir>
 								<outputDirectory>${project.build.directory}/doc</outputDirectory>
 								<attributes>
+									<author>Leipzig University; Digital Data Chain Consortium</author>
 									<toc />
-									<compact>true</compact>
+									<revnumber>${project.version}</revnumber>
+									<revdate>${maven.build.timestamp}</revdate>
+								</attributes>
+							</configuration>
+						</execution>
+						<execution>
+							<id>generate-asciidoc-codes</id>
+							<phase>prepare-package</phase>
+							<goals>
+								<goal>process-asciidoc</goal>
+							</goals>
+							<configuration>
+								<sourceDocumentName>codes.adoc</sourceDocumentName>
+								<sourceDirectory>${project.build.directory}/asciidoc</sourceDirectory>
+								<backend>html5</backend>
+								<baseDir>src/docs/asciidoc</baseDir>
+								<outputDirectory>${project.build.directory}/doc</outputDirectory>																
+								<attributes>
+									<author>Leipzig University; Digital Data Chain Consortium</author>
 									<revnumber>${project.version}</revnumber>
 									<revdate>${maven.build.timestamp}</revdate>
 								</attributes>

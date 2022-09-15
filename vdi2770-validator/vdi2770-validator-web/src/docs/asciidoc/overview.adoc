@@ -18,6 +18,10 @@ set the HTTP header ``Accept-Language``. A security token is given the HTTP head
 ``Accept-Language``:: Set the desired language of validation messages. English, Germany and Chinese 
 are supported. In case of other languages, English will return.
 
+Each validation message can be identified by a validation code. 
+The list of codes is provides to the users as static HTML page ``/codes.html`.
+For each code, an HTML anchor is set, e.g. ``codes.html#DV_008``.
+
 === Settings
 
 ``/rest/report`` and ``/rest/reportpdf`` support file parameters as well as a 

@@ -1,5 +1,5 @@
 === Model Validation
-:url-vdi2770: https://www.vdi.de/richtlinien/details/vdi-2770-blatt-1-betrieb-verfahrenstechnischer-anlagen-mindestanforderungen-an-digitale-herstellerinformationen-fuer-die-prozessindustrie-grundlagen
+:url-vdi2770: link:https://www.vdi.de/richtlinien/details/vdi-2770-blatt-1-betrieb-verfahrenstechnischer-anlagen-mindestanforderungen-an-digitale-herstellerinformationen-fuer-die-prozessindustrie-grundlagen
 
 The validation of the model is divided into two phases.
 First the XML file is validated against the VDI 2770 XML Schema file.
@@ -25,7 +25,7 @@ The `Document` entity contains metadata about a document, that are independent o
 of the document.
 
 For more information see section  C1.2 in 
-link:{url-vdi2770}[VDI 2770].
+{url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `Document`
 [source,xml]
@@ -40,55 +40,59 @@ link:{url-vdi2770}[VDI 2770].
 </Document>
 ----
 
-D_001:: A document can have multiple document IDs. In case of multiple IDs, e.g. from different 
+// tag::core-codes[]
+[[D_001]] D_001:: A document can have multiple document IDs. In case of multiple IDs, e.g. from different 
 domains, exactly one of these IDs must be marked as _primary_.
-D_002:: A document type classification according to VDI 2770 must be specified for each document 
-(see also sections 6 and 8.2 in link:{url-vdi2770}[VDI 2770]).
-D_003:: The document type classification system IEC 61355-1 is widely used in practice. 
+[[D_002]] D_002:: A document type classification according to VDI 2770 must be specified for each document 
+(see also sections 6 and 8.2 in {url-vdi2770}[VDI 2770]).
+[[D_003]] D_003:: The document type classification system IEC 61355-1 is widely used in practice. 
 It is recommended to specify document types according to IEC 61355-1 in addition to the 
-categories in link:{url-vdi2770}[VDI 2770] in order to facilitate automatic document processing.
-D_004:: Documents can be related to each other. Document relationships in the main document are used 
+categories in {url-vdi2770}[VDI 2770] in order to facilitate automatic document processing.
+[[D_004]] D_004:: Documents can be related to each other. Document relationships in the main document are used 
 to enlist the delivered documents in a documentation container. This error code indicates 
 that a relationship to an unknown document, i.e. that may not be included in the document container, 
 has been found. In case of a main document, this message is to be understood as an error.
-D_005:: _DocumentId_ is required (see table C1 in link:{url-vdi2770}[VDI 2770]).
+[[D_005]] D_005:: _DocumentId_ is required (see table C1 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-D_006:: _DocumentVersion_ is required (see table C1 in link:{url-vdi2770}[VDI 2770]).
+[[D_006]] D_006:: _DocumentVersion_ is required (see table C1 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-D_007:: _DocumentClassification_ is required (see table C1 in link:{url-vdi2770}[VDI 2770]).
+[[D_007]] D_007:: _DocumentClassification_ is required (see table C1 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-D_008:: _DocumentIdDomain_ is required (see table C1 in link:{url-vdi2770}[VDI 2770]).
+[[D_008]] D_008:: _DocumentIdDomain_ is required (see table C1 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-D_009:: _ReferencedObject_ is required (see table C1 in link:{url-vdi2770}[VDI 2770]).
+[[D_009]] D_009:: _ReferencedObject_ is required (see table C1 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-D_010:: This code indicates that the object of a document does not match the object of 
+[[D_010]] D_010:: This code indicates that the object of a document does not match the object of 
 the superordinated main document. 
+// end::core-codes[]
 
-link:{url-vdi2770}[VDI 2770] distinguishes between documents and main documents (see also 
-section 7.3 in link:{url-vdi2770}[VDI 2770]). Extended requirements are defined for main 
+{url-vdi2770}[VDI 2770] distinguishes between documents and main documents (see also 
+section 7.3 in {url-vdi2770}[VDI 2770]). Extended requirements are defined for main 
 documents (MD).
 
-MD_001:: The information model of link:{url-vdi2770}[VDI 2770] basically allows that different 
+// tag::core-codes[]
+[[MD_001]] MD_001:: The information model of {url-vdi2770}[VDI 2770] basically allows that different 
 document versions can be provided for one document. 
 For main documents, it has been specified that only exactly one document version may be supplied.
-MD_002:: For main documents a file named `VDI2770_Main.pdf` must be provided (see 9.3.3 d in 
-link:{url-vdi2770}[VDI 2770]). This message indicates that this PDF file could not be found.
-MD_003:: Main documents have are informative. They contain a list of delivered documents and their 
+[[MD_002]] MD_002:: For main documents a file named `VDI2770_Main.pdf` must be provided (see 9.3.3 d in 
+{url-vdi2770}[VDI 2770]). This message indicates that this PDF file could not be found.
+[[MD_003]] MD_003:: Main documents have are informative. They contain a list of delivered documents and their 
 subordinated documentations. Therefore, a document container that only contains a main document
 does not make sense. This message indicates that no documents have been specified in a main 
 document using document relationships. 
-MD_004:: Main documents should refer to documents that are included in the document container. Only 
+[[MD_004]] MD_004:: Main documents should refer to documents that are included in the document container. Only 
 _RefersTo_ relationships should be used in main documents.
-MD_005:: The information model of link:{url-vdi2770}[VDI 2770]) provides that a document can refer 
+[[MD_005]] MD_005:: The information model of {url-vdi2770}[VDI 2770]) provides that a document can refer 
 to a set of objects. For example, safety instructions can apply to different variants of a product 
 with different object IDs. A main document, on the other hand, shall only refer to exactly 
 one object.
-MD_007:: A technical documentation usually refers to all instances of an object. Therefore, the 
+[[MD_007]] MD_007:: A technical documentation usually refers to all instances of an object. Therefore, the 
 specification of a product number is sufficient for individual documents. A main document, on the 
 other hand, must always refer to the delivered object instance. Therefore, the main document 
 must contain a serial number.
-MD_009:: A main document must be released, i.e. have a LifecycleStatus _RELEASED_. Other
+[[MD_009]] MD_009:: A main document must be released, i.e. have a LifecycleStatus _RELEASED_. Other
 lifecycle phases are not allowed.
+// end::core-codes[]
 
 ===== DocumentId (DI)
 
@@ -97,7 +101,7 @@ the document ID assumes that an identifier is only unique within a domain. There
 domain must also be declared. However, a document ID can also be globally unique. 
 This information must be specified in the document ID metadata.
 
-See section C1.3 in link:{url-vdi2770}[VDI 2770].
+See section C1.3 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentId`
 [source,xml]
@@ -105,12 +109,14 @@ See section C1.3 in link:{url-vdi2770}[VDI 2770].
 <DocumentId DomainId="TEXT">TEXT</DocumentId>
 ----
 
-DI_001:: _DomainId_ is required and must not be empty (see table C2 in link:{url-vdi2770}[VDI 2770]).
-DI_002:: _Id_ is required and must not be empty (see table C2 in link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[DI_001]] DI_001:: _DomainId_ is required and must not be empty (see table C2 in {url-vdi2770}[VDI 2770]).
+[[DI_002]] DI_002:: _Id_ is required and must not be empty (see table C2 in {url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 ===== DocumentIdDomain (DID)
 
-See section C1.4 in link:{url-vdi2770}[VDI 2770].
+See section C1.4 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentIdDomain`
 [source,xml]
@@ -120,17 +126,19 @@ See section C1.4 in link:{url-vdi2770}[VDI 2770].
 </DocumentIdDomain>
 ----
 
-DID_001:: The _Role_ attribute of the party must be _Responsible_.
-DID_002:: _DocumentDomainId_ is required and must not be empty. 
-(see table C3 in link:{url-vdi2770}[VDI 2770]).
-DID_003:: _Party_ is required (see table C3 in link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[DID_001]] DID_001:: The _Role_ attribute of the party must be _Responsible_.
+[[DID_002]] DID_002:: _DocumentDomainId_ is required and must not be empty. 
+(see table C3 in {url-vdi2770}[VDI 2770]).
+[[DID_003]] DID_003:: _Party_ is required (see table C3 in {url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 ===== DocumentClassification (DC)
 
-The classification of a document according to link:{url-vdi2770}[VDI 2770] provides important 
+The classification of a document according to {url-vdi2770}[VDI 2770] provides important 
 information for the (automated) processing of the documentation. 
 
-See section C1.5 in link:{url-vdi2770}[VDI 2770].
+See section C1.5 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentClassification`
 [source,xml]
@@ -141,28 +149,30 @@ See section C1.5 in link:{url-vdi2770}[VDI 2770].
 </DocumentClassification>
 ----
 
-DC_001:: _ClassName_ is a list of classes name of VDI 2770 taxonomy. Only one name may be specified 
+// tag::core-codes[]
+[[DC_001]] DC_001:: _ClassName_ is a list of classes name of VDI 2770 taxonomy. Only one name may be specified 
 per language in this list. This message indicates that multiple _ClassName_ have been assigned 
-for the same language. See table C4 in link:{url-vdi2770}[VDI 2770].
-DC_002:: The _ClassId_ of the classes according to VDI 2770 are defined in table 1 
-in link:{url-vdi2770}[VDI 2770]. This message indicates that the given call ID does not 
-comply with the normative specifications. See table C4 in link:{url-vdi2770}[VDI 2770].
-DC_003:: The names of the classes according to VDI 2770 are defined for German and English language 
-in table 1 in link:{url-vdi2770}[VDI 2770]. This message code indicates that a _ClassName_ in German 
-does not comply with the normative definitions. See table C4 in link:{url-vdi2770}[VDI 2770].
-DC_004:: The names of the classes according to VDI 2770 are defined for German and English language 
-in table 1 in link:{url-vdi2770}[VDI 2770]. This message code indicates that a _ClassName_ in English 
-does not comply with the normative definitions. See table C4 in link:{url-vdi2770}[VDI 2770].
-DC_005:: _ClassId_ is required and must not be empty (see table C4 in link:{url-vdi2770}[VDI 2770]).
-DC_006:: _ClassificationSystem_ is required and must not be empty (see table C4 in 
-link:{url-vdi2770}[VDI 2770]).
+for the same language. See table C4 in {url-vdi2770}[VDI 2770].
+[[DC_002]] DC_002:: The _ClassId_ of the classes according to VDI 2770 are defined in table 1 
+in {url-vdi2770}[VDI 2770]. This message indicates that the given call ID does not 
+comply with the normative specifications. See table C4 in {url-vdi2770}[VDI 2770].
+[[DC_003]] DC_003:: The names of the classes according to VDI 2770 are defined for German and English language 
+in table 1 in {url-vdi2770}[VDI 2770]. This message code indicates that a _ClassName_ in German 
+does not comply with the normative definitions. See table C4 in {url-vdi2770}[VDI 2770].
+[[DC_004]] DC_004:: The names of the classes according to VDI 2770 are defined for German and English language 
+in table 1 in {url-vdi2770}[VDI 2770]. This message code indicates that a _ClassName_ in English 
+does not comply with the normative definitions. See table C4 in {url-vdi2770}[VDI 2770].
+[[DC_005]] DC_005:: _ClassId_ is required and must not be empty (see table C4 in {url-vdi2770}[VDI 2770]).
+[[DC_006]] DC_006:: _ClassificationSystem_ is required and must not be empty (see table C4 in 
+{url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 ===== DocumentVersion (DV)
 
 A document version identifies a document status at a certain point in time / at the time of document 
 delivery. As a rule, only document versions that represent a document revision should be delivered.
 
-See section C1.6 in link:{url-vdi2770}[VDI 2770].
+See section C1.6 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentVersion`
 [source,xml]
@@ -178,34 +188,36 @@ See section C1.6 in link:{url-vdi2770}[VDI 2770].
 </DocumentVersion>
 ----
 
-DV_001:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
+// tag::core-codes[]
+[[DV_001]] DV_001:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
 _Author_ role has been set.
-DV_002:: Descriptions of the document version can be provided in different languages. The list of 
+[[DV_002]] DV_002:: Descriptions of the document version can be provided in different languages. The list of 
 _DocumentDescription_ shall contain only one entry per language.
-DV_003:: At least one PDF/A file must be included in the list of files for that document version.
-DV_004:: For each document version, the language(s) used in the document must be specified. A 
+[[DV_003]] DV_003:: At least one PDF/A file must be included in the list of files for that document version.
+[[DV_004]] DV_004:: For each document version, the language(s) used in the document must be specified. A 
 _DocumentDescription_ entry must be provided for each language.
-DV_005:: _DocumentVersionId_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]).
+[[DV_005]] DV_005:: _DocumentVersionId_ is required (see table C5 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-DV_006:: _Language_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]).
+[[DV_006]] DV_006:: _Language_ is required (see table C5 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-DV_007:: Language codes must conform to ISO 639-1 or ISO 639-2. This message code indicates that 
+[[DV_007]] DV_007:: Language codes must conform to ISO 639-1 or ISO 639-2. This message code indicates that 
 an invalid language code was found in _Language_.
-DV_008:: _Party_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]). 
+[[DV_008]] DV_008:: _Party_ is required (see table C5 in {url-vdi2770}[VDI 2770]). 
 This list must not be empty.
-DV_009:: _DocumentDescription_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]).
+[[DV_009]] DV_009:: _DocumentDescription_ is required (see table C5 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-DV_010:: _LifeCycleStatus_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]).
-DV_011:: _DigitalFile_ is required (see table C5 in link:{url-vdi2770}[VDI 2770]).
+[[DV_010]] DV_010:: _LifeCycleStatus_ is required (see table C5 in {url-vdi2770}[VDI 2770]).
+[[DV_011]] DV_011:: _DigitalFile_ is required (see table C5 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
-DV_012:: A file was specified twice in the list of _DigitalFile_.
-DV_013:: The value for _numberOfPages_ must be greater than zero.
+[[DV_012]] DV_012:: A file was specified twice in the list of _DigitalFile_.
+[[DV_013]] DV_013:: The value for _numberOfPages_ must be greater than zero.
+// end::core-codes[]
 
 ===== LifeCycleStatus (LCS)
 
 Document lifecycle information can help to assess the validity of information in a document.
 
-See section C1.7 in link:{url-vdi2770}[VDI 2770].
+See section C1.7 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `LifeCycleStatus`
 [source,xml]
@@ -216,18 +228,20 @@ See section C1.7 in link:{url-vdi2770}[VDI 2770].
 </LifeCycleStatus>
 ----
 
-LCS_001:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
+// tag::core-codes[]
+[[LCS_001]] LCS_001:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
 _Responsible_ role has been set.
-LCS_003:: _StatusValue_ is required and must not be empty 
-(see table C6 in link:{url-vdi2770}[VDI 2770]).
-LCS_004:: _Party_ is required (see table C6 in link:{url-vdi2770}[VDI 2770]).
+[[LCS_003]] LCS_003:: _StatusValue_ is required and must not be empty 
+(see table C6 in {url-vdi2770}[VDI 2770]).
+[[LCS_004]] LCS_004:: _Party_ is required (see table C6 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
+// end::core-codes[]
 
 ===== DocumentDescription (DD)
 
 The `DocumentDescription` entity contains the most important information about a document version.
 
-See section C1.8 in link:{url-vdi2770}[VDI 2770].
+See section C1.8 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentDescription`
 [source,xml]
@@ -240,22 +254,24 @@ See section C1.8 in link:{url-vdi2770}[VDI 2770].
 </DocumentDescription>
 ----
 
-DD_001:: _Language_ is required and must not be empty (see table C7 in 
-link:{url-vdi2770}[VDI 2770]).
-DD_002:: The language code in _Langauge_ does not comply to ISO 639-1 or ISO 639-2.
-DD_003:: _Title_ is required and must not be empty (see table C7 in 
-link:{url-vdi2770}[VDI 2770]).
-DD_004:: _Summary_ is required and must not be empty (see table C7 in 
-link:{url-vdi2770}[VDI 2770]).
-DD_005:: _Keyword_ is required (see table C7 in link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[DD_001]] DD_001:: _Language_ is required and must not be empty (see table C7 in 
+{url-vdi2770}[VDI 2770]).
+[[DD_002]] DD_002:: The language code in _Langauge_ does not comply to ISO 639-1 or ISO 639-2.
+[[DD_003]] DD_003:: _Title_ is required and must not be empty (see table C7 in 
+{url-vdi2770}[VDI 2770]).
+[[DD_004]] DD_004:: _Summary_ is required and must not be empty (see table C7 in 
+{url-vdi2770}[VDI 2770]).
+[[DD_005]] DD_005:: _Keyword_ is required (see table C7 in {url-vdi2770}[VDI 2770]).
 This list must not be empty.
+// end::core-codes[]
 
 ===== Party (P)
 
 The `Party` entity serves as a connecting element between an organization and its role.
 An organization can take different roles.
 
-See section C1.9 in link:{url-vdi2770}[VDI 2770].
+See section C1.9 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `Party`
 [source,xml]
@@ -265,12 +281,14 @@ See section C1.9 in link:{url-vdi2770}[VDI 2770].
 </Party>
 ----
 
-P_001:: _Role_ is required and must not be empty (see table C8 in link:{url-vdi2770}[VDI 2770]).
-P_002:: _Organization_ is required.
+// tag::core-codes[]
+[[P_001]] P_001:: _Role_ is required and must not be empty (see table C8 in {url-vdi2770}[VDI 2770]).
+[[P_002]] P_002:: _Organization_ is required.
+// end::core-codes[]
 
 ===== Organization (O)
 
-See section C1.10 in link:{url-vdi2770}[VDI 2770].
+See section C1.10 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `Organization`
 [source,xml]
@@ -280,17 +298,19 @@ See section C1.10 in link:{url-vdi2770}[VDI 2770].
               OrganizationId="TEXT"/>
 ----
 
-O_001:: _OrganizationName_ is required and must not be empty (see table C9 in 
-link:{url-vdi2770}[VDI 2770]).
-O_002:: _OrganizationOfficialName_ is required and must not be empty (see table C9 in 
-link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[O_001]] O_001:: _OrganizationName_ is required and must not be empty (see table C9 in 
+{url-vdi2770}[VDI 2770]).
+[[O_002]] O_002:: _OrganizationOfficialName_ is required and must not be empty (see table C9 in 
+{url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 ===== ReferencedObject (RO)
 
 The _ReferencedObject_ contains metadata about the (technical) object to which a document 
 refers in terms of content. Such an object may be a motor or a safety valve.
 
-See section C1.11 in link:{url-vdi2770}[VDI 2770].
+See section C1.11 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `ReferencedObject`
 [source,xml]
@@ -302,19 +322,21 @@ See section C1.11 in link:{url-vdi2770}[VDI 2770].
 </ReferencedObject>
 ----
 
-RO_001:: Multiple serial numbers have been found for a single object.
-RO_002:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
+// tag::core-codes[]
+[[RO_001]] RO_001:: Multiple serial numbers have been found for a single object.
+[[RO_002]] RO_002:: The list of involved parties (_Party_) must contain a party for which the _Role_ value 
 _Manufacturer_ role has been set.
-RO_003:: _ObjectId_ is required (see table C10 in link:{url-vdi2770}[VDI 2770]). This list
+[[RO_003]] RO_003:: _ObjectId_ is required (see table C10 in {url-vdi2770}[VDI 2770]). This list
 must not be empty.
-RO_004:: _Party_ is required (see table C10 in link:{url-vdi2770}[VDI 2770]). This list
+[[RO_004]] RO_004:: _Party_ is required (see table C10 in {url-vdi2770}[VDI 2770]). This list
 must not be empty
+// end::core-codes[]
 
 ===== ObjectId (OI)
 
 Objects should be uniquely identifiable. An object can have several object IDs.
 
-See section C1.12 in link:{url-vdi2770}[VDI 2770].
+See section C1.12 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `ObjectId`
 [source,xml]
@@ -324,8 +346,10 @@ See section C1.12 in link:{url-vdi2770}[VDI 2770].
           IsGloballyBiUnique="BOOLEAN">TEXT</ObjectId>
 ----
 
-OI_001:: _ObjectType_ is required (see table C11 in link:{url-vdi2770}[VDI 2770]).
-OI_002:: The value of this element is required (see table C11 in link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[OI_001]] OI_001:: _ObjectType_ is required (see table C11 in {url-vdi2770}[VDI 2770]).
+[[OI_002]] OI_002:: The value of this element is required (see table C11 in {url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 An object ID my be encoded as URL. If RefType has the value "instance of object uri", the value
 of the ID must be an URL. 
@@ -334,18 +358,20 @@ In 2022, these requirements are published as international standard prEN IEC 614
 "Identification Link". 
 The following validation codes relate to URL validation.
 
-OI_003:: The value of this element is not a valid URL.
-OI_004:: Uppercase letters are only allowed in the Path, Query or Fragment components of the URL. See DIN SPEC 91406 or IEC 61406 for more information.
-OI_005:: The URL should not be extended beyond a length of 100 characters.
-OI_006:: The URL shall not be longer than 255 characters.
-OI_007:: The URL may contain punycode.This should be avoided..
-OI_008:: The URL contains invalid characters.
+// tag::core-codes[]
+[[OI_003]] OI_003:: The value of this element is not a valid URL.
+[[OI_004]] OI_004:: Uppercase letters are only allowed in the Path, Query or Fragment components of the URL. See DIN SPEC 91406 or IEC 61406 for more information.
+[[OI_005]] OI_005:: The URL should not be extended beyond a length of 100 characters.
+[[OI_006]] OI_006:: The URL shall not be longer than 255 characters.
+[[OI_007]] OI_007:: The URL may contain punycode.This should be avoided..
+[[OI_008]] OI_008:: The URL contains invalid characters.
+// end::core-codes[]
 
 ===== DigitalFile (DF)
 
 The `DigitalFile` entity contains metadata about files in a container.
 
-See section C1.13 in link:{url-vdi2770}[VDI 2770].
+See section C1.13 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DigitalFile`
 [source,xml]
@@ -353,20 +379,22 @@ See section C1.13 in link:{url-vdi2770}[VDI 2770].
 <DigitalFile FileFormat="TEXT">TEXT</DigitalFile>
 ----
 
-DF_001:: The given MIME-Type is invalid.
-DF_002:: A PDF file shall have the file extension .pdf.
-DF_003:: A ZIP file shall have the file extension .zip.
-DF_004:: The value of the element is required and must not be empty
-(see table C12 in link:{url-vdi2770}[VDI 2770]).
-DF_005:: _FileFormat_ is required and must not be empty (see table C12 in 
-link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[DF_001]] DF_001:: The given MIME-Type is invalid.
+[[DF_002]] DF_002:: A PDF file shall have the file extension .pdf.
+[[DF_003]] DF_003:: A ZIP file shall have the file extension .zip.
+[[DF_004]] DF_004:: The value of the element is required and must not be empty
+(see table C12 in {url-vdi2770}[VDI 2770]).
+[[DF_005]] DF_005:: _FileFormat_ is required and must not be empty (see table C12 in 
+{url-vdi2770}[VDI 2770]).
+// end::core-codes[]
 
 ===== DocumentRelationship (DR)
 
 The entity `DocumentRelationship` specifies a relationship between a document version
 and document or between a document version and another document version.
 
-See section C1.14 in link:{url-vdi2770}[VDI 2770].
+See section C1.14 in {url-vdi2770}[VDI 2770].
 
 .Simplified XML structure of `DocumentRelationship`
 [source,xml]
@@ -378,6 +406,8 @@ See section C1.14 in link:{url-vdi2770}[VDI 2770].
 </DocumentRelationship>
 ----
 
-DR_001:: _DocumentId_ is required (see table C13 in link:{url-vdi2770}[VDI 2770]).
-DR_002:: _Type_ is required and must not be emty (see table C13 in 
-link:{url-vdi2770}[VDI 2770]).
+// tag::core-codes[]
+[[DR_001]] DR_001:: _DocumentId_ is required (see table C13 in {url-vdi2770}[VDI 2770]).
+[[DR_002]] DR_002:: _Type_ is required and must not be empty (see table C13 in 
+{url-vdi2770}[VDI 2770]).
+// end::core-codes[]
