@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -64,6 +64,8 @@ public class ProcessorConfiguration {
 	private static final String REPORT_PREFIX = VDI_PREFIX + "report.pdf.";
 
 	// property names
+	private static final String VALIDATOR_PREFIX = VDI_PREFIX + "validator.";
+
 
 	private static final String REPORT_LOGO_FILE_PROPERTY = REPORT_PREFIX + "logo.file";
 
@@ -88,6 +90,10 @@ public class ProcessorConfiguration {
 	private static final String ZIP_MAX_COMPRESSION = VDI_PREFIX + "zip.maxcompression";
 
 	private static final String ZIP_MAX_FILE_SIZE = VDI_PREFIX + "zip.maxfilesize";
+	// Strict mode properties
+	
+	private static final String VALIDATOR_TREAT_PDF_ERROR_AS_WARNING = VALIDATOR_PREFIX
+			+ "treatPdfErrorsAsWarnings";
 
 	// property file
 	private static final String APP_PROPERTIES_FILE_NAME = "app.properties";
@@ -355,5 +361,26 @@ public class ProcessorConfiguration {
 			return defaultValue;
 		}
 	}
+	
+	/**
+	 * According to VDI 2770, PDF files shall be PDF/A files (normally PDF/A-{1,2,3}a files
+	 * and in case of certificates PDF/A-{1,2,3}b files).
+	 * If this application property is set to <code>true</code>, PDF files, that do not
+	 * conform to any PDF/A specification are reported as warnings instead of errors.
+	 * It is the same, if a PDF/A files shall be PDF/A-{1,2,3}a but is a PDF/A-{1,2,3}b file. 
+	 * 
+	 * @return <code>true</code>, if PDF validation errors shall be handled as warnings
+	 */
+	public boolean isTreatPdfErrorsAsWarnings() {
+		String setting = this.properties.getProperty(VALIDATOR_TREAT_PDF_ERROR_AS_WARNING);
+		if (Strings.isNullOrEmpty(setting)) {
+			return false;
+		}
+		
+		setting = setting.toLowerCase();
+        if (Arrays.asList("1", "true", "yes").contains(setting))
+            return true;
 
+        return false;
+	}
 }
