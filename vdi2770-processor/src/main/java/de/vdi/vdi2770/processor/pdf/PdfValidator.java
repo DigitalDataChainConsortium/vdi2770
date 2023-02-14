@@ -132,16 +132,6 @@ public class PdfValidator {
 	/**
 	 * ctor
 	 * 
-	 * @param locale Desired {@link Locale} for validation messages; must not be
-	 *               <code>null</code>.
-	 */
-	public PdfValidator(final Locale locale) {
-		this(locale, false);
-	}
-
-	/**
-	 * ctor
-	 * 
 	 * @param locale       Desired {@link Locale} for validation messages; must not
 	 *                     be <code>null</code>.
 	 * @param isStrictMode Enable or disable strict validation.
@@ -238,7 +228,7 @@ public class PdfValidator {
 
 			log.warn("Can not extract XMP metadata using Apache PDFBox");
 
-			// try to read PDF/A conformance manually
+			// try to read PDF/ A conformance manually
 			String level = tryGetPdfAConformance(metadata);
 			if (!Strings.isNullOrEmpty(level)) {
 				return level;

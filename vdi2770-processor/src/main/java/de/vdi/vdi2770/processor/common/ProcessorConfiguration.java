@@ -62,10 +62,12 @@ public class ProcessorConfiguration {
 	private static final String VDI_PREFIX = "vdi2770.";
 
 	private static final String REPORT_PREFIX = VDI_PREFIX + "report.pdf.";
-
-	// property names
+	
+	private static final String ZIP_PREFIX = VDI_PREFIX + "zip.";
+	
 	private static final String VALIDATOR_PREFIX = VDI_PREFIX + "validator.";
 
+	// PDF properties
 
 	private static final String REPORT_LOGO_FILE_PROPERTY = REPORT_PREFIX + "logo.file";
 
@@ -86,10 +88,13 @@ public class ProcessorConfiguration {
 	private static final String REPORT_FONT_COLOR_PROPERTY = REPORT_PREFIX + "font.color";
 
 	private static final String REPORT_LINK_COLOR_PROPERTY = REPORT_PREFIX + "link.color";
+	
+	// ZIP properties
+	
+	private static final String ZIP_MAX_COMPRESSION = ZIP_PREFIX + "maxcompression";
 
-	private static final String ZIP_MAX_COMPRESSION = VDI_PREFIX + "zip.maxcompression";
-
-	private static final String ZIP_MAX_FILE_SIZE = VDI_PREFIX + "zip.maxfilesize";
+	private static final String ZIP_MAX_FILE_SIZE = ZIP_PREFIX + "maxfilesize";
+	
 	// Strict mode properties
 	
 	private static final String VALIDATOR_TREAT_PDF_ERROR_AS_WARNING = VALIDATOR_PREFIX

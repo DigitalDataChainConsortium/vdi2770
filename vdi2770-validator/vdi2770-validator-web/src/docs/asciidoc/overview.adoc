@@ -47,7 +47,14 @@ no report warnings return (default is ``false``).
 ``allowStatistics``:: To allow statistics collections, set ``allowStatistics`` to 
 ``true`` (default is `false`). Anonymized results are persisted in a CSV file.
 
-``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly.
+``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly. If set to ``false``,
+[loweralpha]
+. the validator tries to process XML files whose file names do not conform to meta data file
+naming rules,
+. strict XML validation is disabled
+. the PDF validator disables strict XMP processing,
+. container ZIP files are validated, although they might not be considered as document container
+or documentation container files.
 
 ``renderFileHash``:: If set to ``true``, a SHA256 hash will be rendered for each container file
 (nested container files are included).
@@ -461,6 +468,12 @@ The following parameters are used to detect ZIP bombs.
 size.
 
 ``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.
+
+The following parameters are used to configure container validation.
+
+``vdi2770.validator.treatPdfErrorsAsWarnings``:: Boolean flag; If true, PDF/A validation errors
+are reported as warnings. *Attention*: Non PDF/A files do not  meet the requirements of 
+VDI 2770. It is strongly recommended to set this property to false.
 
 === Application Utils
 

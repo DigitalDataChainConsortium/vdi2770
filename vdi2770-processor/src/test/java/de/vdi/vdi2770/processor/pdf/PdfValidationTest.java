@@ -66,7 +66,7 @@ public class PdfValidationTest {
 	@Test
 	public void detectValidPdf() throws PdfValidationException {
 
-		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault(), true);
 		final String type = pdfValidator.getPdfAVersion(new File(EXAMPLES_FOLDER, "Valid.pdf"));
 
 		assertEquals(type, "3A");
@@ -75,7 +75,7 @@ public class PdfValidationTest {
 	@Test
 	public void detect1BPdf() throws PdfValidationException {
 
-		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault(), true);
 		final String type = pdfValidator
 				.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA1b_File.pdf"));
 
@@ -85,7 +85,7 @@ public class PdfValidationTest {
 	@Test
 	public void detect2BPdf() throws PdfValidationException {
 
-		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault(), true);
 		final String type = pdfValidator
 				.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA2b_File.pdf"));
 
@@ -95,7 +95,7 @@ public class PdfValidationTest {
 	@Test
 	public void detect3BPdf() throws PdfValidationException {
 
-		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault(), true);
 		final String type = pdfValidator
 				.getPdfAVersion(new File(EXAMPLES_FOLDER, "PDFA3b_File.pdf"));
 
@@ -108,7 +108,7 @@ public class PdfValidationTest {
 	@Test
 	public void detectInvalid2Pdf() {
 
-		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault());
+		PdfValidator pdfValidator = new PdfValidator(Locale.getDefault(), true);
 		final PdfValidationException ex = Assertions.assertThrows(PdfValidationException.class,
 				() -> {
 					pdfValidator.getPdfAVersion(new File(EXAMPLES_FOLDER, "Invalid2.pdf"));
@@ -121,7 +121,7 @@ public class PdfValidationTest {
 	@Test
 	public void isEncrytedTest() throws IOException {
 
-		PdfValidator validator = new PdfValidator(Locale.GERMAN);
+		PdfValidator validator = new PdfValidator(Locale.GERMAN, true);
 
 		File pdfFile = new File(EXAMPLES_FOLDER, "pdf/encrypted.pdf");
 		boolean result = validator.isEncrypted(pdfFile);
@@ -158,7 +158,7 @@ public class PdfValidationTest {
 	@Test
 	public void extractTextFromPdfTest() throws IOException {
 
-		PdfValidator validator = new PdfValidator(Locale.GERMAN);
+		PdfValidator validator = new PdfValidator(Locale.GERMAN, true);
 		File pdfFile = new File(EXAMPLES_FOLDER, "Valid.pdf");
 		boolean result = validator.hasText(pdfFile);
 		assertTrue(result);
