@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -62,8 +62,12 @@ public class ProcessorConfiguration {
 	private static final String VDI_PREFIX = "vdi2770.";
 
 	private static final String REPORT_PREFIX = VDI_PREFIX + "report.pdf.";
+	
+	private static final String ZIP_PREFIX = VDI_PREFIX + "zip.";
+	
+	private static final String VALIDATOR_PREFIX = VDI_PREFIX + "validator.";
 
-	// property names
+	// PDF properties
 
 	private static final String REPORT_LOGO_FILE_PROPERTY = REPORT_PREFIX + "logo.file";
 
@@ -84,10 +88,17 @@ public class ProcessorConfiguration {
 	private static final String REPORT_FONT_COLOR_PROPERTY = REPORT_PREFIX + "font.color";
 
 	private static final String REPORT_LINK_COLOR_PROPERTY = REPORT_PREFIX + "link.color";
+	
+	// ZIP properties
+	
+	private static final String ZIP_MAX_COMPRESSION = ZIP_PREFIX + "maxcompression";
 
-	private static final String ZIP_MAX_COMPRESSION = VDI_PREFIX + "zip.maxcompression";
-
-	private static final String ZIP_MAX_FILE_SIZE = VDI_PREFIX + "zip.maxfilesize";
+	private static final String ZIP_MAX_FILE_SIZE = ZIP_PREFIX + "maxfilesize";
+	
+	// Strict mode properties
+	
+	private static final String VALIDATOR_TREAT_PDF_ERROR_AS_WARNING = VALIDATOR_PREFIX
+			+ "pdfaError.asWarning";
 
 	// property file
 	private static final String APP_PROPERTIES_FILE_NAME = "app.properties";
@@ -122,6 +133,27 @@ public class ProcessorConfiguration {
 		this.properties = new Properties();
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
 		loadProperties();
+		
+		if(log.isDebugEnabled()) {
+			
+			log.debug("application settings:");
+			try {
+				log.debug(REPORT_LOGO_FILE_PROPERTY + ": " + getLogoFile());
+			} catch (final ProcessorException e) {
+				e.printStackTrace();
+			}
+			log.debug(REPORT_LOGO_HEIGHT_PROPERTY + ": " + getReportLogoHeight());
+			log.debug(REPORT_TITLE_LOGO_HEIGHT_PROPERTY + ": " + getReportLogoTitleHeight());
+			log.debug(REPORT_AUTHOR_PROPERTY + ": " + getReportAuthor());
+			log.debug(REPORT_HEADING_COLOR_PROPERTY + ": " + getReportHeadingColor());
+			log.debug(REPORT_TITLE_COLOR_PROPERTY + ": " + getReportTitleColor());
+			log.debug(REPORT_TABLE_BORDER_COLOR_PROPERTY + ": " + getReportTableBorderColor());
+			log.debug(REPORT_FONT_COLOR_PROPERTY + ": " + getReportFontColor());
+			log.debug(REPORT_LINK_COLOR_PROPERTY + ": " + getReportLinkColor());
+			log.debug(ZIP_MAX_COMPRESSION + ": " + getMaxZipCompressionFactor());
+			log.debug(ZIP_MAX_FILE_SIZE + ": " + getMaxZipFileSize());
+			log.debug(VALIDATOR_TREAT_PDF_ERROR_AS_WARNING + ": " + isTreatPdfErrorsAsWarnings());
+		}
 	}
 
 	/**
@@ -355,5 +387,26 @@ public class ProcessorConfiguration {
 			return defaultValue;
 		}
 	}
+	
+	/**
+	 * According to VDI 2770, PDF files shall be PDF/A files (normally PDF/A-{1,2,3}a files
+	 * and in case of certificates PDF/A-{1,2,3}b files).
+	 * If this application property is set to <code>true</code>, PDF files, that do not
+	 * conform to any PDF/A specification are reported as warnings instead of errors.
+	 * It is the same, if a PDF/A files shall be PDF/A-{1,2,3}a but is a PDF/A-{1,2,3}b file. 
+	 * 
+	 * @return <code>true</code>, if PDF validation errors shall be handled as warnings
+	 */
+	public boolean isTreatPdfErrorsAsWarnings() {
+		String setting = this.properties.getProperty(VALIDATOR_TREAT_PDF_ERROR_AS_WARNING);
+		if (Strings.isNullOrEmpty(setting)) {
+			return false;
+		}
+		
+		setting = setting.toLowerCase();
+        if (Arrays.asList("1", "true", "yes").contains(setting))
+            return true;
 
+        return false;
+	}
 }

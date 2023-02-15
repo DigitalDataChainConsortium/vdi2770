@@ -8,7 +8,7 @@
 	<parent>
 		<groupId>de.vdi.vdi2770</groupId>
 		<artifactId>vdi2770</artifactId>
-		<version>0.9.10</version>
+		<version>0.9.11</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 
@@ -154,6 +154,12 @@
 				<executions>
 					<execution>
 						<id>generate-asciidoc-readme</id>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</execution>
+					<execution>
+						<id>generate-asciidoc-codes</id>
 						<configuration>
 							<skip>true</skip>
 						</configuration>

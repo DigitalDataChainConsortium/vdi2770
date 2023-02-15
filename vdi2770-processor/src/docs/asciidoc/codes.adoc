@@ -2,6 +2,7 @@
 :url-vdi2770: link:https://www.vdi.de/richtlinien/details/vdi-2770-blatt-1-betrieb-verfahrenstechnischer-anlagen-mindestanforderungen-an-digitale-herstellerinformationen-fuer-die-prozessindustrie-grundlagen
 
 The processor is able to validate different types of files:
+
 * XML metadata files
 * PDF file (check PDF level)
 * container files (document container and documentation container)
@@ -16,47 +17,59 @@ For more information on entity validation codes, see documentation of the `core`
 
 At the beginning of a container validation, the ZIP file is formally checked.
 
-ZU_001:: The container file contains folders. Although this is generally permitted 
-according to link:{url-vdi2770}[VDI 2770], these folders are not processed. 
+// tag::processor-codes[]
+[[ZU_001]] ZU_001:: The container file contains folders. Although this is generally permitted 
+according to {url-vdi2770}[VDI 2770], these folders are not processed. 
 ZIP files should only contain files.
-ZU_002:: The given file is not a ZIP and cannot be unzipped.
-ZU_003:: The ZIP file contains invalid header information.
-ZU_004:: The ZIP file is encrypted. According to link:{url-vdi2770}[VDI 2770], 
+[[ZU_002]] ZU_002:: The given file is not a ZIP and cannot be unzipped.
+[[ZU_003]] ZU_003:: The ZIP file contains invalid header information.
+[[ZU_004]] ZU_004:: The ZIP file is encrypted. According to {url-vdi2770}[VDI 2770], 
 ZIP files shall not be encrypted.
+// end::processor-codes[]
 
 Then the contents of the ZIP file are checked.
 
-REP_002:: The ZIP file does not contain any files. Validation process is aborted.
+// tag::processor-codes[]
+[[REP_002]] REP_002:: The ZIP file does not contain any files. Validation process is aborted.
+// end::processor-codes[]
 
 The validator provides a strict mode. If this is activated, e.g. incorrectly named XML 
 files are not processed.
 
-REP_036:: Strict mode is enabled.
-REP_037:: Strict mode is disabled.
+// tag::processor-codes[]
+[[REP_036]] REP_036:: Strict mode is enabled.
+[[REP_037]] REP_037:: Strict mode is disabled.
+// end::processor-codes[]
 
 The type of the container file is checked.
 
-REP_003:: DOCUMENTATION_CONTAINER stands for a documentation container. DOCUMENT_CONTAINER stands 
+// tag::processor-codes[]
+[[REP_003]] REP_003:: DOCUMENTATION_CONTAINER stands for a documentation container. DOCUMENT_CONTAINER stands 
 for a document container.
-REP_034:: The type of the container is unknown. Any subordinated container files are not 
+[[REP_034]] REP_034:: The type of the container is unknown. Any subordinated container files are not 
 validated further.
+// end::processor-codes[]
 
 Now the validator tries to read the XML metadata file.
 
-REP_004:: Neither a file named VDI2770_Metadata.xml nor VDI2770_Main.xml could be found.
-REP_035:: The name spelling of the metadata file is not correct (upper and lower case).
+// tag::processor-codes[]
+[[REP_004]] REP_004:: Neither a file named VDI2770_Metadata.xml nor VDI2770_Main.xml could be found.
+[[REP_035]] REP_035:: The name spelling of the metadata file is not correct (upper and lower case).
+// end::processor-codes[]
 
 If strict mode is disabled, the validator searches for XML files (which are not named 
-according to the specifications in link:{url-vdi2770}[VDI 2770]).
+according to the specifications in {url-vdi2770}[VDI 2770]).
 
-REP_033:: Several XML files were found. The validation aborts.
-REP_026:: No XML metafile file could be found.
-REP_016:: Problems were found while validating the XML metadata file.
-REP_020:: The XML file is valid.
-REP_023:: The XML parser has detected structural problems with the XML metadata file.
-REP_024:: The XML parser has detected potential structural problems with the 
+// tag::processor-codes[]
+[[REP_033]] REP_033:: Several XML files were found. The validation aborts.
+[[REP_026]] REP_026:: No XML metadata file file could be found.
+[[REP_016]] REP_016:: Problems were found while validating the XML metadata file.
+[[REP_020]] REP_020:: The XML file is valid.
+[[REP_023]] REP_023:: The XML parser has detected structural problems with the XML metadata file.
+[[REP_024]] REP_024:: The XML parser has detected potential structural problems with the 
 XML metadata file.
-REP_039:: Because the XML file has errors, validation aborts.
+[[REP_039]] REP_039:: Because the XML file has errors, validation aborts.
+// end::processor-codes[]
 
 The information model entities are going to be validated in detail. 
 If the XML file does not contain any errors, essential metadata information are shown:
@@ -67,48 +80,56 @@ If the XML file does not contain any errors, essential metadata information are 
 * every document relationship;
 * every file in a container.
 
-REP_006:: A file was found in the container that is not referenced in the XML metadata.
-REP_007:: A file referenced in the XML metadata could not be found in the container.
-REP_008:: A file referenced in the XML metadata was found in the container.
-REP_014:: The file type of a file in a container could not be determined.
-REP_018:: A file has a different MIME type than specified in the XML metadata.
-REP_009:: Output of a document ID. The output pattern is <id, domainId, isPrimary>.
-REP_010:: Output of an object ID. The output pattern is <id, objectType, isGloballyBiunique>.
-REP_011::  Output of an classId. The output pattern is <classificationSystem --> 
+// tag::processor-codes[]
+[[REP_006]] REP_006:: A file was found in the container that is not referenced in the XML metadata.
+[[REP_007]] REP_007:: A file referenced in the XML metadata could not be found in the container.
+[[REP_008]] REP_008:: A file referenced in the XML metadata was found in the container.
+[[REP_014]] REP_014:: The file type of a file in a container could not be determined.
+[[REP_018]] REP_018:: A file has a different MIME type than specified in the XML metadata.
+[[REP_009]] REP_009:: Output of a document ID. The output pattern is <id, domainId, isPrimary>.
+[[REP_010]] REP_010:: Output of an object ID. The output pattern is <id, objectType, isGloballyBiunique>.
+[[REP_011]] REP_011::  Output of an classId. The output pattern is <classificationSystem --> 
 classId [classNames]>.
-REP_012:: Output of a document relationship. The output pattern is <id, domainId, isPrimary>.
-REP_013:: Output of the file type of a file.
-REP_031:: Object information in a document shall match the object of the main document.
-REP_032:: All document relationships are valid.
+[[REP_012]] REP_012:: Output of a document relationship. The output pattern is <id, domainId, isPrimary>.
+[[REP_013]] REP_013:: Output of the file type of a file.
+[[REP_031]] REP_031:: Object information in a document shall match the object of the main document.
+[[REP_032]] REP_032:: All document relationships are valid.
+// end::processor-codes[]
 
 The PDF files in a container are examined more closely with regard to their conformity 
-to link:{url-vdi2770}[VDI 2770]. If more than one PDF file is provided in the container, at 
+to {url-vdi2770}[VDI 2770]. If more than one PDF file is provided in the container, at 
 least one PDF file shall conform to PDF/A (depends on the VDI 2770 class). 
 The other PDF file may be e.g. a regular PDF 1.4 file. In this case, validation information 
 will be reported as information; otherwise, validation will be reported as error.
 
-REP_017:: The PDF/A level of a PDF file could not be read.
-REP_015:: Output the PDF/A level of the PDF file.
-REP_019:: Internal error during validation of the PDF file.
-REP_022:: The PDF file is valid.
-REP_038:: The PDF file shall have the type PDF/A-1A, PDF/A-2A, or PDF/A-3A. Only documents of 
-category 02-04 are excluded. See section 9.1 in link:{url-vdi2770}[VDI 2770].
-REP_040:: The PDF file is encrypted or password protected.
-REP_041:: The PDF file is not encrypted or password protected.
-REP_043:: The PDF file contains text. See section 9.1 in link:{url-vdi2770}[VDI 2770].
-REP_043:: Could not extract text from PDF file. 
-REP_046:: There are preflight problems. At the moment, preflight for PDF/A-1{a,b} files are 
+// tag::processor-codes[]
+[[REP_017]] REP_017:: The PDF/A level of a PDF file could not be read.
+[[REP_015]] REP_015:: Output the PDF/A level of the PDF file.
+[[REP_019]] REP_019:: Internal error during validation of the PDF file.
+[[REP_022]] REP_022:: The PDF file is valid.
+[[REP_038]] REP_038:: The PDF file shall have the type PDF/A-1A, PDF/A-2A, or PDF/A-3A. Only documents of 
+category 02-04 are excluded. See section 9.1 in {url-vdi2770}[VDI 2770].
+[[REP_040]] REP_040:: The PDF file is encrypted or password protected.
+[[REP_041]] REP_041:: The PDF file is not encrypted or password protected.
+[[REP_043]] REP_043:: The PDF file contains text. See section 9.1 in {url-vdi2770}[VDI 2770].
+[[REP_045]] REP_045:: Could not extract text from PDF file. 
+[[REP_046]] REP_046:: There are preflight problems. At the moment, preflight for PDF/A-1{a,b} files are 
 implemented.
+// end::processor-codes[]
 
 If the container file is a documentation container, an extended check is performed.
 
-REP_025:: The PDF file VDI2270_Main.pdf could not be found.
+// tag::processor-codes[]
+[[REP_025]] REP_025:: The PDF file VDI2270_Main.pdf could not be found.
+// end::processor-codes[]
 
 Document relationships and object IDs are checked for all containers, provided that the XML 
 metadata file has no errors.
 
-REP_027:: Document relationships have not been validated.
-REP_028:: Object relationships were not validated.
+// tag::processor-codes[]
+[[REP_027]] REP_027:: Document relationships have not been validated.
+[[REP_028]] REP_028:: Object relationships were not validated.
+// end::processor-codes[]
 
 This validation is performed recursively for all child container files
 
@@ -116,9 +137,10 @@ Documentation containers can be nested.
 They can contain further documentation containers and / or document containers. 
 Documents as well as subordinate main documents must be referenced (in the sense of a tree 
 structure). 
-Section 7.3 in link:{url-vdi2770}[VDI 2770] specifies that a main document shall list all documents 
+Section 7.3 in {url-vdi2770}[VDI 2770] specifies that a main document shall list all documents 
 and the main documents of the subordinate documentation containers.
 
-REP_029:: A document or main document is not found by an the superordinated main document. 
-REP_030:: The document is properly referenced from a main document.
-
+// tag::processor-codes[]
+[[REP_029]] REP_029:: A document or main document is not found by an the superordinated main document. 
+[[REP_030]] REP_030:: The document is properly referenced from a main document.
+// end::processor-codes[]

@@ -1,5 +1,4 @@
 = VDI 2770 Reference Implementation
-Leipzig University and Institute for Applied Informatics (InfAI) at the Leipzig University
 ifndef::env-github[]
 include::src/docs/asciidoc/config.adoc[]
 endif::[]

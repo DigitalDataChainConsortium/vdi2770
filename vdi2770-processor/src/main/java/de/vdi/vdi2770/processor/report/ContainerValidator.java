@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -69,6 +69,7 @@ import de.vdi.vdi2770.processor.common.Check;
 import de.vdi.vdi2770.processor.common.ContainerType;
 import de.vdi.vdi2770.processor.common.Message;
 import de.vdi.vdi2770.processor.common.MessageLevel;
+import de.vdi.vdi2770.processor.common.ProcessorConfiguration;
 import de.vdi.vdi2770.processor.pdf.PdfValidationException;
 import de.vdi.vdi2770.processor.pdf.PdfValidator;
 import de.vdi.vdi2770.processor.zip.ZipFault;
@@ -449,7 +450,11 @@ public class ContainerValidator {
 		}
 
 		// add strict mode enabled / disabled to report
-		reportStrictMode(report, indentLevel);
+		if (this.isStrictMode) {
+			report.addMessage(new Message(this.bundle.getString("REP_MESSAGE_036"), indentLevel));
+		} else {
+			report.addMessage(new Message(this.bundle.getString("REP_MESSAGE_037"), indentLevel));
+		}
 
 		// convert to array to support streams and so on
 		final List<File> filesInFolder = Lists.newArrayList(files).stream()
@@ -477,11 +482,14 @@ public class ContainerValidator {
 		} catch (final ProcessorException ex) {
 			report.addMessage(new Message(MessageLevel.ERROR, ex.getMessage(), indentLevel));
 
-			// finish validation in strict mode
+			// finish validation in strict mode, because neither VDI2770_Main.xml nor
+			// VDI2770_Metadata.xml has been found
 			if (this.isStrictMode) {
 				return;
 			}
 
+			// if strict mode is disabled, we try to read XML files that are named
+			// differently
 			final File[] xmlFiles = folder.listFiles(new FilenameFilter() {
 				@Override
 				public boolean accept(final File dir, final String name) {
@@ -489,17 +497,20 @@ public class ContainerValidator {
 				}
 			});
 
-			// not XML files found
+			// no XML files found
 			if (xmlFiles == null || xmlFiles.length == 0) {
 				return;
 			}
 
+			// more than one XML file found
+			// report as warning
 			if (xmlFiles.length > 1) {
 				report.addMessage(
 						new Message(this.bundle.getString("REP_MESSAGE_033"), indentLevel));
 				return;
 			}
 
+			// try the first XML file for processing
 			vdiXmlFile = xmlFiles[0];
 		}
 
@@ -547,6 +558,8 @@ public class ContainerValidator {
 
 		// only process other ZIP files, if the container is documentation
 		// container file
+		// if strict mode is disabled, try to process ZIP files although the ZIP
+		// file may not be a file container
 		if (type == ContainerType.DOCUMENTATION_CONTAINER || (!this.isStrictMode && type == null)) {
 
 			// check VDI2770_Main.pdf file
@@ -561,6 +574,8 @@ public class ContainerValidator {
 					indentLevel + 1);
 		}
 
+		// report warning, if ZIP file is not a container file
+		// remark: a ZIP file may be a valid attachment in the container
 		if (this.isStrictMode && type == null) {
 			report.addMessage(new Message(MessageLevel.WARN,
 					this.bundle.getString("REP_MESSAGE_034"), indentLevel));
@@ -586,18 +601,6 @@ public class ContainerValidator {
 		} catch (final Exception e) {
 			log.warn("Error while checking XML metadata file", e);
 		}
-	}
-
-	private void reportStrictMode(final Report report, int indentLevel) {
-
-		Preconditions.checkArgument(report != null, "report is null");
-
-		if (this.isStrictMode) {
-			report.addMessage(new Message(this.bundle.getString("REP_MESSAGE_036"), indentLevel));
-		} else {
-			report.addMessage(new Message(this.bundle.getString("REP_MESSAGE_037"), indentLevel));
-		}
-
 	}
 
 	private static boolean isKnownByParent(final Document current, final Document parent) {
@@ -811,40 +814,44 @@ public class ContainerValidator {
 			}
 		}
 
-		// query: is the document classified as VDI 2770 02-04?
-		// if true, PDF/A-{1,2,3}b files are allowed
-		// see VDI 2770:2020 page 30
-		boolean allowPdfAOnly = document.getDocumentClassification().stream()
+		// query: Is the document not classified as VDI 2770 02-04?
+		// note: A document may have more than one class
+		// If true, only PDF/A-{1,2,3}a files are allowed
+		// see VDI 2770:2020 page 30 for more information
+		boolean allowPdfAaOnly = document.getDocumentClassification().stream()
 				.filter(s -> StringUtils.equals(s.getClassificationSystem(),
 						Constants.VDI2770_CLASSIFICATIONSYSTEM_NAME))
 				.map(s -> s.getClassId())
 				.filter(i -> StringUtils.equals(i, Constants.VDI2770_CERTIFICATE_CATEGORY))
 				.count() == 0;
-
+		
+		// only one PDF file found.  
 		if (pdfFiles.size() == 1) {
-			report.addMessages(validatePdfFile(pdfFiles.get(0), allowPdfAOnly, indentLevel));
+			report.addMessages(validatePdfFile(pdfFiles.get(0), allowPdfAaOnly, indentLevel));
 		}
 
+		// there is more than one PDF file
 		if (pdfFiles.size() > 1) {
 
 			Map<File, List<Message>> pdfFileStatus = new HashMap<>();
 			boolean validPdfFound = false;
 			for (File pdfFile : pdfFiles) {
-				List<Message> pdfFaults = validatePdfFile(pdfFile, allowPdfAOnly, indentLevel);
+				List<Message> pdfFaults = validatePdfFile(pdfFile, allowPdfAaOnly, indentLevel);
 				pdfFileStatus.put(pdfFile, pdfFaults);
 				if (!Message.hasErrors(pdfFaults)) {
 					validPdfFound = true;
 				}
 			}
 
+			// there was at least one valid PDF/A file
 			if (validPdfFound) {
 				for (Map.Entry<File, List<Message>> status : pdfFileStatus.entrySet()) {
 					if (!Message.hasErrors(status.getValue())) {
 						report.addMessages(status.getValue());
 					} else {
-						// report errors as information
+						// report errors as information (validate the PDF file again)
 						report.addMessages(
-								validatePdfFile(status.getKey(), allowPdfAOnly, true, indentLevel));
+								validatePdfFile(status.getKey(), allowPdfAaOnly, true, indentLevel));
 					}
 				}
 			} else {
@@ -977,17 +984,46 @@ public class ContainerValidator {
 		return validatePdfFile(pdfFile, isCertificateClass, false, indentLevel);
 	}
 
-	private List<Message> validatePdfFile(final File pdfFile, boolean isCertificateClass,
-			boolean treatErrosAsInfo, final int indentLevel) {
+	
+	/**
+	 * Validate a PDF file.
+	 *
+	 * <p>
+	 * According to VDI 2770, a PDF file must has the type PDF/A-2 or PDF/A-3.
+	 * Containers in PDF are not allowed.
+	 * </p>
+	 *
+	 * @param pdfFile          A PDF {@link File}; must not be <code>null</code> and
+	 *                         exist.
+	 * @param allowPDFAaOnly   Document shall conform to PDF/A-{1,2,3}a. Only
+	 *                         certificate documents (see class 02-04 in VDI 2770)
+	 *                         may have level PDF/A-{1,2,3}b.
+	 * @param treatErrosAsInfo Report an information message instead of an error
+	 *                         message, if PDF/A conformance validation fails
+	 * @param indentLevel      Level of indent.
+	 * @return A {@link List} of {@link Message} including Information, warnings and
+	 *         errors.
+	 */
+	private List<Message> validatePdfFile(final File pdfFile, boolean allowPDFAaOnly,
+			boolean treatErrorsAsInfo, final int indentLevel) {
 
 		Preconditions.checkArgument(pdfFile != null, "pdfFile is null");
 		Preconditions.checkArgument(pdfFile.exists(), "pdfFile does not exist");
-
+		
 		final List<Message> messages = new ArrayList<>();
 
-		final PdfValidator pdfValidator = new PdfValidator(this.locale);
+		final PdfValidator pdfValidator = new PdfValidator(this.locale, this.isStrictMode);
 
 		String pdfVersion = "";
+		
+		// issue #30
+		ProcessorConfiguration config = ProcessorConfiguration.getInstance(Locale.getDefault());
+		MessageLevel level = MessageLevel.ERROR;
+		if(treatErrorsAsInfo) {
+			level = MessageLevel.INFO;
+		} else if(config.isTreatPdfErrorsAsWarnings()) {
+			level = MessageLevel.WARN;
+		}
 
 		// read and check PDF/A conformance level
 		try {
@@ -996,15 +1032,17 @@ public class ContainerValidator {
 			messages.add(new Message(MessageFormat.format(this.bundle.getString("REP_MESSAGE_015"),
 					pdfFile.getName(), pdfVersion), indentLevel));
 
-			if (isCertificateClass && !pdfVersion.toLowerCase().endsWith("a")) {
-				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
-						this.bundle.getString("REP_MESSAGE_038"), indentLevel));
+			if (allowPDFAaOnly && !pdfVersion.toLowerCase().endsWith("a")) {
+				messages.add(
+						new Message(level, this.bundle.getString("REP_MESSAGE_038"), indentLevel));
 			}
 
 		} catch (final PdfValidationException e) {
+			// can not read PDF/A level. The given PDF file may not be a PDF/A file.
+			// Report information, if strict PDF validation is disabled
 			messages.add(new Message(
-					!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO, MessageFormat
-							.format(this.bundle.getString("REP_MESSAGE_017"), pdfFile.getName()),
+					level, MessageFormat.format(this.bundle.getString("REP_MESSAGE_017"),
+							pdfFile.getName()),
 					indentLevel));
 			if (log.isWarnEnabled()) {
 				log.warn("Error reading PDF/A level", e.getMessage());
@@ -1016,7 +1054,7 @@ public class ContainerValidator {
 		try {
 			isEncrypted = pdfValidator.isEncrypted(pdfFile);
 			if (isEncrypted) {
-				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
+				messages.add(new Message(treatErrorsAsInfo ? MessageLevel.INFO : MessageLevel.ERROR,
 						MessageFormat.format(this.bundle.getString("REP_MESSAGE_040"),
 								pdfFile.getName()),
 						indentLevel));
@@ -1031,7 +1069,7 @@ public class ContainerValidator {
 					indentLevel));
 		}
 
-		// if not encryped, try to extract text from PDF
+		// if not encrypted, try to extract text from PDF
 		if (!isEncrypted) {
 			try {
 				boolean hasText = pdfValidator.hasText(pdfFile);
@@ -1041,7 +1079,9 @@ public class ContainerValidator {
 							indentLevel));
 				} else {
 					messages.add(
-							new Message(isCertificateClass ? MessageLevel.INFO : MessageLevel.WARN,
+							// in case of e.g. certificates, PDF files may be scanned images
+							// So, text might not be extracted
+							new Message(allowPDFAaOnly ? MessageLevel.WARN : MessageLevel.INFO,
 									MessageFormat.format(this.bundle.getString("REP_MESSAGE_044"),
 											pdfFile.getName()),
 									indentLevel));
@@ -1052,7 +1092,7 @@ public class ContainerValidator {
 					log.warn("Can not extract text from file " + pdfFile.getAbsolutePath(), e);
 				}
 
-				messages.add(new Message(!treatErrosAsInfo ? MessageLevel.ERROR : MessageLevel.INFO,
+				messages.add(new Message(treatErrorsAsInfo ? MessageLevel.INFO : MessageLevel.ERROR,
 						MessageFormat.format(this.bundle.getString("REP_MESSAGE_045"),
 								pdfFile.getName()),
 						indentLevel));

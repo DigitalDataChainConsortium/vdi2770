@@ -1,0 +1,14 @@
+= VDI 2770 Validator Codes
+Johannes Schmidt, Leipzig University and Institute for Applied Informatics (InfAI)
+
+:url-vdi2770: link:https://www.vdi.de/richtlinien/details/vdi-2770-blatt-1-betrieb-verfahrenstechnischer-anlagen-mindestanforderungen-an-digitale-herstellerinformationen-fuer-die-prozessindustrie-grundlagen
+
+include::config.adoc[]
+
+## Codes
+
+include::../../../vdi2770-processor/src/docs/asciidoc/codes.adoc[tag=processor-codes]
+
+include::../../../vdi2770-core/src/docs/asciidoc/codes.adoc[tag=core-codes]
+
+include::../../../Readme.adoc[tag=doc-license]

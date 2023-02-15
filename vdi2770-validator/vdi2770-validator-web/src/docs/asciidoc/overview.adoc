@@ -18,6 +18,10 @@ set the HTTP header ``Accept-Language``. A security token is given the HTTP head
 ``Accept-Language``:: Set the desired language of validation messages. English, Germany and Chinese 
 are supported. In case of other languages, English will return.
 
+Each validation message can be identified by a validation code. 
+The list of codes is provides to the users as static HTML page ``/codes.html`.
+For each code, an HTML anchor is set, e.g. ``codes.html#DV_008``.
+
 === Settings
 
 ``/rest/report`` and ``/rest/reportpdf`` support file parameters as well as a 
@@ -43,7 +47,14 @@ no report warnings return (default is ``false``).
 ``allowStatistics``:: To allow statistics collections, set ``allowStatistics`` to 
 ``true`` (default is `false`). Anonymized results are persisted in a CSV file.
 
-``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly.
+``enableStrictMode``:: If set to ``true``, uploaded files are validated strictly. If set to ``false``,
+[loweralpha]
+. the validator tries to process XML files whose file names do not conform to meta data file
+naming rules,
+. strict XML validation is disabled
+. the PDF validator disables strict XMP processing,
+. container ZIP files are validated, although they might not be considered as document container
+or documentation container files.
 
 ``renderFileHash``:: If set to ``true``, a SHA256 hash will be rendered for each container file
 (nested container files are included).
@@ -416,22 +427,37 @@ vdi2770.zip.maxfilesize = 209715200
 In the following, important application settings are explained.
 
 ``spring.servlet.multipart.max-file-size``:: Set maximum file upload size.
+The property value can be overwritten by using the command line parameter 
+``--spring.servlet.multipart.max-file-size=<VALUE>``.
 ``spring.servlet.multipart.max-request-size`` :: Set maximum HTTP request size.
+The property value can be overwritten by using the command line parameter 
+``--spring.servlet.multipart.max-request-size=<VALUE>``.
 ``server.tomcat.max-swallow-siz``:: Disable limit for swallowing  request body bytes.
 	
-``vdi2770.version.value``:: Application version as property
-``vdi2770.version.expose``:: Enable version REST controller and expose application version
+``vdi2770.version.value``:: Application version as property.
+The property value can be overwritten by using the command line parameter 
+``--vdi2770.version.value=<VALUE>``.
+``vdi2770.version.expose``:: Enable version REST controller and expose application version.
+The property value can be overwritten by using the command line parameter 
+``--vdi2770.version.expose=<VALUE>``.
 ``vdi2770.settings.expose``:: Enable settings REST controller and expose application settings
+The property value can be overwritten by using the command line parameter 
+``--vdi2770.settings.expose=<VALUE>``.
 
 ``vdi2770.http.auth.tokenName``:: Specify the name of the security header. Default value 
-is ``Api-Key``.
+is ``Api-Key``. The property value can be overwritten by using the command line parameter 
+``--vdi2770.http.auth.tokenName=<VALUE>``.
 
 ``vdi2770.http.auth.tokenValue``:: Security token to access the application. Default value 
-is ``vdi2770``.
+is ``vdi2770``. The property value can be overwritten by using the command line parameter 
+``--vdi2770.http.auth.tokenValue=<VALUE>``.
 
 ``vdi2770.http.cors.domains``:: Configure domains for CORS. Default is an empty List.
+The property value can be overwritten by using the command line parameter 
+``--vdi2770.http.cors.domains=<VALUE>``
 
-The following parameters are used for PDF report generation.
+The following parameters are used for PDF report generation. The property values can not 
+be overwritten as command line parameter.
 
 ``vdi2770.report.pdf.logo.file``:: Specify a path to a logo file.
 
@@ -451,12 +477,20 @@ The following parameters are used for PDF report generation.
 
 ``vdi2770.report.pdf.link.color``:: Font color for links.
 
-The following parameters are used to detect ZIP bombs.
+The following parameters are used to detect ZIP bombs. The property values can not 
+be overwritten as command line parameter.
 
 ``vdi2770.zip.maxcompression``:: Maximum factor of a zip entry between uncompressed and compressed 
 size.
 
 ``vdi2770.zip.maxfilesize``:: Maximum uncompressed file size of a zip entry.
+
+The following parameters are used to configure container validation. The property values can not 
+be overwritten as command line parameter.
+
+``vdi2770.validator.pdfaError.asWarning``:: Boolean flag; If true, PDF/A validation errors
+are reported as warnings. *Attention*: Non PDF/A files do not  meet the requirements of 
+VDI 2770. It is strongly recommended to set this property to false.
 
 === Application Utils
 
