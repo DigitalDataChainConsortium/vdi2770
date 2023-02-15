@@ -98,7 +98,7 @@ public class ProcessorConfiguration {
 	// Strict mode properties
 	
 	private static final String VALIDATOR_TREAT_PDF_ERROR_AS_WARNING = VALIDATOR_PREFIX
-			+ "treatPdfErrorsAsWarnings";
+			+ "pdfaError.asWarning";
 
 	// property file
 	private static final String APP_PROPERTIES_FILE_NAME = "app.properties";
@@ -133,6 +133,27 @@ public class ProcessorConfiguration {
 		this.properties = new Properties();
 		this.bundle = ResourceBundle.getBundle("i8n.processor", locale);
 		loadProperties();
+		
+		if(log.isDebugEnabled()) {
+			
+			log.debug("application settings:");
+			try {
+				log.debug(REPORT_LOGO_FILE_PROPERTY + ": " + getLogoFile());
+			} catch (final ProcessorException e) {
+				e.printStackTrace();
+			}
+			log.debug(REPORT_LOGO_HEIGHT_PROPERTY + ": " + getReportLogoHeight());
+			log.debug(REPORT_TITLE_LOGO_HEIGHT_PROPERTY + ": " + getReportLogoTitleHeight());
+			log.debug(REPORT_AUTHOR_PROPERTY + ": " + getReportAuthor());
+			log.debug(REPORT_HEADING_COLOR_PROPERTY + ": " + getReportHeadingColor());
+			log.debug(REPORT_TITLE_COLOR_PROPERTY + ": " + getReportTitleColor());
+			log.debug(REPORT_TABLE_BORDER_COLOR_PROPERTY + ": " + getReportTableBorderColor());
+			log.debug(REPORT_FONT_COLOR_PROPERTY + ": " + getReportFontColor());
+			log.debug(REPORT_LINK_COLOR_PROPERTY + ": " + getReportLinkColor());
+			log.debug(ZIP_MAX_COMPRESSION + ": " + getMaxZipCompressionFactor());
+			log.debug(ZIP_MAX_FILE_SIZE + ": " + getMaxZipFileSize());
+			log.debug(VALIDATOR_TREAT_PDF_ERROR_AS_WARNING + ": " + isTreatPdfErrorsAsWarnings());
+		}
 	}
 
 	/**
