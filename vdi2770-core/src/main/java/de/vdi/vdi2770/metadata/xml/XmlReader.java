@@ -28,9 +28,11 @@ import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
+import java.util.Set;
 
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.validation.Validator;
@@ -158,24 +160,26 @@ public class XmlReader {
 
 		// The validation implementation consists of two steps
 		
-		List<XmlValidationFault> result = new ArrayList<>();
-		
-		try {
-			// First, we use org.xml.sax.XMLReader reader and a javax.xml.bind.Unmarshaller
-			// combined with an error handler to get reading errors
-			read(xmlFile);
-		} catch (XmlValidationException e) {
-			e.getFaults().stream().filter(f -> f instanceof XmlValidationFault)
-					.forEach(f -> result.add((XmlValidationFault) f));
-		} catch (XmlProcessingException e) {
-			throw e;
+		// Second, we a javax.xml.validation.Validator for XML validation
+		List<XmlValidationFault> saxFaults = saxValidate(xmlFile);
+		if(!saxFaults.isEmpty()) {
+			return saxFaults;
 		}
 		
-		// Second, we a javax.xml.validation.Validator for XML validation
-		// and combine validation results
-		result.addAll(saxValidate(xmlFile));
+		try {
+			// Second, we use org.xml.sax.XMLReader reader and a javax.xml.bind.Unmarshaller
+			// combined with an error handler to get reading errors
+			// Attention: there messages are not translated
+			read(xmlFile);
+		} catch (XmlValidationException e) {
+			List<XmlValidationFault> xmlFaults = saxValidate(xmlFile);
+			e.getFaults().stream().filter(f -> f instanceof XmlValidationFault)
+					.forEach(f -> xmlFaults.add((XmlValidationFault) f));
+			return xmlFaults;
+		}
 		
-		return result;		
+		// no validation faults detected
+		return new ArrayList<>();
 	}
 	
 	
