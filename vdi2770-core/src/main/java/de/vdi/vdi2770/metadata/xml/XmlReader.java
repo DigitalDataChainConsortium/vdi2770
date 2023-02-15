@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,6 +26,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -155,6 +156,31 @@ public class XmlReader {
 	 */
 	public List<XmlValidationFault> validate(final File xmlFile) throws XmlProcessingException {
 
+		// The validation implementation consists of two steps
+		
+		List<XmlValidationFault> result = new ArrayList<>();
+		
+		try {
+			// First, we use org.xml.sax.XMLReader reader and a javax.xml.bind.Unmarshaller
+			// combined with an error handler to get reading errors
+			read(xmlFile);
+		} catch (XmlValidationException e) {
+			e.getFaults().stream().filter(f -> f instanceof XmlValidationFault)
+					.forEach(f -> result.add((XmlValidationFault) f));
+		} catch (XmlProcessingException e) {
+			throw e;
+		}
+		
+		// Second, we a javax.xml.validation.Validator for XML validation
+		// and combine validation results
+		result.addAll(saxValidate(xmlFile));
+		
+		return result;		
+	}
+	
+	
+	private List<XmlValidationFault> saxValidate(final File xmlFile) throws XmlProcessingException {
+
 		try (FileInputStream fis = new FileInputStream(xmlFile)) {
 
 			// Note: The following code is based on
@@ -164,7 +190,7 @@ public class XmlReader {
 			// XML reader instance
 			XmlUtils xmlUtils = new XmlUtils(this.locale);
 			XMLReader reader = xmlUtils.getXmlReader();
-
+			
 			// instantiate the VDI filter
 			// this filter will append the VDI 2770 namespace to every entity
 			VdiNamespaceFilter inFilter = new VdiNamespaceFilter();
@@ -235,11 +261,12 @@ public class XmlReader {
 	 *                <code>null</code>.
 	 * @return A new instance of {@link de.vdi.vdi2770.metadata.model.Document}
 	 *         which is the POJO representation of the XML file.
+	 * @throws XmlValidationException   The XML document is not valid.
 	 * @throws XmlProcessingException   There was an error reading the XML stream.
 	 * @throws IllegalArgumentException The given file is not a file.
 	 */
 	public de.vdi.vdi2770.metadata.model.Document read(final File xmlFile)
-			throws XmlProcessingException {
+			throws XmlValidationException, XmlProcessingException {
 
 		Preconditions.checkArgument(xmlFile != null, "xmlFile is null");
 		Preconditions.checkArgument(xmlFile.isFile(), "xmlFile is not a file");
@@ -257,6 +284,8 @@ public class XmlReader {
 		} catch (final IOException e) {
 			throw new XmlProcessingException(
 					MessageFormat.format(this.bundle.getString("XmlReader_EX6"), xmlFile), e);
+		} catch (final XmlValidationException e) {
+			throw e;
 		} catch (final XmlProcessingException e) {
 			throw e;
 		} catch (final Exception e) {

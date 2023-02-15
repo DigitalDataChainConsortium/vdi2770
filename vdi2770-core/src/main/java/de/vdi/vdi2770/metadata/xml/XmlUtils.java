@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -262,12 +262,13 @@ public class XmlUtils {
 			final Document doc = jaxbResult.getValue();
 
 			if (handler.hasErrors()) {
-				throw new XmlProcessingException(this.bundle.getString("XmlUtils_EX7"));
+				throw new XmlValidationException(this.bundle.getString("XmlUtils_EX7"),
+						handler.getFaults());
 			}
 
 			return doc;
 
-		} catch (XmlProcessingException e) {
+		} catch (XmlValidationException e) {
 			throw e;
 		} catch (final Exception e) {
 			throw new XmlProcessingException(this.bundle.getString("XmlUtils_EX5"), e);
@@ -281,13 +282,14 @@ public class XmlUtils {
 	 * @param stream A file input stream of an XML file.
 	 * @return A {@link de.vdi.vdi2770.metadata.model.Document} instance built from
 	 *         the XML stream.
+	 * @throws XmlValidationException The XML document is not not valid
 	 * @throws XmlProcessingException There was an error reading the XML file /
 	 *                                stream.
 	 */
 	public de.vdi.vdi2770.metadata.model.Document readXml(final InputStream stream)
-			throws XmlProcessingException {
+			throws XmlValidationException, XmlProcessingException {
 
-		// unmarshal the stream as JAXB Document class intance
+		// unmarshal the stream as JAXB Document class instance
 		final Document document = readXmlRaw(stream);
 
 		// map to POJO representation using dozermapper

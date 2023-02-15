@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,6 +24,7 @@ package de.vdi.vdi2770.metadata.xml;
 import java.util.ArrayList;
 import java.util.List;
 
+import de.vdi.vdi2770.metadata.common.Fault;
 import de.vdi.vdi2770.metadata.model.ValidationFault;
 
 /**
@@ -36,7 +37,7 @@ public class XmlValidationException extends XmlProcessingException {
 
 	private static final long serialVersionUID = 1L;
 
-	private final List<ValidationFault> faults;
+	private final List<? extends Fault> faults;
 
 	/**
 	 * Create an exception with a message
@@ -50,7 +51,7 @@ public class XmlValidationException extends XmlProcessingException {
 	}
 
 	/**
-	 * Create an exception with a message including the orgin exception
+	 * Create an exception with a message including the origin exception
 	 *
 	 * @param message A message
 	 * @param cause   An origin exception
@@ -67,7 +68,7 @@ public class XmlValidationException extends XmlProcessingException {
 	 * @param message A message
 	 * @param faults  A {@link List} of {@link ValidationFault}s
 	 */
-	public XmlValidationException(final String message, final List<ValidationFault> faults) {
+	public XmlValidationException(final String message, final List<? extends Fault> faults) {
 
 		super(message);
 
@@ -83,7 +84,7 @@ public class XmlValidationException extends XmlProcessingException {
 	 *
 	 * @return {@link List} of {@link ValidationFault}
 	 */
-	public List<ValidationFault> getFaults() {
+	public List<? extends Fault> getFaults() {
 		return new ArrayList<>(this.faults);
 	}
 
