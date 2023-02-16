@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,6 @@ package de.vdi.vdi2770.metadata.model;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.List;
 import java.util.Locale;
 
@@ -169,6 +166,12 @@ public class ObjectIdTest {
 		assertTrue(fault.getLevel() == FaultLevel.ERROR);
 	}
 
+	/**
+	 * Test URLs that are object IDs
+	 * 
+	 * See DIN SPEC 91406 / IEC 61409 for more information
+	 * 
+	 */
 	@Test
 	public void instanceOfObjectUriTest() {
 		
@@ -205,18 +208,20 @@ public class ObjectIdTest {
 		faults = id.validate(Locale.getDefault());
 		assertTrue(faults.size() == 0);
 		
+		// see issue #32 
 		id.setId("www.domain-abc.com/23456tdhfe65ur67uztm");
 		faults = id.validate(Locale.getDefault());
-		assertTrue(faults.size() == 1);
+		assertTrue(faults.size() == 0);
 		
-		final ValidationFault missingProtocolFault = faults.get(0);
+		// see issue #32 
+		id.setId("domain-abc.com/23456tdhfe65ur67uztm");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
 		
-		assertTrue(missingProtocolFault.getEntity() == "ObjectId");
-		assertTrue(missingProtocolFault.getProperties().size() == 1);
-		assertTrue(missingProtocolFault.getProperties().get(0) == ObjectId.Fields.id);
-		assertTrue(missingProtocolFault.getType() == FaultType.HAS_INVALID_VALUE);
-		assertTrue(missingProtocolFault.getLevel() == FaultLevel.ERROR);
-		assertTrue(missingProtocolFault.getMessage().startsWith("OI_003"));
+		// see issue #32 
+		id.setId("ed2k://domain-abc.com/23456tdhfe65ur67uztm");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
 		
 		id.setId("http://domain-abc.com/23456tdhfe65ur67uztm");
 		faults = id.validate(Locale.getDefault());
@@ -231,6 +236,14 @@ public class ObjectIdTest {
 		assertTrue(faults.size() == 0);
 		
 		id.setId("https://www.domain-abc.com/sd09fqw4?37S=UN123456789111222333IIICCC+54321");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("https://foo/bar/demo");
+		faults = id.validate(Locale.getDefault());
+		assertTrue(faults.size() == 0);
+		
+		id.setId("ftp://www2.foo/bar/demo");
 		faults = id.validate(Locale.getDefault());
 		assertTrue(faults.size() == 0);
 	}
