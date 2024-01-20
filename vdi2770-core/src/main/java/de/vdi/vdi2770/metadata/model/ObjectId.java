@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (C) 2021 Johannes Schmidt
+ * Copyright (C) 2021-2023 Johannes Schmidt
  * 
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -21,9 +21,8 @@
  ******************************************************************************/
 package de.vdi.vdi2770.metadata.model;
 
-import java.net.MalformedURLException;
+import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -161,29 +160,40 @@ public class ObjectId implements ModelEntity {
 	 * 
 	 */
 	private static List<ValidationFault> validateUrl(final String url, final ResourceBundle bundle,
-			final String parent) {
+			final String parent)  {
 
 		final List<ValidationFault> faults = new ArrayList<>();
 
 		try {
 
+			// append scheme if missing
+			// see RFC 3986 
+			String toParse = url;
+			if (!toParse.contains("://")) {
+				toParse = "http://" + toParse;
+			}
+			
 			// see Requirement 5.1 in DIN SPEC 91406
-			// parse the URL string
-			URL parsedUrl = new URL(url);
+			// parse the URI string
+			// note: java.net.URL throws exception in case of unknown scheme,
+			// so, we use URI
+			URI parsedUri = new URI(toParse);
 
-			// call toURI to validate authority
-			parsedUrl.toURI();
-
-			final String host = parsedUrl.getHost();
+			final String host = parsedUri.getHost();
 			if (!Strings.isNullOrEmpty(host)) {
 
 				// Requirement 5.3 in DIN SPEC 91406
-				if (!StringUtils.equals(parsedUrl.getHost(), parsedUrl.getHost().toLowerCase())) {
+				if (!StringUtils.equals(parsedUri.getHost(), parsedUri.getHost().toLowerCase())) {
 					ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent,
 							FaultLevel.ERROR, FaultType.HAS_INVALID_VALUE);
 					fault.setMessage(bundle.getString(ENTITY + "_VAL4"));
 					faults.add(fault);
 				}
+			} else {
+				ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
+						FaultType.HAS_INVALID_VALUE);
+				fault.setMessage(bundle.getString(ENTITY + "_VAL3"));
+				faults.add(fault);
 			}
 
 			// see Requirement 4 in DIN SPEC 91406
@@ -220,7 +230,7 @@ public class ObjectId implements ModelEntity {
 				faults.add(fault);
 			}
 
-		} catch (final MalformedURLException | URISyntaxException e) {
+		} catch (final URISyntaxException e) {
 			ValidationFault fault = new ValidationFault(ENTITY, Fields.id, parent, FaultLevel.ERROR,
 					FaultType.HAS_INVALID_VALUE);
 			fault.setMessage(bundle.getString(ENTITY + "_VAL3"));
